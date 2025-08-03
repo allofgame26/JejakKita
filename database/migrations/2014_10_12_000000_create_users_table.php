@@ -23,7 +23,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_identitas');
             $table->timestamps();
 
-            $table->foreign('id_identitas')->references('id')->on('m_data_diris')->onUpdate('cascade')->onDelete('delete');
+            $table->foreign('id_identitas')->references('id')->on('m_data_diris')->cascadeOnDelete()->cascadeOnUpdate();
         });
     }
 

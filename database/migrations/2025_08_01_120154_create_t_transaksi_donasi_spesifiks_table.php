@@ -22,7 +22,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('id_program')->references('id')->on('m_program_pembangunans')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreign('id-user')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreign('id_user')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreign('id_metode_pembayaran')->references('id')->on('m_metode_pembayarans')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreign('id_kebutuhan_barang')->references('id')->on('t_kebutuhan_barang_programs')->cascadeOnDelete()->cascadeOnUpdate();
 
