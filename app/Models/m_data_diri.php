@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class m_data_diri extends Model
+class m_data_diri extends Model implements HasMedia
 {
-    use HasFactory;
+    use HasFactory, InteractsWithMedia;
 
     protected $fillable = [
         'nip',
@@ -18,6 +20,7 @@ class m_data_diri extends Model
         'alamat',
         'jenis_kelamin',
         'no_telp',
+        'profile',
     ];
 
     public function user(): HasMany
