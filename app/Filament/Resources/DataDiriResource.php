@@ -9,6 +9,7 @@ use Dom\Text;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -55,6 +56,9 @@ class DataDiriResource extends Resource
                     ->tel()
                     ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/')
                     ->required(),
+                SpatieMediaLibraryFileUpload::make('profile')
+                    ->image()
+                    ->imageEditor(),
             ]);
     }
 

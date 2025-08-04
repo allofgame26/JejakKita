@@ -4,15 +4,22 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
+use App\Models\m_data_diri;
 use App\Models\User;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Hash;
+use Nette\Utils\ImageColor;
 
 class UserResource extends Resource
 {
@@ -24,7 +31,20 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                //
+                TextInput::make('name'),
+                TextInput::make('email')
+                    ->email(),
+                TextInput::make('password')
+                    ->password()
+                    ->revealable()
+                    ->label('Password')
+                    ->dehydrateStateUsing(fn ($state) => $state ? Hash::make($state) : null)
+                    ->required(fn (string $context): bool => $context === 'create')
+                    ->dehydrated(fn ($state) => filled($state)), // hanya simpan jika diisi
+                Select::make('id_identitas')
+                    ->label('Data Diri')
+                    ->relationship('datadiri','nama_lengkap')
+                    ->searchable(['nama_lengkap','nip'])
             ]);
     }
 
@@ -33,9 +53,10 @@ class UserResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('id'),
+                ImageColumn::make('profile_url')->label('Profile'),
                 TextColumn::make('name'),
                 TextColumn::make('email'),
-                TextColumn::make('user.nip')
+                TextColumn::make('datadiri.nip')
                     ->label('NIP'),
             ])
             ->filters([

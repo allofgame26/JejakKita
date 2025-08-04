@@ -17,6 +17,8 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Joaopaulolndev\FilamentEditProfile\FilamentEditProfile;
+use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -26,6 +28,10 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
+            ->profile(isSimple: false) // kurang dicustom
+            // ->emailVerification()
+            ->registration()
+            ->passwordReset()
             ->login()
             ->colors([
                 'primary' => Color::Amber,
@@ -53,6 +59,19 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            ->plugins([
+                FilamentEditProfilePlugin::make()
+                ->setTitle('My Profile')
+                ->setNavigationLabel('My Profile')
+                ->setNavigationGroup('Group Profile')
+                ->setIcon('heroicon-o-user')
+                ->setSort(10)
+                ->canAccess(fn () => auth()->user()->id === 1)
+                ->shouldRegisterNavigation(false)
+                ->shouldShowDeleteAccountForm(false)
+                ->shouldShowSanctumTokens()
+            ])      
+            ;
     }
 }
