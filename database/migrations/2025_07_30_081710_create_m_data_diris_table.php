@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('alamat');
             $table->enum('jenis_kelamin',['laki','perempuan']);
             $table->string('no_telp')->unique();
-            $table->string('profile');
             $table->timestamps();
         });
     }

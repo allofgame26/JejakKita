@@ -20,7 +20,6 @@ class m_data_diri extends Model implements HasMedia
         'alamat',
         'jenis_kelamin',
         'no_telp',
-        'profile',
     ];
 
     public function user(): HasMany
