@@ -29,7 +29,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->profile(isSimple: false) // kurang dicustom
-            // ->emailVerification()
+            ->emailVerification()
             ->registration()
             ->passwordReset()
             ->login()
