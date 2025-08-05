@@ -29,14 +29,20 @@ class UserResource extends Resource
 
     protected static ?string $navigationLabel = 'Data Akun';
 
+    protected static ?string $navigationGroup = 'Super Admin';
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                TextInput::make('name'),
+                TextInput::make('name')
+                    ->required(),
                 TextInput::make('email')
-                    ->email(),
+                    ->email()
+                    ->unique()
+                    ->required(),
                 TextInput::make('password')
+                    ->required()
                     ->password()
                     ->revealable()
                     ->label('Password')
