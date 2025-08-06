@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProgramPembangunanResource\Pages;
 use App\Filament\Resources\ProgramPembangunanResource\RelationManagers;
+use App\Filament\Resources\ProgramPembangunanResource\RelationManagers\BarangRelationManager;
 use App\Models\m_program_pembangunan;
 use Dotenv\Util\Str;
 use Filament\Forms;
@@ -121,7 +122,7 @@ class ProgramPembangunanResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            BarangRelationManager::class
         ];
     }
 
