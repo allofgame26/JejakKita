@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -34,5 +35,10 @@ class m_program_pembangunan extends Model implements HasMedia
     public function barang()
     {
         return $this->belongsToMany(m_barang::class,'t_kebutuhan_barang_programs','program_id','barang_id')->withPivot('jumlah_barang','status_pengadaan','keterangan');
+    }
+
+    public function donasiprogram(): HasMany
+    {
+        return $this->hasMany(t_transaksi_donasi_program::class);
     }
 }

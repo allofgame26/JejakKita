@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProgramPembangunanResource\Pages;
-use App\Filament\Resources\ProgramPembangunanResource\RelationManagers;
 use App\Filament\Resources\ProgramPembangunanResource\RelationManagers\BarangRelationManager;
 use App\Models\m_program_pembangunan;
 use Dotenv\Util\Str;
@@ -71,7 +70,7 @@ class ProgramPembangunanResource extends Resource
                 Select::make('status')
                     ->options([
                         'diajukan' => 'Diajukan',
-                        'direncanakan' => 'DiRencanakan',
+                        'direncanakan' => 'Direncanakan',
                         'berjalan' => 'Berjalan',
                         'selesai' => 'Selesai',
                         'ditunda' => 'Ditunda',
