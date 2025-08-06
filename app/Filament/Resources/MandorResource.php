@@ -2,10 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\DataDiriResource\Pages;
-use App\Filament\Resources\DataDiriResource\RelationManagers;
-use App\Models\m_data_diri;
-use Dom\Text;
+use App\Filament\Resources\MandorResource\Pages;
+use App\Filament\Resources\MandorResource\RelationManagers;
+use App\Models\m_mandor;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
@@ -14,22 +13,21 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use stdClass;
 
-class DataDiriResource extends Resource
+class MandorResource extends Resource
 {
-    protected static ?string $model = m_data_diri::class;
+    protected static ?string $model = m_mandor::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-user';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
-    protected static ?string $navigationLabel = 'Data Diri';
+    protected static ?string $navigationLabel = 'Data Mandor';
 
-    protected static ?string $navigationGroup = 'Super Admin';
+    protected static ?string $navigationGroup = 'Pembangunan';
 
     public static function form(Form $form): Form
     {
@@ -37,15 +35,22 @@ class DataDiriResource extends Resource
             ->schema([
                 TextInput::make('nama_lengkap')
                     ->required(),
-                TextInput::make('nip')
-                    ->required(),
+                TextInput::make('nik')
+                    ->unique()
+                    ->required()
+                    ->label('Nomor Induk Kependudukan')
+                    ->minLength(16)
+                    ->validationMessages([
+                        'unique' => 'NIK sudah Terpakai'
+                    ]),
                 TextInput::make('tempat_lahir')
                     ->required(),
                 DatePicker::make('tanggal_lahir')
                     ->displayFormat('d/m/Y')
                     ->native(false)
                     ->maxDate(now())
-                    ->required(),
+                    ->required()
+                    ->suffixIcon('heroicon-m-calendar'),
                 TextInput::make('alamat')
                     ->required(),
                 Select::make('jenis_kelamin')
@@ -68,14 +73,13 @@ class DataDiriResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('index')
-                    ->state( static function (HasTable $livewire, stdClass $rowLoop): string { return (string) ( $rowLoop->iteration + ($livewire->getTableRecordsPerPage() * ( $livewire->getTablePage() - 1 )) ); } ),
-                TextColumn::make('nip'),
-                TextColumn::make('nama_lengkap'),
-                TextColumn::make('no_telp'),
+                SpatieMediaLibraryImageColumn::make('profile')
+                    ->label('Profile'),
+                TextColumn::make('nama_lengkap')
+                    ->label('Nama Lengkap')
             ])
             ->filters([
-                
+                //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -97,9 +101,9 @@ class DataDiriResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListDataDiris::route('/'),
-            'create' => Pages\CreateDataDiri::route('/create'),
-            'edit' => Pages\EditDataDiri::route('/{record}/edit'),
+            'index' => Pages\ListMandors::route('/'),
+            'create' => Pages\CreateMandor::route('/create'),
+            'edit' => Pages\EditMandor::route('/{record}/edit'),
         ];
     }
 }
