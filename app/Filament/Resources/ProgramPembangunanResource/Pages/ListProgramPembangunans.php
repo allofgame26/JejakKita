@@ -1,32 +1,32 @@
 <?php
 
-namespace App\Filament\Resources\MandorResource\Pages;
+namespace App\Filament\Resources\ProgramPembangunanResource\Pages;
 
-use App\Filament\Resources\MandorResource;
+use App\Filament\Resources\ProgramPembangunanResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Contracts\Support\Htmlable;
 
-class ListMandors extends ListRecords
+class ListProgramPembangunans extends ListRecords
 {
-    protected static string $resource = MandorResource::class;
+    protected static string $resource = ProgramPembangunanResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make()
-                ->label('Tambah Mandor')
+                ->label('Tambah Program')
                 ->icon('heroicon-o-plus-circle'),
         ];
     }
 
     public function getTitle(): string|Htmlable
     {
-        return 'Daftar Mandor';
+        return 'Program Pembangunan';
     }
 
     public function getBreadcrumb(): ?string
     {
-        return 'Daftar-Mandor';
+        return 'Program Pembangunan';
     }
 }

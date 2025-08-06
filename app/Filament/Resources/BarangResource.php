@@ -75,10 +75,10 @@ class BarangResource extends Resource
                 TextColumn::make('kode_barang'),
                 TextColumn::make('kategoribarang.nama_kategori'),
                 TextColumn::make('nama_barang'),
-                TextColumn::make('total_harga')
-                    ->label('Total Harga')
-                    ->getStateUsing(fn ($record) => 
-                        'Rp. ' . number_format($record->jumlah_barang_dibutuhkan * $record->harga_satuan, 0, ',', '.')),
+                // TextColumn::make('total_harga')
+                //     ->label('Total Harga')
+                //     ->getStateUsing(fn ($record) => 
+                //         'Rp. ' . number_format($record->jumlah_barang_dibutuhkan * $record->harga_satuan, 0, ',', '.')),
             ])
             ->filters([
                 //
