@@ -42,7 +42,7 @@ class BarangRelationManager extends RelationManager
                     ->color(fn (string $state): string => match ($state){
                         'diajukan' => 'warning',
                         'disetujui' => 'gray',
-                        'tersedia' => 'warning',
+                        'tersedia' => 'success',
                     })
             ])
             ->filters([

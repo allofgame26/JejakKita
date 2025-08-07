@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class t_kebutuhan_barang_program extends Model
 {
@@ -28,5 +29,10 @@ class t_kebutuhan_barang_program extends Model
     public function program(): BelongsTo
     {
         return $this->belongsTo(m_program_pembangunan::class, 'program_id', 'id');
+    }
+
+    public function donasispesifik(): HasMany
+    {
+        return $this->hasMany(t_transaksi_donasi_spesifik::class);
     }
 }
