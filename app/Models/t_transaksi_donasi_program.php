@@ -14,9 +14,9 @@ class t_transaksi_donasi_program extends Model implements HasMedia
     use InteractsWithMedia;
 
     protected $fillable = [
-        'id_program',
-        'id_user',
-        'id_metode_pembayaran',
+        'program_id',
+        'user_id',
+        'pembayaran_id',
         'jumlah_donasi',
         'status_pembayaran',
         'pesan_donatur',
@@ -36,4 +36,9 @@ class t_transaksi_donasi_program extends Model implements HasMedia
     {
         return $this->belongsTo(m_program_pembangunan::class);
     }
+
+    // public function getProfileUrlAttribute()
+    // {
+    //     return $this->datadiri?->getFirstMediaUrl();
+    // }
 }
