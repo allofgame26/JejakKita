@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('t_transaksi_donasi_programs', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_program');
-            $table->unsignedBigInteger('id_user');
+            $table->unsignedBigInteger('program_id');
+            $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('id_metode_pembayaran');
             $table->string('jumlahdonasi');
             $table->enum('status_pembayaran',['gagal','pending','sukses']);

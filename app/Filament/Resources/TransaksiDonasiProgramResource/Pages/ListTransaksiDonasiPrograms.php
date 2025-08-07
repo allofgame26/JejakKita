@@ -15,7 +15,7 @@ class ListTransaksiDonasiPrograms extends ListRecords
     {
         return [
             Actions\CreateAction::make()
-            ->label('Tambah Program')
+            ->label('Tambah Program Manual')
             ->icon('heroicon-o-plus-circle'),
         ];
     }
