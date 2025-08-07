@@ -19,6 +19,8 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfile;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
+use App\Filament\Pages\HistoryDonasiGabungan;
+
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -40,6 +42,7 @@ class AdminPanelProvider extends PanelProvider
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
                 Pages\Dashboard::class,
+                 HistoryDonasiGabungan::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
@@ -71,7 +74,8 @@ class AdminPanelProvider extends PanelProvider
                 ->shouldRegisterNavigation(false)
                 ->shouldShowDeleteAccountForm(false)
                 ->shouldShowSanctumTokens()
-            ])      
+            ])
             ;
+            
     }
 }
