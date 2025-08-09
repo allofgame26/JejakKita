@@ -60,9 +60,6 @@ class BarangResource extends Resource
                     ->prefix('Rp.')
                     ->mask(RawJs::make('$money($input'))
                     ->stripCharacters(','),
-                TextInput::make('jumlah_barang_dibutuhkan')
-                    ->required()
-                    ->numeric(),
                 TextInput::make('deskripsi_barang')
                     ->required(),
             ]);

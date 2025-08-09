@@ -13,8 +13,8 @@ class m_barang extends Model
 
     protected $fillable = [
         'kategoribarang_id',
-        'kode_barang',
         'nama_barang',
+        'kode_barang',
         'nama_satuan',
         'harga_satuan',
         'jumlah_barang_dibutuhkan',
@@ -30,4 +30,5 @@ class m_barang extends Model
     {
         return $this->belongsToMany(m_program_pembangunan::class,'t_kebutuhan_barang_programs','barang_id','program_id');
     }
+    
 }

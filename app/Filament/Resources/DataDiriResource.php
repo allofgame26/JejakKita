@@ -60,6 +60,7 @@ class DataDiriResource extends Resource
                     ->required(),
                 SpatieMediaLibraryFileUpload::make('profile')
                     ->image()
+                    ->collection('profile')
                     ->imageEditor(),
             ]);
     }
