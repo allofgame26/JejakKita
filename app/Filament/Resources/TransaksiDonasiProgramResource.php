@@ -3,7 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\TransaksiDonasiProgramResource\Pages;
-use App\Filament\Resources\TransaksiDonasiProgramResource\RelationManagers;
+use App\Models\m_metode_pembayaran;
 use App\Models\m_program_pembangunan;
 use App\Models\t_transaksi_donasi_program;
 use App\Models\TransaksiDonasiProgram;
@@ -21,6 +21,7 @@ use Filament\Tables;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -58,7 +59,7 @@ class TransaksiDonasiProgramResource extends Resource
                         ->schema([
                             Select::make('pembayaran_id')
                                 ->required()
-                                ->relationship('pembayaran','nama_pembayaran')
+                                ->options(m_metode_pembayaran::where('is_open', true)->pluck('nama_pembayaran','id'))
                                 ->label('Pilih Pembayaran'),
                             TextInput::make('jumlah_donasi')
                                 ->required()
@@ -75,6 +76,10 @@ class TransaksiDonasiProgramResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('created_at')
+                    ->label('Tanggal Transaksi')
+                    ->date('d M Y')
+                    ->sortable(),
                 TextColumn::make('user.datadiri.nama_lengkap')
                     ->label('Nama Donatur')
                     ->sortable(),
@@ -82,7 +87,9 @@ class TransaksiDonasiProgramResource extends Resource
                     ->label('Nama Program Pembangunan')
                     ->sortable(),
                 TextColumn::make('jumlah_donasi')
-                    ->label('Jumlah Donasi'),
+                    ->label('Jumlah Donasi')
+                    ->prefix('Rp.')
+                    ->numeric(),
                 TextColumn::make('status_pembayaran')
                     ->label('Status Pembayaran')
                     ->badge()
@@ -96,7 +103,10 @@ class TransaksiDonasiProgramResource extends Resource
                     ->collection('bukti_pembayaran')
             ])
             ->filters([
-                //
+                SelectFilter::make('pembayaran')
+                    ->relationship('pembayaran','nama_pembayaran'),
+                SelectFilter::make('program')
+                    ->relationship('program','nama_pembangunan')
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

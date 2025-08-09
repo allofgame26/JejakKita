@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -14,18 +15,16 @@ class t_transaksi_donasi_spesifik extends Model implements HasMedia
     use InteractsWithMedia;
 
     protected $fillable = [
-        'id_program',
-        'id_user',
-        'id_metode_pembayaran',
-        'id_kebutuhan_barang',
+        'user_id',
+        'pembayaran_id',
         'jumlah_donasi',
         'status_pembayaran',
         'pesan_donatur',
     ];
 
-    public function barang(): BelongsTo
+    public function kebutuhan(): BelongsToMany
     {
-        return $this->belongsTo(t_kebutuhan_barang_program::class);
+        return $this->belongsToMany(t_kebutuhan_barang_program::class,'donasi_kebutuhans','donasi_id','kebutuhan_id');
     }
 
     public function user(): BelongsTo
@@ -37,4 +36,14 @@ class t_transaksi_donasi_spesifik extends Model implements HasMedia
     {
         return $this->belongsTo(m_metode_pembayaran::class);
     }
+
+    public function program()
+    {
+        return $this->hasOneThrough(
+            m_program_pembangunan::class,
+            t_kebutuhan_barang_program::class,
+            'id','id','kebutuhan_id','program_id'
+        );
+    }
+
 }

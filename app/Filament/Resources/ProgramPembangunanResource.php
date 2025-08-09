@@ -93,7 +93,8 @@ class ProgramPembangunanResource extends Resource
                 TextColumn::make('nama_pembangunan')
                     ->label('Nama Pembangunan'),
                 TextColumn::make('tanggal_mulai')
-                    ->label('Tanggal Mulai'),
+                    ->label('Tanggal Mulai')
+                    ->date('d M Y'),
                 TextColumn::make('status')
                     ->label('Status')
                     ->badge()
