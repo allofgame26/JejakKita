@@ -16,10 +16,8 @@ return new class extends Migration
             $table->string('title');
             $table->string('slug')->unique();
             $table->text('content');
-            $table->unsignedBigInteger('parent_id');
             $table->timestamps();
 
-            $table->foreign('parent_id')->references('id')->on('m_kategories')->cascadeOnDelete()->cascadeOnUpdate();
         });
     }
 
