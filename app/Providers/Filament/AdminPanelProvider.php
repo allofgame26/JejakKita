@@ -32,6 +32,7 @@ class AdminPanelProvider extends PanelProvider
             ->profile(isSimple: false) // kurang dicustom
             ->emailVerification()
             ->sidebarCollapsibleOnDesktop()
+            ->viteTheme('resource/css/filament/admin/theme.css')
             ->registration()
             ->passwordReset()
             ->login()
