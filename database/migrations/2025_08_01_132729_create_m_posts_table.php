@@ -18,8 +18,10 @@ return new class extends Migration
             $table->string('meta_description');
             $table->string('slug');
             $table->boolean('is_published');
-            $table->foreign('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
         });
     }
 
