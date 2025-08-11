@@ -64,7 +64,8 @@ class TransaksiDonasiProgramResource extends Resource
                             TextInput::make('jumlah_donasi')
                                 ->required()
                                 ->prefix('Rp.')
-                                ->label('Jumlah Donasi'),
+                                ->label('Jumlah Donasi')
+                                ->numeric(),
                             TextInput::make('pesan_donatur')
                                 ->label('Pesan Donatur')
                         ])->columns(2)

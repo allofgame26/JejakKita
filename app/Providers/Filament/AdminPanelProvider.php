@@ -32,13 +32,13 @@ class AdminPanelProvider extends PanelProvider
             ->profile(isSimple: false) // kurang dicustom
             ->emailVerification()
             ->sidebarCollapsibleOnDesktop()
-            ->viteTheme('resource/css/filament/admin/theme.css')
             ->registration()
             ->passwordReset()
             ->login()
             ->colors([
                 'primary' => Color::Amber,
             ])
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
@@ -65,7 +65,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
-            ])      
+            ])   
             ;
     }
 }
