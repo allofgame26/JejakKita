@@ -11,15 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('m_kategoris', function (Blueprint $table) {
+        Schema::create('m_posts', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('slug')->unique();
             $table->text('content');
-            $table->unsignedBigInteger('parent_id');
+            $table->string('meta_description');
+            $table->string('slug');
+            $table->boolean('is_published');
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
 
-            $table->foreign('parent_id')->references('id')->on('m_kategories')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
         });
     }
 
@@ -28,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('m_kategoris');
+        Schema::dropIfExists('m_posts');
     }
 };

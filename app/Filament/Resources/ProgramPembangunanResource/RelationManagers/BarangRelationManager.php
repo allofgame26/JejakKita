@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\ProgramPembangunanResource\RelationManagers;
 
 use Filament\Forms;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -36,14 +37,15 @@ class BarangRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('nama_barang'),
                 TextColumn::make('jumlah_barang')
                     ->label('Jumlah Barang'),
-                TextColumn::make('status_pengadaan')
-                    ->label('Status Pengadaan')
+                TextColumn::make('status')
+                    ->label('Status')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state){
-                        'diajukan' => 'warning',
-                        'disetujui' => 'gray',
-                        'tersedia' => 'success',
-                    })
+                    ->color(
+                        fn (string $state): string => match ($state){
+                            'tersedia' => 'success',
+                            'diambil' => 'danger'
+                        }
+                    )
             ])
             ->filters([
                 //
@@ -59,12 +61,8 @@ class BarangRelationManager extends RelationManager
                         $action->getRecordSelect(),
                         TextInput::make('jumlah_barang')
                             ->numeric(),
-                        Select::make('status_pengadaan')
-                            ->options([
-                                'diajukan' => 'Diajukan',
-                                'disetujui' => 'Disetujui',
-                                'tersedia' => 'Tersedia',
-                            ]),
+                        Hidden::make('status')
+                            ->default('tersedia'),
                         TextInput::make('keterangan'),
                     ]),
             ])
