@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\TransaksiDonasiProgramResource\Pages;
+use App\Filament\Resources\TransaksiDonasiProgramResource\RelationManagers;
 use App\Models\m_metode_pembayaran;
 use App\Models\m_program_pembangunan;
 use App\Models\t_transaksi_donasi_program;
@@ -59,6 +60,7 @@ class TransaksiDonasiProgramResource extends Resource
                         ->schema([
                             Select::make('pembayaran_id')
                                 ->required()
+                                ->relationship('pembayaran','nama_pembayaran')
                                 ->options(m_metode_pembayaran::where('is_open', true)->pluck('nama_pembayaran','id'))
                                 ->label('Pilih Pembayaran'),
                             TextInput::make('jumlah_donasi')

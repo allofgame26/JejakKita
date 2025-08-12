@@ -24,17 +24,17 @@ class t_transaksi_donasi_program extends Model implements HasMedia
 
     public function pembayaran(): BelongsTo
     {
-        return $this->belongsTo(m_metode_pembayaran::class);
+        return $this->belongsTo(m_metode_pembayaran::class, 'pembayaran_id');
     }
     
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function program(): BelongsTo
     {
-        return $this->belongsTo(m_program_pembangunan::class);
+        return $this->belongsTo(m_program_pembangunan::class, 'program_id');
     }
 
     // public function getProfileUrlAttribute()
