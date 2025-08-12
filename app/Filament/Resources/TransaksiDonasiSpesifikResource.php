@@ -46,6 +46,7 @@ class TransaksiDonasiSpesifikResource extends Resource
                             TableSelect::make('kebutuhan')
                                 ->relationship('kebutuhan','id')
                                 ->label('Kebutuhan Barang')
+                                ->optionColor('success')
                                 ->selectionTable(function (Table $table) {
                                     return $table
                                         ->heading('Pilih Barang')
@@ -104,8 +105,8 @@ class TransaksiDonasiSpesifikResource extends Resource
                 TextColumn::make('created_at')
                     ->label('Tanggal Transaksi')
                     ->date('d M Y'),
-                TextColumn::make('user.datadiri.nama_lengkap')
-                    ->label('Nama Donatur')
+                TextColumn::make('user.email')
+                    ->label('E-mail Donatur')
                     ->sortable(),
                 TextColumn::make('kebutuhan.barang.nama_barang')
                     ->label('Nama Barang'),
