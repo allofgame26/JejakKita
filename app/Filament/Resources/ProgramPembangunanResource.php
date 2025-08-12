@@ -42,7 +42,8 @@ class ProgramPembangunanResource extends Resource
                 Select::make('mandor_id')
                     ->required()
                     ->relationship('mandor','nama_lengkap')
-                    ->searchable(),
+                    ->searchable()
+                    ->preload(),
                 TextInput::make('nama_pembangunan')
                     ->required(),
                 DatePicker::make('tanggal_mulai')
@@ -77,7 +78,8 @@ class ProgramPembangunanResource extends Resource
                     ])
                     ->required(),
                 SpatieMediaLibraryFileUpload::make('foto_pembangunan')
-                        ->multiple(),
+                        ->multiple()
+                        ->collection('pembangunan'),
                 TextInput::make('deskripsi')
                         ->required()
 

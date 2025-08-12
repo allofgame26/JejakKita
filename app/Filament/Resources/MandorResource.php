@@ -63,7 +63,9 @@ class MandorResource extends Resource
                     ->tel()
                     ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/')
                     ->required(),
-                SpatieMediaLibraryFileUpload::make('profile')
+                SpatieMediaLibraryFileUpload::make('mandor')
+                    ->collection('mandor')
+                    ->label('Foto Mandor')
                     ->image()
                     ->imageEditor(),
             ]);
@@ -74,7 +76,8 @@ class MandorResource extends Resource
         return $table
             ->columns([
                 SpatieMediaLibraryImageColumn::make('profile')
-                    ->label('Profile'),
+                    ->label('Profile')
+                    ->collection('mandor'),
                 TextColumn::make('nama_lengkap')
                     ->label('Nama Lengkap')
             ])
