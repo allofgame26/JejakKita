@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Widgets\DashboardWidget;
 use App\Filament\Widgets\TestWidget;
 use Filament\Http\Middleware\Authenticate;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
@@ -19,11 +20,11 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use Joaopaulolndev\FilamentEditProfile\FilamentEditProfile;
-use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
+
+
     public function panel(Panel $panel): Panel
     {
         return $panel
@@ -49,7 +50,8 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 // Widgets\AccountWidget::class,
                 // Widgets\FilamentInfoWidget::class,
-                // TestWidget::class, Widget Bisa ditaruh didalam sini
+                TestWidget::class, // Widget Bisa ditaruh didalam sini
+                DashboardWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
