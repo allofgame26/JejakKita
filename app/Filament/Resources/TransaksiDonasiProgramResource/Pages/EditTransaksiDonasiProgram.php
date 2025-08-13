@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\TransaksiDonasiProgramResource\Pages;
 
 use App\Filament\Resources\TransaksiDonasiProgramResource;
+use App\Models\m_metode_pembayaran;
 use Filament\Actions;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
@@ -39,12 +40,32 @@ class EditTransaksiDonasiProgram extends EditRecord
                 TextInput::make('pesan_donatur')
                     ->readOnly()
                     ->label('Pesan Donatur'),
-                Select::make('status_pembayaran')
-                    ->options([
-                        'gagal' => 'Gagal',
-                        'pending' => 'Pending',
-                        'sukses' => 'Sukses',
-                    ]),
+                TextInput::make('status_pembayaran')
+                    ->readOnly(),
+                Select::make('pembayaran_id')
+                    ->required()
+                    ->disabled()
+                    ->options(m_metode_pembayaran::where('is_open', true)->pluck('nama_pembayaran','id'))
+                    ->label('Pilih Pembayaran')
+                    ->reactive()
+                    ->afterStateUpdated(function (callable $set, $state){
+                        $pembayaran = m_metode_pembayaran::find($state);
+                        if($pembayaran){
+                            $set('nomor_rekening',$pembayaran->no_rekening);
+                        }
+                    })
+                    ->afterStateHydrated(function (callable $set, $state) {
+                        if ($state) {
+                            $pembayaran = m_metode_pembayaran::find($state);
+                            if ($pembayaran) {
+                                $set('nomor_rekening', $pembayaran->no_rekening);
+                            }
+                        }
+                    }),
+                TextInput::make('nomor_rekening')
+                    ->label('Nomor Rekening')
+                    ->visible(fn ($get) => filled($get('pembayaran_id')))
+                    ->readOnly(),
                 SpatieMediaLibraryFileUpload::make('bukti_pembayaran')
                     ->label('Bukti Pembayaran')
                     ->collection('bukti_pembayaran')

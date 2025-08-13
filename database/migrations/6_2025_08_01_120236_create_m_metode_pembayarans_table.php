@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('m_metode_pembayarans', function (Blueprint $table) {
             $table->id();
             $table->string('nama_pembayaran');
-            $table->string('nno_rekenening')->unique();
+            $table->string('no_rekening')->unique();
             $table->boolean('is_open');
             $table->string('deskripsi');
             $table->timestamps();

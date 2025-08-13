@@ -17,7 +17,6 @@ class m_barang extends Model
         'kode_barang',
         'nama_satuan',
         'harga_satuan',
-        'jumlah_barang_dibutuhkan',
         'deskripsi_barang',
     ];
 

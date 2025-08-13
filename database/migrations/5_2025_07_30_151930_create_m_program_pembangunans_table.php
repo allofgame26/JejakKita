@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('m_program_pembangunans', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_mandor');
+            $table->unsignedBigInteger('mandor_id');
             $table->string('kode_program')->unique();
             $table->string('nama_pembangunan');
             $table->date('estimasi_tanggal_selesai');
@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('deskripsi');
             $table->timestamps();
 
-            $table->foreign('id_mandor')->references('id')->on('m_mandors')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('mandor_id')->references('id')->on('m_mandors')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 
