@@ -6,7 +6,8 @@ use App\Filament\Resources\TransaksiDonasiProgramResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Resources\Pages\ListRecords\Tab;
-use Illuminate\Contracts\Database\Eloquent\Builder;
+// use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Support\Htmlable;
 
 class ListTransaksiDonasiPrograms extends ListRecords
