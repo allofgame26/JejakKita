@@ -29,6 +29,8 @@ class DataDiriResource extends Resource
 
     protected static ?string $navigationLabel = 'Data Diri';
 
+    protected static ?string $navigationGroup = 'Super Admin';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -58,6 +60,7 @@ class DataDiriResource extends Resource
                     ->required(),
                 SpatieMediaLibraryFileUpload::make('profile')
                     ->image()
+                    ->collection('profile')
                     ->imageEditor(),
             ]);
     }
