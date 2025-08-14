@@ -10,17 +10,11 @@ class EditPengisianDonasi extends EditRecord
 {
     protected static string $resource = PengisianDonasiResource::class;
 
-    protected ?string $heading = 'Edit Pengisian Donasi';
-
     protected function getHeaderActions(): array
     {
         return [
             Actions\DeleteAction::make(),
         ];
     }
-
-    protected function getRedirectUrl(): string
-    {
-        return $this->getResource()::getUrl('index');
-    }
 }
+
