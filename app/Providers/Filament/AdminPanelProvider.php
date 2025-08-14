@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\MyProfile;
 use App\Filament\Widgets\DashboardWidget;
 use App\Filament\Widgets\TestWidget;
 use Filament\Http\Middleware\Authenticate;
@@ -9,11 +10,13 @@ use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\MenuItem;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Widgets;
+// use Illuminate\Auth\Events\Verified;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -63,13 +66,20 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                'verified'
             ])
             ->authMiddleware([
                 Authenticate::class,
             ])
             ->plugins([
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
-            ])   
+            ])  
+            ->userMenuItems([
+                'profile' => MenuItem::make()
+                    ->label('My Profile')
+                    ->url(fn (): string => MyProfile::getUrl())
+                    ->icon('heroicon-o-user')
+            ]) 
             ;
     }
 }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ba0a2e52c100351d4be0e30d2c69a63a",
+    "content-hash": "0ed3c8256802570ae5ff89137ffe94c8",
     "packages": [
         {
             "name": "althinect/filament-spatie-roles-permissions",
@@ -2992,16 +2992,16 @@
         },
         {
             "name": "laravel/fortify",
-            "version": "v1.27.0",
+            "version": "v1.28.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/fortify.git",
-                "reference": "0fb2ec99dfee77ed66884668fc06683acca91ebd"
+                "reference": "138d9790081343d4c4357daa5425790cd7f6bd82"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/fortify/zipball/0fb2ec99dfee77ed66884668fc06683acca91ebd",
-                "reference": "0fb2ec99dfee77ed66884668fc06683acca91ebd",
+                "url": "https://api.github.com/repos/laravel/fortify/zipball/138d9790081343d4c4357daa5425790cd7f6bd82",
+                "reference": "138d9790081343d4c4357daa5425790cd7f6bd82",
                 "shasum": ""
             },
             "require": {
@@ -3053,7 +3053,7 @@
                 "issues": "https://github.com/laravel/fortify/issues",
                 "source": "https://github.com/laravel/fortify"
             },
-            "time": "2025-06-11T14:30:52+00:00"
+            "time": "2025-07-22T15:26:32+00:00"
         },
         {
             "name": "laravel/framework",
