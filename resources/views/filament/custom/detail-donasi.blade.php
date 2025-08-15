@@ -82,7 +82,7 @@
                             @if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp']))
                                 <div x-data="{ show: false }" class="flex flex-col items-center">
                                     <img src="{{ $url }}" alt="Bukti Pembayaran"
-                                        class="h-36 w-auto object-cover rounded-lg border border-blue-200 dark:border-gray-700 shadow-sm bg-white dark:bg-gray-900 cursor-zoom-in hover:scale-105 transition-transform duration-1500"
+                                        class="h-36 w-auto object-cover rounded-lg border border-blue-200 dark:border-gray-700 shadow-sm bg-white dark:bg-gray-900 cursor-zoom-in hover:scale-105 transition-transform duration-300"    
                                         @click="show = true" title="Klik untuk perbesar">
                                     <span class="text-xs text-gray-500 mt-1">Klik gambar untuk lihat besar</span>
                                     <div x-show="show" x-transition

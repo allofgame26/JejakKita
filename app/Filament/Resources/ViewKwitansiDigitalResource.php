@@ -55,7 +55,8 @@ class ViewKwitansiDigitalResource extends Resource
                 Tables\Columns\TextColumn::make('pesan_donatur')
                     ->label('Pesan Donatur')
                     ->limit(30)
-                    ->icon('heroicon-o-chat-bubble-left-ellipsis'),
+                    ->icon('heroicon-o-chat-bubble-left-ellipsis')
+                    ->html(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Tanggal Pengisian')
                     ->dateTime('d M Y H:i')

@@ -13,6 +13,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use FilamentTiptapEditor\TiptapEditor;
+use Filament\Tables\Columns\HtmlColumn;
 
 class PengisianDonasiResource extends Resource
 {
@@ -54,11 +56,13 @@ class PengisianDonasiResource extends Resource
                     ->placeholder('0')
                     // ->helperText('Masukkan nominal donasi dalam rupiah.')
                     ->required(),
-                Forms\Components\Textarea::make('pesan_donatur')
+                TiptapEditor::make('pesan_donatur')
                     ->label('Pesan Donatur')
                     ->placeholder('Tulis pesan atau harapan Anda (opsional)')
-                    ->rows(3)
-                // ->helperText('Pesan ini akan diterima oleh pengelola program.'),
+                    ->columnSpanFull() // form field lebar penuh
+                    ->extraAttributes([
+                        'style' => 'max-height:10px; overflow-y:auto;'
+                    ])
             ]);
     }
 
@@ -80,8 +84,9 @@ class PengisianDonasiResource extends Resource
                     ->color('success'),
                 Tables\Columns\TextColumn::make('pesan_donatur')
                     ->label('Pesan Donatur')
-                    ->limit(30)
-                    ->icon('heroicon-o-chat-bubble-left-ellipsis'),
+                    ->icon('heroicon-o-chat-bubble-left-ellipsis')
+                    ->limit(60)
+                    ->html(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Tanggal Pengisian')
                     ->dateTime('d M Y H:i')
