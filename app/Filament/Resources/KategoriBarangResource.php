@@ -26,6 +26,10 @@ class KategoriBarangResource extends Resource
 
     protected static ?string $navigationGroup = 'Pembangunan';
 
+    protected static ?string $pluralLabel = 'Data Kategori Barang';
+
+    protected static ?string $label = 'Data Kategori Barang';
+    
     public static function form(Form $form): Form
     {
         return $form

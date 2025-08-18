@@ -31,6 +31,10 @@ class DataDiriResource extends Resource
 
     protected static ?string $navigationGroup = 'Super Admin';
 
+    protected static ?string $pluralLabel = 'Data Diri';
+
+    protected static ?string $label = 'Data Diri';
+
     public static function form(Form $form): Form
     {
         return $form

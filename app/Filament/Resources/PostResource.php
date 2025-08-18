@@ -46,6 +46,7 @@ class PostResource extends Resource
                     ->readOnly(),
                 Select::make('kategori')
                     ->relationship('kategori','title')
+                    ->preload()
                     ->required()
                     ->multiple(),
                 Hidden::make('user_id')

@@ -36,6 +36,10 @@ class TransaksiDonasiProgramResource extends Resource
 
     protected static ?string $navigationLabel = 'Data Transaksi Donasi Program';
 
+    protected static ?string $pluralLabel = 'Data Transaksi Donasi Program';
+
+    protected static ?string $label = 'Data Transaksi Donasi Program';
+
     protected static ?string $navigationGroup = 'Transaksi';
 
     public static function form(Form $form): Form

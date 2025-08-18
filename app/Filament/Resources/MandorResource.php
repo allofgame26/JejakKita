@@ -29,6 +29,10 @@ class MandorResource extends Resource
 
     protected static ?string $navigationGroup = 'Pembangunan';
 
+    protected static ?string $pluralLabel = 'Data Mandor';
+
+    protected static ?string $label = 'Data Mandor';
+
     public static function form(Form $form): Form
     {
         return $form
