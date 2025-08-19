@@ -26,7 +26,7 @@ class PengisianDonasiResource extends Resource
 
     protected static ?string $label = 'Pengisian Donasi';
 
-    protected static ?string $navigationGroup = 'Donasi';
+    protected static ?string $navigationGroup = 'Transaksi';
 
     protected static ?string $slug = 'pengisian-donasi';
 

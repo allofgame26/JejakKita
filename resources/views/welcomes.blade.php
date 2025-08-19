@@ -471,7 +471,7 @@
           <li class="nav-item"><a href="#lokasi" class="nav-link">Lokasi</a></li>
           <li class="nav-item"><a href="#kontak" class="nav-link">Kontak</a></li>
           <li class="nav-item">
-            <a href="http://127.0.0.1:8000/admin/login" class="btn btn-login ms-lg-3 px-4 py-1 rounded">Login</a>
+            <a href="http://127.0.0.1:8000/admin" class="btn btn-login ms-lg-3 px-4 py-1 rounded">Login</a>
           </li>
         </ul>
       </div>
