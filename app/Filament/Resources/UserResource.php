@@ -31,6 +31,16 @@ class UserResource extends Resource
 
     protected static ?string $navigationGroup = 'Super Admin';
 
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeTooltip(): ?string
+    {
+        return 'Banyaknya User';
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -51,6 +61,7 @@ class UserResource extends Resource
                     ->dehydrated(fn ($state) => filled($state)), // hanya simpan jika diisi
                 Select::make('id_identitas')
                     ->label('Data Diri')
+                    ->preload()
                     ->relationship('datadiri','nama_lengkap')
                     ->searchable(['nama_lengkap','nip'])
             ]);

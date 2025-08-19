@@ -64,6 +64,7 @@ class TransaksiDonasiProgramResource extends Resource
                         ->schema([
                             Select::make('pembayaran_id')
                                 ->required()
+                                ->preload()
                                 ->relationship('pembayaran','nama_pembayaran')
                                 ->options(m_metode_pembayaran::where('is_open', true)->pluck('nama_pembayaran','id'))
                                 ->label('Pilih Pembayaran'),
