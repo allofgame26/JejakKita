@@ -27,6 +27,10 @@ class KategoriPostResource extends Resource
 
     protected static ?string $navigationGroup = 'Management Konten';
 
+    protected static ?string $pluralLabel = 'Data Kategori Postingan';
+
+    protected static ?string $label = 'Data Kategori Postingan';
+
     public static function form(Form $form): Form
     {
         return $form

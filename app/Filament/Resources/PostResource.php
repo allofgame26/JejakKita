@@ -40,12 +40,14 @@ class PostResource extends Resource
                     ->label('Judul')
                     ->required()
                     ->reactive()
+                    ->unique(ignoreRecord: TRUE)
                     ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', \Str::slug($state))),
                 TextInput::make('slug')
                     ->label('slug')
                     ->readOnly(),
                 Select::make('kategori')
                     ->relationship('kategori','title')
+                    ->preload()
                     ->required()
                     ->multiple(),
                 Hidden::make('user_id')

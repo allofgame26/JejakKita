@@ -46,6 +46,7 @@ class TransaksiDonasiSpesifikResource extends Resource
                             TableSelect::make('kebutuhan')
                                 ->relationship('kebutuhan','id')
                                 ->label('Kebutuhan Barang')
+                                ->placeholder('Kebutuhan Barang')
                                 ->optionColor('success')
                                 ->placeholder('Masukkan Barang Donasi')
                                 ->optionIcon('heroicon-o-archive-box')
@@ -56,6 +57,7 @@ class TransaksiDonasiSpesifikResource extends Resource
                                             TextColumn::make('barang.nama_barang')->label('Nama Barang'),
                                             TextColumn::make('jumlah_barang')->label('Jumlah Barang'),
                                             TextColumn::make('status')->label('status')->badge(),
+                                            TextColumn::make('program.nama_program')->label('Nama Program')->searchable()
                                         ])
                                         ->modifyQueryUsing(function ($query) {
                                             return $query->with('barang')->where('status','tersedia');
@@ -74,7 +76,7 @@ class TransaksiDonasiSpesifikResource extends Resource
                                         });
 
                                     $set('jumlah_donasi',$totaldonasi);
-                                }),
+                                }), //melakukan perubahan didalam FrontEnd, dan menyimpankan datakedalam kolom tersebut
                         ]),
                     Step::make('Pilih Pembayaran Pembayaran')
                         ->schema([
@@ -84,6 +86,7 @@ class TransaksiDonasiSpesifikResource extends Resource
                                 ->default('pending'),
                             Select::make('pembayaran_id')
                                 ->required()
+                                ->preload()
                                 ->options(m_metode_pembayaran::where('is_open', true)->pluck('nama_pembayaran','id'))
                                 ->label('Pilih Pembayaran'),
                             TextInput::make('jumlah_donasi')

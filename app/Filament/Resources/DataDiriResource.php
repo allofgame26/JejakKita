@@ -31,6 +31,10 @@ class DataDiriResource extends Resource
 
     protected static ?string $navigationGroup = 'Super Admin';
 
+    protected static ?string $pluralLabel = 'Data Diri';
+
+    protected static ?string $label = 'Data Diri';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -38,7 +42,8 @@ class DataDiriResource extends Resource
                 TextInput::make('nama_lengkap')
                     ->required(),
                 TextInput::make('nip')
-                    ->required(),
+                    ->required()
+                    ->unique(ignoreRecord: TRUE),
                 TextInput::make('tempat_lahir')
                     ->required(),
                 DatePicker::make('tanggal_lahir')

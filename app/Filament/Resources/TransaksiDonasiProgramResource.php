@@ -36,6 +36,10 @@ class TransaksiDonasiProgramResource extends Resource
 
     protected static ?string $navigationLabel = 'Data Transaksi Donasi Program';
 
+    protected static ?string $pluralLabel = 'Data Transaksi Donasi Program';
+
+    protected static ?string $label = 'Data Transaksi Donasi Program';
+
     protected static ?string $navigationGroup = 'Transaksi';
 
     public static function form(Form $form): Form
@@ -60,6 +64,7 @@ class TransaksiDonasiProgramResource extends Resource
                         ->schema([
                             Select::make('pembayaran_id')
                                 ->required()
+                                ->preload()
                                 ->relationship('pembayaran','nama_pembayaran')
                                 ->options(m_metode_pembayaran::where('is_open', true)->pluck('nama_pembayaran','id'))
                                 ->label('Pilih Pembayaran'),
