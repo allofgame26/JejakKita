@@ -42,7 +42,8 @@ class DataDiriResource extends Resource
                 TextInput::make('nama_lengkap')
                     ->required(),
                 TextInput::make('nip')
-                    ->required(),
+                    ->required()
+                    ->unique(ignoreRecord: TRUE),
                 TextInput::make('tempat_lahir')
                     ->required(),
                 DatePicker::make('tanggal_lahir')

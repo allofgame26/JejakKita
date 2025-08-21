@@ -39,7 +39,7 @@ class ProgramPembangunanResource extends Resource
             ->schema([
                 TextInput::make('kode_program')
                     ->required()
-                    ->unique()
+                    ->unique(ignoreRecord: TRUE)
                     ->validationMessages([
                         'unique' => 'Kode Program sudah Terpakai'
                     ]),

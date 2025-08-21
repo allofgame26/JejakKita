@@ -37,6 +37,7 @@ class BarangResource extends Resource
             ->schema([
                 TextInput::make('kode_barang')
                     ->required()
+                    ->unique(ignoreRecord: true)
                     ->label('Kode Barang'),
                 Select::make('kategoribarang_id')
                     ->required()

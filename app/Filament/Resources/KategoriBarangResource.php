@@ -35,7 +35,7 @@ class KategoriBarangResource extends Resource
         return $form
             ->schema([
                 TextInput::make('nama_kategori')
-                    ->unique()
+                    ->unique(ignoreRecord: true)
                     ->label('Nama Kategori')
                     ->required(),
                 TextInput::make('deskripsi_kategori')

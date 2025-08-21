@@ -74,7 +74,7 @@ class TransaksiDonasiSpesifikResource extends Resource
                                         });
 
                                     $set('jumlah_donasi',$totaldonasi);
-                                }),
+                                }), //melakukan perubahan didalam FrontEnd, dan menyimpankan datakedalam kolom tersebut
                         ]),
                     Step::make('Pilih Pembayaran Pembayaran')
                         ->schema([

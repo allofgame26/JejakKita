@@ -40,7 +40,7 @@ class MandorResource extends Resource
                 TextInput::make('nama_lengkap')
                     ->required(),
                 TextInput::make('nik')
-                    ->unique()
+                    ->unique(ignoreRecord: true)
                     ->required()
                     ->label('Nomor Induk Kependudukan')
                     ->minLength(16)

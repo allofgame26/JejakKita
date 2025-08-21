@@ -41,7 +41,7 @@ class MetodePembayaranResource extends Resource
                 TextInput::make('no_rekening')
                     ->label('Nomor Rekenening')
                     ->required()
-                    ->unique()
+                    ->unique(ignoreRecord: TRUE)
                     ->validationMessages([
                         'unique' => 'Nomor Rekening sudah ada'
                     ]),
