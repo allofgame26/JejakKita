@@ -48,6 +48,8 @@ class TransaksiDonasiSpesifikResource extends Resource
                                 ->label('Kebutuhan Barang')
                                 ->placeholder('Kebutuhan Barang')
                                 ->optionColor('success')
+                                ->placeholder('Masukkan Barang Donasi')
+                                ->optionIcon('heroicon-o-archive-box')
                                 ->selectionTable(function (Table $table) {
                                     return $table
                                         ->heading('Pilih Barang')

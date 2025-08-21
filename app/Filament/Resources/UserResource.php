@@ -65,6 +65,12 @@ class UserResource extends Resource
                     ->preload()
                     ->relationship('datadiri','nama_lengkap')
                     ->searchable(['nama_lengkap','nip'])
+                    ->preload(),
+                Select::make('roles')
+                    ->relationship('roles','name')
+                    ->label('Roles')
+                    ->preload()
+                    ->searchable()
             ]);
     }
 
@@ -72,12 +78,16 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('id'),
                 ImageColumn::make('profile_url')->label('Profile'),
-                TextColumn::make('name'),
-                TextColumn::make('email'),
+                TextColumn::make('name')
+                    ->label('username'),
+                TextColumn::make('email')
+                    ->label('E-Mail'),
                 TextColumn::make('datadiri.nip')
                     ->label('NIP'),
+                TextColumn::make('roles.name')
+                    ->label('Roles')
+                    ->badge()
             ])
             ->filters([
                 //

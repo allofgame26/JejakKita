@@ -11,24 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('t_pengisian_donasis', function (Blueprint $table) {
+        Schema::create('t_transaksi_donasi_programs', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('program_id');
             $table->unsignedBigInteger('user_id');
-            $table->enum('donasi_type', ['program', 'spesifik'])->comment('Jenis donasi: program atau spesifik');
-            $table->unsignedBigInteger('donasi_id')->comment('ID dari program pembangunan atau donasi spesifik');
             $table->unsignedBigInteger('pembayaran_id');
-            $table->decimal('jumlah_donasi', 15, 2);
-            $table->text('pesan_donatur')->nullable();
-            $table->datetime('tanggal_donasi')->default(now());
+            $table->string('jumlah_donasi');
+            $table->enum('status_pembayaran',['gagal','pending','sukses']);
+            $table->string('pesan_donatur');
             $table->timestamps();
 
-            // Foreign key constraints
+            $table->foreign('program_id')->references('id')->on('m_program_pembangunans')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreign('pembayaran_id')->references('id')->on('m_metode_pembayarans')->cascadeOnDelete()->cascadeOnUpdate();
-            
-            // Index untuk performa
-            $table->index(['donasi_type', 'donasi_id']);
-            $table->index('tanggal_donasi');
         });
     }
 
@@ -37,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('t_pengisian_donasis');
+        Schema::dropIfExists('t_transaksi_donasi_programs');
     }
 };
