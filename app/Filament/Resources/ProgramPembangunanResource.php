@@ -5,6 +5,9 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ProgramPembangunanResource\Pages;
 use App\Filament\Resources\ProgramPembangunanResource\RelationManagers\BarangRelationManager;
 use App\Models\m_program_pembangunan;
+use App\Models\t_kebutuhan_barang_program;
+use App\Models\t_transaksi_donasi_program;
+use App\Models\t_transaksi_donasi_spesifik;
 use Dotenv\Util\Str;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
@@ -15,9 +18,12 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Enums\RecordCheckboxPosition;
 use Filament\Tables\Table;
+use IbrahimBougaoua\FilaProgress\Tables\Columns\ProgressBar;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\DB;
 
 class ProgramPembangunanResource extends Resource
 {
@@ -51,20 +57,20 @@ class ProgramPembangunanResource extends Resource
                 TextInput::make('nama_pembangunan')
                     ->required(),
                 DatePicker::make('tanggal_mulai')
-                    ->displayFormat('d/m/Y')
+                    ->displayFormat('d M Y')
                     ->native(false)
                     ->required()
                     ->minDate(now())
                     ->suffixIcon('heroicon-m-calendar')
                     ->live(),
                 DatePicker::make('estimasi_tanggal_selesai')
-                    ->displayFormat('d/m/Y')
+                    ->displayFormat('d M Y')
                     ->native(false)
                     ->required()
                     ->minDate(fn ($get) => $get('tanggal_mulai'))
                     ->suffixIcon('heroicon-m-calendar'),
                 DatePicker::make('tanggal_selesai_aktual')
-                    ->displayFormat('d/m/Y')
+                    ->displayFormat('d M Y')
                     ->native(false)
                     ->minDate(fn ($get) => $get('tanggal_mulai'))
                     ->suffixIcon('heroicon-m-calendar'),
@@ -110,6 +116,18 @@ class ProgramPembangunanResource extends Resource
                         'berjalan' => 'info',
                         'selesai' => 'success',
                         'ditunda' => 'danger',
+                    }),
+                ProgressBar::make('progress_program')
+                    ->label('Dana Donasi')
+                    ->getStateUsing(function ($record){
+                        $t_transaksi_program = t_transaksi_donasi_program::where([['program_id', $record->id],['status_pembayaran', 'sukses']])->sum('jumlah_donasi');
+                        $t_transaksi_kebutuhan = t_transaksi_donasi_spesifik::join('donasi_kebutuhans', 't_transaksi_donasi_spesifiks.id','=','donasi_kebutuhans.donasi_id')->join('t_kebutuhan_barang_programs', 'donasi_kebutuhans.kebutuhan_id', '=', 't_kebutuhan_barang_programs.id')->where([['t_kebutuhan_barang_programs.program_id', $record->id],['status_pembayaran','sukses']])->sum('jumlah_donasi');
+                        $total = $record->estimasi_biaya;
+                        $progress = $t_transaksi_program + $t_transaksi_kebutuhan;
+                        return [
+                            'total' => $total,
+                            'progress' => $progress,
+                        ];
                     }),
             ])
             ->filters([
