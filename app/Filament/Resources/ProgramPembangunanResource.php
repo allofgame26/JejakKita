@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProgramPembangunanResource\Pages;
 use App\Filament\Resources\ProgramPembangunanResource\RelationManagers\BarangRelationManager;
+use App\Filament\Resources\ProgramPembangunanResource\RelationManagers\PriorityRelationManager;
 use App\Models\m_program_pembangunan;
 use App\Models\t_kebutuhan_barang_program;
 use App\Models\t_transaksi_donasi_program;
@@ -146,7 +147,8 @@ class ProgramPembangunanResource extends Resource
     public static function getRelations(): array
     {
         return [
-            BarangRelationManager::class
+            BarangRelationManager::class,
+            PriorityRelationManager::class
         ];
     }
 
