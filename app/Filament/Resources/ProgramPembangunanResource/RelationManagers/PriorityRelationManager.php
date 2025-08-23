@@ -3,6 +3,8 @@
 namespace App\Filament\Resources\ProgramPembangunanResource\RelationManagers;
 
 use Filament\Forms;
+use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -44,18 +46,35 @@ class PriorityRelationManager extends RelationManager
             ->headerActions([
                 // Tables\Actions\CreateAction::make(),
                 AttachAction::make()
+                    ->modalIcon('heroicon-o-exclamation-triangle')
+                    ->modalDescription('Beri Nilai Retang 1 - 5')
                     ->preloadRecordSelect()
                     ->label('Tambah Prioritas')
                     ->icon('heroicon-o-plus-circle')
                     ->color('warning')
                     ->form(fn (AttachAction $action) => [
-                        $action->getRecordSelect(),
-                        TextInput::make('nilai_priority')
-                            ->numeric()
-                            ->minValue(0)
-                            ->minValue(5)
-                            ->prefixIcon('heroicon-o-percent-badge')
-                    ])
+                        Fieldset::make('Nilai')
+                            ->schema([
+                                $action->getRecordSelect(),
+                                Radio::make('nilai_priority')
+                                    ->label('Beri Nilai Skor')
+                                    ->options([
+                                        '1' => '1 - Sangat Rendah',
+                                        '2' => '2 - Rendah',
+                                        '3' => '3 - Sedang',
+                                        '4' => '4 - Tinggi',
+                                        '5' => '5 - Sangat Tinggi',
+                                    ])
+                                    ->descriptions([
+                                        '1' => 'Dampak atau urgensi sangat kecil, bisa ditunda tanpa risiko.',
+                                        '2' => 'Dampak atau urgensi rendah, tidak terlalu signifikan.',
+                                        '3' => 'Dampak atau urgensi cukup, standar atau netral.',
+                                        '4' => 'Dampak atau urgensi besar dan penting untuk diperhatikan.',
+                                        '5' => 'Dampak atau urgensi sangat kritis, harus segera ditangani.',
+                                    ])
+                                ->required()
+                            ])->columns(1)
+                    ]) 
             ])
             ->actions([
                 // Tables\Actions\EditAction::make(),

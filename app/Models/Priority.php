@@ -18,7 +18,7 @@ class Priority extends Model
 
     public function mProgramPembangunans(): BelongsToMany
     {
-        return $this->belongsToMany(m_program_pembangunan::class,'priority_pembangunans','priority_id','program_id')->withPivot('nama_priority','nilai_priority');
+        return $this->belongsToMany(m_program_pembangunan::class,'priority_pembangunans','priority_id','program_id')->withPivot('nilai_priority');
     }
     
 }

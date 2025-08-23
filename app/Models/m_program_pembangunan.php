@@ -44,6 +44,6 @@ class m_program_pembangunan extends Model implements HasMedia
 
     public function priority(): BelongsToMany
     {
-        return $this->belongsToMany(Priority::class,'priority_pembangunans','program_id','priority_id')->withPivot('nama_pembangunan');
+        return $this->belongsToMany(Priority::class,'priority_pembangunans','program_id','priority_id')->withPivot('nilai_priority');
     }
 }

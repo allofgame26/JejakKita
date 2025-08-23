@@ -15,6 +15,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\HtmlString;
 
 class PrioritasResource extends Resource
 {
@@ -22,13 +23,15 @@ class PrioritasResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-adjustments-horizontal';
 
-    protected static ?string $navigationLabel = 'Pengaturan Prioritas Pembangunan';
+    protected static ?string $navigationLabel = 'Prioritas Pembangunan';
 
     protected static ?string $pluralLabel = 'Pengaturan Prioritas Pembangunan';
 
     protected static ?string $label = 'Pengaturan Prioritas Pembangunan';
 
     protected static ?string $navigationGroup = 'Pembangunan';
+
+    protected static ?int $navigationSort = 15;
 
     public static function form(Form $form): Form
     {
@@ -50,12 +53,23 @@ class PrioritasResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+        
+            ->heading(function (){
+                $totalpersentasi = Priority::sum('persen_priority');
+
+                $textColorClass = ($totalpersentasi != 100) ? 'text-danger-500' : 'text-success-500';
+
+                $title = "Jumlah Bobot Prioritas: <span class='{$textColorClass}'>{$totalpersentasi}%</span>";
+
+                return new HtmlString($title);
+            })
             ->columns([
-                TextColumn::make('nama_prioritas')
+                TextColumn::make('nama_priority')
                     ->label('Nama Prioritas')
-                    ->icon('heroicon-o-book-open'),
+                    ->icon('heroicon-o-book-open')
+                    ->description(fn (Priority $record): string => $record->deskripsi_priority),
                 TextColumn::make('persen_priority')
-                    ->label('Besar Priority')
+                    ->label('Besar Priority (Dalam Persen (%))')
                     ->icon('heroicon-o-percent-badge')
             ])
             ->filters([

@@ -7,12 +7,14 @@ use App\Filament\Resources\PengisianDonasiResource\RelationManagers;
 use App\Models\PengisianDonasi;
 use App\Models\t_pengisian_donasi;
 use Filament\Forms;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class PengisianDonasiResource extends Resource
 {
@@ -32,12 +34,8 @@ class PengisianDonasiResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nama_lengkap_donatur')
-                    ->label('Nama Lengkap Donatur')
-                    ->placeholder('Masukkan nama lengkap sesuai identitas')
-                    // ->helperText('Pastikan nama sesuai dengan identitas untuk kemudahan verifikasi.')
-                    ->prefixIcon('heroicon-o-user')
-                    ->required(),
+                Hidden::make('user_id')
+                    ->default(fn () => Auth()->id()),
                 Forms\Components\Select::make('pembayaran_id')
                     ->label('Metode Pembayaran')
                     ->relationship('pembayaran', 'nama_pembayaran')
@@ -59,6 +57,9 @@ class PengisianDonasiResource extends Resource
                     ->placeholder('Tulis pesan atau harapan Anda (opsional)')
                     ->rows(3)
                 // ->helperText('Pesan ini akan diterima oleh pengelola program.'),
+                // membuat Program automatis dipilih untuk masuk kedalam donasi
+                
+
             ]);
     }
 
