@@ -14,6 +14,7 @@ class Priority extends Model
         'nama_priority',
         'persen_priority',
         'deskripsi_priority',
+        'jenis_kriteria'
     ];
 
     public function mProgramPembangunans(): BelongsToMany

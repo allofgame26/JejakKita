@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nama_priority')->unique();
             $table->string('persen_priority');
             $table->string('deskripsi_priority');
+            $table->enum('jenis_kriteria',['benefit','cost']);
             $table->timestamps();
         });
     }

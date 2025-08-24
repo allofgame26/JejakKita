@@ -10,6 +10,8 @@ class Priority_Pembangunan extends Model
 {
     use HasFactory;
 
+    protected $table = 'priority_pembangunans';
+
     protected $fillable = [
         'program_id',
         'priority_id',

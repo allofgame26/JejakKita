@@ -6,6 +6,8 @@ use App\Filament\Resources\ProgramPembangunanResource\Pages;
 use App\Filament\Resources\ProgramPembangunanResource\RelationManagers\BarangRelationManager;
 use App\Filament\Resources\ProgramPembangunanResource\RelationManagers\PriorityRelationManager;
 use App\Models\m_program_pembangunan;
+use App\Models\Priority;
+use App\Models\Priority_Pembangunan;
 use App\Models\t_kebutuhan_barang_program;
 use App\Models\t_transaksi_donasi_program;
 use App\Models\t_transaksi_donasi_spesifik;
@@ -19,6 +21,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\TextColumn\TextColumnSize;
 use Filament\Tables\Enums\RecordCheckboxPosition;
 use Filament\Tables\Table;
 use IbrahimBougaoua\FilaProgress\Tables\Columns\ProgressBar;
@@ -102,7 +105,8 @@ class ProgramPembangunanResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('kode_program')
-                    ->label('Kode Program'),
+                    ->label('Kode Program')
+                    ->searchable(),
                 TextColumn::make('nama_pembangunan')
                     ->label('Nama Pembangunan'),
                 TextColumn::make('tanggal_mulai')
@@ -130,6 +134,13 @@ class ProgramPembangunanResource extends Resource
                             'progress' => $progress,
                         ];
                     }),
+                TextColumn::make('prioritas')
+                    ->label('Prioritas')
+                    ->numeric(2)
+                    ->sortable()
+                    ->getStateUsing(function (m_program_pembangunan $record): float{
+                        return $record->sawScore();
+                    })
             ])
             ->filters([
                 //

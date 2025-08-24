@@ -7,6 +7,8 @@ use App\Filament\Resources\PrioritasResource\RelationManagers;
 use App\Models\Prioritas;
 use App\Models\Priority;
 use Filament\Forms;
+use Filament\Forms\Components\Radio;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -46,7 +48,17 @@ class PrioritasResource extends Resource
                     ->suffixIcon('heroicon-o-percent-badge'),
                 TextInput::make('deskripsi_priority')
                     ->required()
-                    ->label('Deskripsi Prioritas')
+                    ->label('Deskripsi Prioritas'),
+                Radio::make('jenis_kriteria')
+                    ->options([
+                        'benefit' => 'Keuntungan (Benefit)',
+                        'cost' => 'Kerugian (Cost)',
+                    ])
+                    ->required()
+                    ->descriptions([
+                       'benefit' => 'Benefit adalah kriteria di mana nilai yang lebih tinggi adalah yang terbaik (misalnya: kualitas, manfaat, laba)',
+                       'cost' => 'Cost adalah Kriteria di mana nilai yang lebih rendah adalah yang terbaik (misalnya: biaya, waktu, risiko)'
+                    ])
             ]);
     }
 
@@ -70,7 +82,15 @@ class PrioritasResource extends Resource
                     ->description(fn (Priority $record): string => $record->deskripsi_priority),
                 TextColumn::make('persen_priority')
                     ->label('Besar Priority (Dalam Persen (%))')
-                    ->icon('heroicon-o-percent-badge')
+                    ->icon('heroicon-o-percent-badge'),
+                TextColumn::make('jenis_kriteria')
+                    ->label('Jenis Kriteria')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state){
+                        'cost' => 'danger',
+                        'benefit' => 'success'
+                    })
+                    
             ])
             ->filters([
                 //

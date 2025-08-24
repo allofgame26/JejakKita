@@ -46,4 +46,52 @@ class m_program_pembangunan extends Model implements HasMedia
     {
         return $this->belongsToMany(Priority::class,'priority_pembangunans','program_id','priority_id')->withPivot('nilai_priority');
     }
+
+    public function sawScore(): float
+    {
+        $kriteria = Priority::all()->keyBy('id');
+
+        $nilaiMentah = Priority_Pembangunan::where('program_id', $this->id)->get();
+
+        if ($kriteria->isEmpty() || $nilaiMentah->isEmpty()) {
+            return 0.0;
+        }
+
+        $maxMinValues = [];
+
+        foreach ($kriteria as $k){
+            $query = Priority_Pembangunan::where('priority_id', $k->id);
+            if($k->jenis_kriteria == 'benefit'){
+                $maxMinValues[$k->id] = $query->max('nilai_priority');
+            } else {
+                $maxMinValues[$k->id] = $query->min('nilai_priority');
+            }
+        }
+
+        $skorTotal = 0;
+
+        foreach ($nilaiMentah as $nilai){
+            $kriteriaDetail = $kriteria[$nilai->priority_id];
+            $nilaiPrioritas = $nilai->nilai_priority;
+
+            $nilaiTernormalisasi = 0;
+
+
+            if($nilaiPrioritas > 0 && isset($maxMinValues[$nilai->priority_id])){
+                if ($kriteriaDetail->jenis_kriteria == 'benefit'){
+                    $nilaiTernormalisasi = $nilaiPrioritas / $maxMinValues[$nilai->priority_id];
+                } else {
+                    $nilaiTernormalisasi = $maxMinValues[$nilai->priority_id] / $nilaiPrioritas;
+                }
+            }
+
+            $bobot = $kriteriaDetail->persen_priority / 100;
+            $skorTotal += $bobot * $nilaiTernormalisasi;
+        }
+
+        return round($skorTotal, 2);
+    }
+    
+
+
 }
