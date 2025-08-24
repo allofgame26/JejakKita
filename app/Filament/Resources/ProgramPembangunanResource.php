@@ -134,14 +134,13 @@ class ProgramPembangunanResource extends Resource
                             'progress' => $progress,
                         ];
                     }),
-                TextColumn::make('prioritas')
+                TextColumn::make('skor_prioritas_akhir')
                     ->label('Prioritas')
+                    ->icon('heroicon-o-information-circle')
                     ->numeric(2)
                     ->sortable()
-                    ->getStateUsing(function (m_program_pembangunan $record): float{
-                        return $record->sawScore();
-                    })
             ])
+            ->defaultSort('skor_prioritas_akhir','desc')
             ->filters([
                 //
             ])

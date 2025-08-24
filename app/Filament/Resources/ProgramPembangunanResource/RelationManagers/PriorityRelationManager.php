@@ -74,11 +74,14 @@ class PriorityRelationManager extends RelationManager
                                     ])
                                 ->required()
                             ])->columns(1)
-                    ]) 
+                    ])
+                    ->after(fn () => $this->getOwnerRecord()->calculateAndSavePriorityScore()), 
             ])
             ->actions([
-                // Tables\Actions\EditAction::make(),
-                DetachAction::make(),
+                // Tables\Actions\EditAction::make()
+                //     ->after(fn () => $this->getOwnerRecord()->calculateAndSavePriorityScore()),
+                DetachAction::make()
+                    ->after(fn () => $this->getOwnerRecord()->calculateAndSavePriorityScore()),
                 // Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([

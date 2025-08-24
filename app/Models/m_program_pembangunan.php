@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\DB;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -25,6 +26,7 @@ class m_program_pembangunan extends Model implements HasMedia
         'estimasi_biaya',
         'status',
         'deskripsi',
+        'skor_prioritas_akhir'
     ];
 
     public function mandor(): BelongsTo
@@ -47,51 +49,73 @@ class m_program_pembangunan extends Model implements HasMedia
         return $this->belongsToMany(Priority::class,'priority_pembangunans','program_id','priority_id')->withPivot('nilai_priority');
     }
 
-    public function sawScore(): float
-    {
-        $kriteria = Priority::all()->keyBy('id');
+    // public function sawScore(): float
+    // {
+    //     $kriteria = Priority::all()->keyBy('id');
 
-        $nilaiMentah = Priority_Pembangunan::where('program_id', $this->id)->get();
+    //     $nilaiMentah = Priority_Pembangunan::where('program_id', $this->id)->get();
 
-        if ($kriteria->isEmpty() || $nilaiMentah->isEmpty()) {
-            return 0.0;
-        }
+    //     if ($kriteria->isEmpty() || $nilaiMentah->isEmpty()) {
+    //         return 0.0;
+    //     }
 
-        $maxMinValues = [];
+    //     $maxMinValues = [];
 
-        foreach ($kriteria as $k){
-            $query = Priority_Pembangunan::where('priority_id', $k->id);
-            if($k->jenis_kriteria == 'benefit'){
-                $maxMinValues[$k->id] = $query->max('nilai_priority');
-            } else {
-                $maxMinValues[$k->id] = $query->min('nilai_priority');
-            }
-        }
+    //     foreach ($kriteria as $k){
+    //         $query = Priority_Pembangunan::where('priority_id', $k->id);
+    //         if($k->jenis_kriteria == 'benefit'){
+    //             $maxMinValues[$k->id] = $query->max('nilai_priority');
+    //         } else {
+    //             $maxMinValues[$k->id] = $query->min('nilai_priority');
+    //         }
+    //     }
 
-        $skorTotal = 0;
+    //     $skorTotal = 0;
 
-        foreach ($nilaiMentah as $nilai){
-            $kriteriaDetail = $kriteria[$nilai->priority_id];
-            $nilaiPrioritas = $nilai->nilai_priority;
+    //     foreach ($nilaiMentah as $nilai){
+    //         $kriteriaDetail = $kriteria[$nilai->priority_id];
+    //         $nilaiPrioritas = $nilai->nilai_priority;
 
-            $nilaiTernormalisasi = 0;
+    //         $nilaiTernormalisasi = 0;
 
 
-            if($nilaiPrioritas > 0 && isset($maxMinValues[$nilai->priority_id])){
-                if ($kriteriaDetail->jenis_kriteria == 'benefit'){
-                    $nilaiTernormalisasi = $nilaiPrioritas / $maxMinValues[$nilai->priority_id];
-                } else {
-                    $nilaiTernormalisasi = $maxMinValues[$nilai->priority_id] / $nilaiPrioritas;
-                }
-            }
+    //         if($nilaiPrioritas > 0 && isset($maxMinValues[$nilai->priority_id])){
+    //             if ($kriteriaDetail->jenis_kriteria == 'benefit'){
+    //                 $nilaiTernormalisasi = $nilaiPrioritas / $maxMinValues[$nilai->priority_id];
+    //             } else {
+    //                 $nilaiTernormalisasi = $maxMinValues[$nilai->priority_id] / $nilaiPrioritas;
+    //             }
+    //         }
 
-            $bobot = $kriteriaDetail->persen_priority / 100;
-            $skorTotal += $bobot * $nilaiTernormalisasi;
-        }
+    //         $bobot = $kriteriaDetail->persen_priority / 100;
+    //         $skorTotal += $bobot * $nilaiTernormalisasi;
+    //     }
 
-        return round($skorTotal, 2);
-    }
+    //     return round($skorTotal, 2);
+    // }
     
+    public function calculateAndSavePriorityScore(): void
+    {
 
+        // dd('Muncul');
+
+        $bobotPrioritas = Priority::all()->pluck('persen_priority','id');
+
+        $skorInputs = DB::table('priority_pembangunans')
+                        ->where('program_id', $this->id)
+                        ->pluck('nilai_priority', 'priority_id');
+
+        $totalSkorAkhir = 0;
+
+        foreach ($skorInputs as $priorityId => $nilaiSkor){
+            if (isset($bobotPrioritas[$priorityId])) {
+                $bobot = $bobotPrioritas[$priorityId] / 100;
+                $totalSkorAkhir += ($nilaiSkor * $bobot);
+            }
+        }
+
+        $this->skor_prioritas_akhir = $totalSkorAkhir;
+        $this->saveQuietly();
+    }
 
 }
