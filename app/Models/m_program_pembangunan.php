@@ -26,7 +26,8 @@ class m_program_pembangunan extends Model implements HasMedia
         'estimasi_biaya',
         'status',
         'deskripsi',
-        'skor_prioritas_akhir'
+        'skor_prioritas_akhir',
+        'status_pendanaan'
     ];
 
     public function mandor(): BelongsTo
@@ -47,6 +48,25 @@ class m_program_pembangunan extends Model implements HasMedia
     public function priority(): BelongsToMany
     {
         return $this->belongsToMany(Priority::class,'priority_pembangunans','program_id','priority_id')->withPivot('nilai_priority');
+    }
+
+    public function hitungTotalDonasiTerkumpul()
+    {
+        $t_transaksi_program = t_transaksi_donasi_program::where([['program_id', $this->id],['status_pembayaran', 'sukses']])->sum('jumlah_donasi');
+
+        $t_transaksi_kebutuhan = t_transaksi_donasi_spesifik::join('donasi_kebutuhans', 't_transaksi_donasi_spesifiks.id','=','donasi_kebutuhans.donasi_id')->join('t_kebutuhan_barang_programs', 'donasi_kebutuhans.kebutuhan_id', '=', 't_kebutuhan_barang_programs.id')->where([['t_kebutuhan_barang_programs.program_id', $this->id],['status_pembayaran','sukses']])->sum('jumlah_donasi');
+
+        return $t_transaksi_program + $t_transaksi_kebutuhan;
+    }
+
+    public function cekDanUpdateStatus(): void
+    {
+        $totaldonasi = $this->hitungTotalDonasiTerkumpul();
+
+        if ($totaldonasi >= $this->estimasi_biaya){
+            $this->status_pendanaan = 'lengkap';
+            $this->saveQuietly();
+        }
     }
 
     // public function sawScore(): float

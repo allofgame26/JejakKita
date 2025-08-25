@@ -124,11 +124,11 @@ class ProgramPembangunanResource extends Resource
                     }),
                 ProgressBar::make('progress_program')
                     ->label('Dana Donasi')
-                    ->getStateUsing(function ($record){
-                        $t_transaksi_program = t_transaksi_donasi_program::where([['program_id', $record->id],['status_pembayaran', 'sukses']])->sum('jumlah_donasi');
-                        $t_transaksi_kebutuhan = t_transaksi_donasi_spesifik::join('donasi_kebutuhans', 't_transaksi_donasi_spesifiks.id','=','donasi_kebutuhans.donasi_id')->join('t_kebutuhan_barang_programs', 'donasi_kebutuhans.kebutuhan_id', '=', 't_kebutuhan_barang_programs.id')->where([['t_kebutuhan_barang_programs.program_id', $record->id],['status_pembayaran','sukses']])->sum('jumlah_donasi');
+                    ->getStateUsing(function (m_program_pembangunan $record){
                         $total = $record->estimasi_biaya;
-                        $progress = $t_transaksi_program + $t_transaksi_kebutuhan;
+
+                        $progress = $record->hitungTotalDonasiTerkumpul();
+                        
                         return [
                             'total' => $total,
                             'progress' => $progress,

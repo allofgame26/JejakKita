@@ -96,7 +96,7 @@ class TransaksiDonasiProgramResource extends Resource
                     ->sortable(),
                 TextColumn::make('jumlah_donasi')
                     ->label('Jumlah Donasi')
-                    ->money('IDR')
+                    ->money('IDR',true)
                     ->prefix('Rp.')
                     ->numeric(),
                 TextColumn::make('status_pembayaran')
