@@ -27,16 +27,22 @@ class BarangResource extends Resource
 
     protected static ?string $navigationGroup = 'Pembangunan';
 
+    protected static ?string $pluralLabel = 'Data Barang';
+
+    protected static ?string $label = 'Data Barang'; 
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 TextInput::make('kode_barang')
                     ->required()
+                    ->unique(ignoreRecord: true)
                     ->label('Kode Barang'),
                 Select::make('kategoribarang_id')
                     ->required()
-                    ->relationship('kategoriBarang','nama_kategori'),
+                    ->relationship('kategoriBarang','nama_kategori')
+                    ->preload(),
                 TextInput::make('nama_barang')
                     ->required()
                     ->label('Nama Barang'),
@@ -69,9 +75,15 @@ class BarangResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('kode_barang'),
-                TextColumn::make('kategoribarang.nama_kategori'),
-                TextColumn::make('nama_barang'),
+                TextColumn::make('kode_barang')
+                    ->label('Kode Barang')
+                    ->icon('heroicon-o-clipboard-document-list'),
+                TextColumn::make('kategoribarang.nama_kategori')
+                    ->label('Nama Kategori')
+                    ->icon('heroicon-o-archive-box'),
+                TextColumn::make('nama_barang')
+                    ->label('Nama Barang')
+                    ->icon('heroicon-o-gift'),
                 // TextColumn::make('total_harga')
                 //     ->label('Total Harga')
                 //     ->getStateUsing(fn ($record) => 

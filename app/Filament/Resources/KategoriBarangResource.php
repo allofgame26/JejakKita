@@ -26,12 +26,16 @@ class KategoriBarangResource extends Resource
 
     protected static ?string $navigationGroup = 'Pembangunan';
 
+    protected static ?string $pluralLabel = 'Data Kategori Barang';
+
+    protected static ?string $label = 'Data Kategori Barang';
+    
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 TextInput::make('nama_kategori')
-                    ->unique()
+                    ->unique(ignoreRecord: true)
                     ->label('Nama Kategori')
                     ->required(),
                 TextInput::make('deskripsi_kategori')

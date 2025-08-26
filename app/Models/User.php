@@ -86,4 +86,9 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->hasMany(t_transaksi_donasi_spesifik::class);
     }
+
+    public function feedback(): HasMany
+    {
+        return $this->hasMany(m_feedback::class);
+    }
 }

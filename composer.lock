@@ -1514,16 +1514,16 @@
         },
         {
             "name": "dvarilek/filament-table-select",
-            "version": "v2.0.5",
+            "version": "v2.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dvarilek/filament-table-select.git",
-                "reference": "913993a6b4e409ad19e2551b142f62961e2c621b"
+                "reference": "17e057680054f26059e02129aa6a0c787f736771"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dvarilek/filament-table-select/zipball/913993a6b4e409ad19e2551b142f62961e2c621b",
-                "reference": "913993a6b4e409ad19e2551b142f62961e2c621b",
+                "url": "https://api.github.com/repos/dvarilek/filament-table-select/zipball/17e057680054f26059e02129aa6a0c787f736771",
+                "reference": "17e057680054f26059e02129aa6a0c787f736771",
                 "shasum": ""
             },
             "require": {
@@ -1572,9 +1572,9 @@
             ],
             "support": {
                 "issues": "https://github.com/dvarilek/filament-table-select/issues",
-                "source": "https://github.com/dvarilek/filament-table-select/tree/v2.0.5"
+                "source": "https://github.com/dvarilek/filament-table-select/tree/v2.0.7"
             },
-            "time": "2025-07-24T12:37:10+00:00"
+            "time": "2025-08-11T15:33:29+00:00"
         },
         {
             "name": "dvarilek/livewire-closure-synthesizer",

@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Hash;
 use Nette\Utils\ImageColor;
+use SebastianBergmann\Type\TrueType;
 
 class UserResource extends Resource
 {
@@ -31,6 +32,16 @@ class UserResource extends Resource
 
     protected static ?string $navigationGroup = 'Super Admin';
 
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeTooltip(): ?string
+    {
+        return 'Banyaknya User';
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -39,22 +50,19 @@ class UserResource extends Resource
                     ->required(),
                 TextInput::make('email')
                     ->email()
-                    ->unique(
-                        table: User::class,
-                        column: 'email',
-                        ignoreRecord: true
-                    )
+                    ->unique(ignoreRecord: TRUE)
                     ->required(),
                 TextInput::make('password')
                     ->required()
                     ->password()
                     ->revealable()
                     ->label('Password')
-                    ->dehydrateStateUsing(fn ($state) => $state ? Hash::make($state) : null)
+                    ->dehydrateStateUsing(fn ($state) => $state ? Hash::make($state) : null) //melakukan edit sebuah value yang di inputkan, setelah itu dimasukkan kedalam database
                     ->required(fn (string $context): bool => $context === 'create')
-                    ->dehydrated(fn ($state) => filled($state)), // hanya simpan jika diisi
+                    ->dehydrated(fn ($state) => filled($state)), // melakukan hanya simpan jika kolom diisi 
                 Select::make('id_identitas')
                     ->label('Data Diri')
+                    ->preload()
                     ->relationship('datadiri','nama_lengkap')
                     ->searchable(['nama_lengkap','nip'])
                     ->preload(),

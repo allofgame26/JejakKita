@@ -25,6 +25,10 @@ class MetodePembayaranResource extends Resource
 
     protected static ?string $navigationLabel = 'Metode Pembayaran';
 
+    protected static ?string $pluralLabel = 'Metode Pembayaran';
+
+    protected static ?string $label = 'Metode Pembayaran';
+
     protected static ?string $navigationGroup = 'Transaksi';
 
     public static function form(Form $form): Form
@@ -37,7 +41,7 @@ class MetodePembayaranResource extends Resource
                 TextInput::make('no_rekening')
                     ->label('Nomor Rekenening')
                     ->required()
-                    ->unique()
+                    ->unique(ignoreRecord: TRUE)
                     ->validationMessages([
                         'unique' => 'Nomor Rekening sudah ada'
                     ]),

@@ -27,6 +27,10 @@ class ProgramPembangunanResource extends Resource
 
     protected static ?string $navigationLabel = 'Data Pembangunan';
 
+    protected static ?string $pluralLabel = 'Data Pembangunan';
+
+    protected static ?string $label = 'Data Pembangunan';
+
     protected static ?string $navigationGroup = 'Pembangunan';
 
     public static function form(Form $form): Form
@@ -35,7 +39,7 @@ class ProgramPembangunanResource extends Resource
             ->schema([
                 TextInput::make('kode_program')
                     ->required()
-                    ->unique()
+                    ->unique(ignoreRecord: TRUE)
                     ->validationMessages([
                         'unique' => 'Kode Program sudah Terpakai'
                     ]),
