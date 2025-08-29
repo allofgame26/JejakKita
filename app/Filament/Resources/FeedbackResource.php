@@ -20,6 +20,7 @@ use Filament\Tables\Filters\QueryBuilder\Constraints\DateConstraint;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use IbrahimBougaoua\FilamentRatingStar\Columns\Components\RatingStar;
+use IbrahimBougaoua\FilamentRatingStar\Forms\Components\RatingStar as ComponentsRatingStar;
 use Illuminate\Database\Eloquent\Builder;
 
 class FeedbackResource extends Resource
@@ -47,7 +48,7 @@ class FeedbackResource extends Resource
                         Hidden::make('user_id')->default(fn () => auth()->id()),
                         TextInput::make('subject_feedback')->label('Subjek Feedback')->required(),
                         TextInput::make('isi_feedback')->label('Isi Subjek')->required(),
-                        RatingStar::make('rate')->label('Rating'),
+                        ComponentsRatingStar::make('rate')->label('Rating'),
                         SpatieMediaLibraryFileUpload::make('Foto feedback')->image()->imageEditor()->multiple()->collection('feedback')->label('Foto Feedback')
                     ])->columns('1')
             ]);
