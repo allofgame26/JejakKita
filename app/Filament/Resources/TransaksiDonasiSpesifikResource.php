@@ -60,7 +60,7 @@ class TransaksiDonasiSpesifikResource extends Resource
                                             TextColumn::make('program.nama_pembangunan')->label('Nama Program')->searchable()
                                         ])
                                         ->modifyQueryUsing(function ($query) {
-                                            return $query->with(['barang','program'])->where('status','tersedia');
+                                            return $query->with(['barang','program'])->where('status','tersedia')->where('status_pembelian','tersedia');
                                         });
                                     })
                                 ->multiple()
@@ -110,8 +110,8 @@ class TransaksiDonasiSpesifikResource extends Resource
                 TextColumn::make('created_at')
                     ->label('Tanggal Transaksi')
                     ->date('d M Y'),
-                TextColumn::make('user.email')
-                    ->label('E-mail Donatur')
+                TextColumn::make('user.datadiri.nama_lengkap')
+                    ->label('Nama Donatur')
                     ->sortable(),
                 TextColumn::make('kebutuhan.barang.nama_barang')
                     ->label('Nama Barang')

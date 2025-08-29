@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('barang_id');
             $table->string('jumlah_barang');
             $table->enum('status',['diambil','tersedia']);
+            $table->enum('status_pembelian',['belum_tersedia','tersedia']);
             $table->string('keterangan');
             $table->timestamps();
 

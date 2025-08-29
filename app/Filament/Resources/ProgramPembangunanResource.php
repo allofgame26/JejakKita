@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ProgramPembangunanResource\Pages;
 use App\Filament\Resources\ProgramPembangunanResource\RelationManagers\BarangRelationManager;
 use App\Filament\Resources\ProgramPembangunanResource\RelationManagers\PriorityRelationManager;
+use App\Models\m_periode;
 use App\Models\m_program_pembangunan;
 use App\Models\Priority;
 use App\Models\Priority_Pembangunan;
@@ -42,6 +43,8 @@ class ProgramPembangunanResource extends Resource
     protected static ?string $label = 'Data Pembangunan';
 
     protected static ?string $navigationGroup = 'Pembangunan';
+
+    protected static ?int $navigationSort = 14;
 
     public static function form(Form $form): Form
     {
@@ -95,8 +98,10 @@ class ProgramPembangunanResource extends Resource
                         ->multiple()
                         ->collection('pembangunan'),
                 TextInput::make('deskripsi')
+                        ->required(),
+                Select::make('periode_id')
+                        ->options(m_periode::all()->pluck('nama_periode','id'))
                         ->required()
-
             ]);
     }
 
