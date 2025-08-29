@@ -21,6 +21,7 @@ return new class extends Migration
             $table->date('tanggal_selesai_aktual')->nullable();
             $table->string('estimasi_biaya');
             $table->enum('status',['diajukan','direncanakan','berjalan','selesai','ditunda']);
+            $table->enum('status_pendanaan',['belum_lengkap','lengkap']);
             $table->string('deskripsi');
             $table->timestamps();
 

@@ -67,4 +67,10 @@ class t_transaksi_donasi_program extends Model implements HasMedia
     {
         return $this->belongsTo(m_program_pembangunan::class, 'program_id');
     }
+
+    public static function dataDiri()
+    {
+        return self::with('user.datadiri')->get();
+    }
+
 }

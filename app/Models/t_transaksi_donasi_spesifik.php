@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -39,6 +40,7 @@ class t_transaksi_donasi_spesifik extends Model implements HasMedia
 
     public function program()
     {
+
         return $this->hasOneThrough(
             m_program_pembangunan::class,
             t_kebutuhan_barang_program::class,
