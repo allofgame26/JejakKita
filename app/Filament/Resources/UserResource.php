@@ -79,7 +79,7 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                ImageColumn::make('profile_url')->label('Profile'),
+                SpatieMediaLibraryImageColumn::make('profile_url')->label('Profile')->collection('profile'),
                 TextColumn::make('name')
                     ->label('username'),
                 TextColumn::make('email')

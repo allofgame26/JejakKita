@@ -39,6 +39,7 @@ class KategoriPostResource extends Resource
                     ->label('Nama Kategori')
                     ->required()
                     ->live()
+                    ->live(onBlur: true)
                     ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', \Str::slug($state))),
                 TextInput::make('slug')
                     ->label('slug')
