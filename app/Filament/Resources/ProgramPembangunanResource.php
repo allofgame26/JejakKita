@@ -19,6 +19,10 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
@@ -63,6 +67,10 @@ class ProgramPembangunanResource extends Resource
                     ->preload(),
                 TextInput::make('nama_pembangunan')
                     ->required(),
+                Select::make('periode_id')
+                    ->label('Periode Pembangunan')
+                    ->options(m_periode::all()->pluck('nama_periode','id'))
+                    ->required(),
                 DatePicker::make('tanggal_mulai')
                     ->displayFormat('d M Y')
                     ->native(false)
@@ -99,9 +107,6 @@ class ProgramPembangunanResource extends Resource
                         ->collection('pembangunan'),
                 TextInput::make('deskripsi')
                         ->required(),
-                Select::make('periode_id')
-                        ->options(m_periode::all()->pluck('nama_periode','id'))
-                        ->required()
             ]);
     }
 
@@ -150,6 +155,7 @@ class ProgramPembangunanResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -173,6 +179,44 @@ class ProgramPembangunanResource extends Resource
             'index' => Pages\ListProgramPembangunans::route('/'),
             'create' => Pages\CreateProgramPembangunan::route('/create'),
             'edit' => Pages\EditProgramPembangunan::route('/{record}/edit'),
+        ];
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        // Sekarang kita panggil fungsi yang mengembalikan array, dan memasukkannya ke dalam schema()
+        return $infolist->schema(static::getInfolistSchema());
+    }
+
+    // UBAH FUNGSI INI AGAR MENGEMBALIKAN ARRAY
+    public static function getInfolistSchema(): array
+    {
+        // Tidak lagi menggunakan Infolist::make(), langsung kembalikan array schema
+        return [
+            Section::make('Informasi Utama')
+                ->columns(2)
+                ->schema([
+                    TextEntry::make('nama_pembangunan')
+                        ->label('Nama Program'),
+                    TextEntry::make('status')
+                        ->badge(),
+                    TextEntry::make('estimasi_biaya')
+                        ->label('Target Dana')
+                        ->money('IDR'),
+                    TextEntry::make('periode.nama_periode')
+                        ->label('Periode'),
+                ]),
+
+            Section::make('Detail Program')
+                ->schema([
+                    TextEntry::make('deskripsi')
+                        ->label('Deskripsi Program')
+                        ->columnSpanFull(),
+                    SpatieMediaLibraryImageEntry::make('foto_pembangunan')
+                        ->label('Gambar Utama')
+                        ->collection('pembangunan')
+                        ->columnSpanFull(),
+                ])
         ];
     }
 }
