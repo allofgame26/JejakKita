@@ -19,7 +19,7 @@ class ProgramPembangunanWidget extends BaseWidget
     {
         return $table
             ->query(
-                m_program_pembangunan::query()->where('status_pendanaan','lengkap')->limit(5)
+                m_program_pembangunan::query()->where('status_pendanaan','belum_lengkap')->limit(5)
             )
             ->columns([
                 TextColumn::make('nama_pembangunan')->label('Nama Program'),
@@ -48,6 +48,7 @@ class ProgramPembangunanWidget extends BaseWidget
                 Action::make('donasi')
                     ->label('Donasi Sekarang')
                     ->color('success')
+                    ->icon('heroicon-o-document')
                     ->url(fn ($record) => route('filament.admin.resources.transaksi-donasi-programs.create', [
                         'program_id' => $record->id,
                     ]))
