@@ -29,9 +29,13 @@ class PostResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-newspaper';
     
-    protected static ?string $navigationLabel = 'Data Post';
+    protected static ?string $navigationLabel = 'Data Postingan';
 
     protected static ?string $navigationGroup = 'Management Konten';
+
+    protected static ?string $label = 'Data Postingan';
+
+    protected static ?string $slug = 'posts';
 
     public static function form(Form $form): Form
     {
@@ -72,21 +76,24 @@ class PostResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('title')
-                    ->label('Judul'),
-                ToggleColumn::make('is_published')
-                    ->label('Di Publish'),
-                TextColumn::make('created_at')
-                    ->label('Dibuat')
-                    ->date('d M Y'),
-                SpatieMediaLibraryImageColumn::make('media')
-                    ->collection('media')
+                TextColumn::make('title')->label('Judul'),
+                ToggleColumn::make('is_published')->label('Di Publish'),
+                TextColumn::make('created_at')->label('Dibuat')->date('d M Y'),
+                SpatieMediaLibraryImageColumn::make('media')->collection('media'),
             ])
             ->filters([
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make()
+                    ->label('Detail')
+                    ->icon('heroicon-o-eye')
+                    ->modalHeading('Detail Postingan')
+                    ->modalContent(fn ($record) => view('filament.resources.post-detail', [
+                        'record' => $record
+                    ])),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
