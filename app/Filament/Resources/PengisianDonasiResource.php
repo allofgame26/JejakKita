@@ -37,13 +37,22 @@ class PengisianDonasiResource extends Resource
         return $form
             ->schema([
                 Hidden::make('user_id')
-                    ->default(fn () => Auth()->id()),
+                    ->default(fn() => Auth()->id()),
                 Hidden::make('program_id')
                     ->default(function () {
-                        $topPriorityProgram = m_program_pembangunan::orderBy('skor_prioritas_akhir','desc')->first()->where('status_pendanaan','belum_lengkap');
+                        $topPriorityProgram = m_program_pembangunan::where('status_pendanaan', 'belum_lengkap')
+                            ->orderBy('skor_prioritas_akhir', 'desc')
+                            ->first();
 
-                        return $topPriorityProgram ? $topPriorityProgram->id : null;
-                    }),
+                        if ($topPriorityProgram) {
+                            return $topPriorityProgram->id;
+                        }
+
+                        // fallback: ambil program pertama
+                        $anyProgram = m_program_pembangunan::first();
+                        return $anyProgram ? $anyProgram->id : null;
+                    })
+                    ->required(),
                 Hidden::make('status_pembayaran')
                     ->default('pending'),
                 Forms\Components\Select::make('pembayaran_id')
@@ -68,7 +77,7 @@ class PengisianDonasiResource extends Resource
                     ->rows(3)
                 // ->helperText('Pesan ini akan diterima oleh pengelola program.'),
                 // membuat Program automatis dipilih untuk masuk kedalam donasi
-                
+
 
             ]);
     }
@@ -106,7 +115,7 @@ class PengisianDonasiResource extends Resource
                     ->label('Bayar Sekarang')
                     ->icon('heroicon-o-arrow-up-on-square')
                     ->color('primary')
-                    ->visible(fn ($record): bool => $record->status_pembayaran === "pending")
+                    ->visible(fn($record): bool => $record->status_pembayaran === "pending")
                     ->modalHeading('Upload Bukti Pembayaran')
                     ->modalSubmitActionLabel('Upload')
                     ->form([
