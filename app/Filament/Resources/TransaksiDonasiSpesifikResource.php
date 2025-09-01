@@ -57,10 +57,10 @@ class TransaksiDonasiSpesifikResource extends Resource
                                             TextColumn::make('barang.nama_barang')->label('Nama Barang'),
                                             TextColumn::make('jumlah_barang')->label('Jumlah Barang'),
                                             TextColumn::make('status')->label('status')->badge(),
-                                            TextColumn::make('program.nama_program')->label('Nama Program')->searchable()
+                                            TextColumn::make('program.nama_pembangunan')->label('Nama Program')->searchable()
                                         ])
                                         ->modifyQueryUsing(function ($query) {
-                                            return $query->with('barang')->where('status','tersedia');
+                                            return $query->with(['barang','program'])->where('status','tersedia')->where('status_pembelian','tersedia');
                                         });
                                     })
                                 ->multiple()
@@ -76,7 +76,7 @@ class TransaksiDonasiSpesifikResource extends Resource
                                         });
 
                                     $set('jumlah_donasi',$totaldonasi);
-                                }), //melakukan perubahan didalam FrontEnd, dan menyimpankan datakedalam kolom tersebut
+                                }), //melakukan perubahan didalam FrontEnd (tampilan), dan menyimpankan datakedalam kolom tersebut
                         ]),
                     Step::make('Pilih Pembayaran Pembayaran')
                         ->schema([
@@ -110,11 +110,12 @@ class TransaksiDonasiSpesifikResource extends Resource
                 TextColumn::make('created_at')
                     ->label('Tanggal Transaksi')
                     ->date('d M Y'),
-                TextColumn::make('user.email')
-                    ->label('E-mail Donatur')
+                TextColumn::make('user.datadiri.nama_lengkap')
+                    ->label('Nama Donatur')
                     ->sortable(),
                 TextColumn::make('kebutuhan.barang.nama_barang')
-                    ->label('Nama Barang'),
+                    ->label('Nama Barang')
+                    ->badge(),
                 TextColumn::make('jumlah_donasi')
                     ->label('Jumlah Donasi')
                     ->prefix('Rp.')
@@ -129,7 +130,7 @@ class TransaksiDonasiSpesifikResource extends Resource
                     }),
                 SpatieMediaLibraryImageColumn::make('bukti_pembayaran')
                     ->label('Bukti Pembayaran')
-                    ->collection('bukti_pembayaran')
+                    ->collection('bukti_pembayaran_spesifik')
             ])
             ->filters([
                 SelectFilter::make('program')

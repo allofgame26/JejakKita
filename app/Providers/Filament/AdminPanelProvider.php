@@ -4,6 +4,8 @@ namespace App\Providers\Filament;
 
 use App\Filament\Widgets\DashboardWidget;
 use App\Filament\Widgets\TestWidget;
+use App\Filament\Widgets\PorgramPembangunanWidget;
+use App\Filament\Widgets\ProgramPembangunanWidget;
 use Filament\Http\Middleware\Authenticate;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -51,6 +53,7 @@ class AdminPanelProvider extends PanelProvider
                 // Widgets\AccountWidget::class,
                 // Widgets\FilamentInfoWidget::class,
                 TestWidget::class, // Widget Bisa ditaruh didalam sini
+                ProgramPembangunanWidget::class,
                 DashboardWidget::class,
             ])
             ->middleware([

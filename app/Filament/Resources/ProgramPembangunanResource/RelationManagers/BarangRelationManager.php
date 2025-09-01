@@ -63,7 +63,8 @@ class BarangRelationManager extends RelationManager
                             ->numeric(),
                         Hidden::make('status')
                             ->default('tersedia'),
-                        TextInput::make('keterangan'),
+                        TextInput::make('keterangan')
+                            ->required(),
                     ]),
             ])
             ->actions([

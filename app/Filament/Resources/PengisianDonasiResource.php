@@ -4,9 +4,12 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PengisianDonasiResource\Pages;
 use App\Filament\Resources\PengisianDonasiResource\RelationManagers;
+use App\Models\m_program_pembangunan;
 use App\Models\PengisianDonasi;
 use App\Models\t_pengisian_donasi;
+use App\Models\t_transaksi_donasi_program;
 use Filament\Forms;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -15,10 +18,11 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use FilamentTiptapEditor\TiptapEditor;
 use Filament\Tables\Columns\HtmlColumn;
+use Illuminate\Support\Facades\Auth;
 
 class PengisianDonasiResource extends Resource
 {
-    protected static ?string $model = t_pengisian_donasi::class;
+    protected static ?string $model = t_transaksi_donasi_program::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-banknotes';
 
@@ -34,12 +38,16 @@ class PengisianDonasiResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nama_lengkap_donatur')
-                    ->label('Nama Lengkap Donatur')
-                    ->placeholder('Masukkan nama lengkap sesuai identitas')
-                    // ->helperText('Pastikan nama sesuai dengan identitas untuk kemudahan verifikasi.')
-                    ->prefixIcon('heroicon-o-user')
-                    ->required(),
+                Hidden::make('user_id')
+                    ->default(fn () => Auth()->id()),
+                Hidden::make('program_id')
+                    ->default(function () {
+                        $topPriorityProgram = m_program_pembangunan::orderBy('skor_prioritas_akhir','desc')->first()->where('status_pendanaan','belum_lengkap');
+
+                        return $topPriorityProgram ? $topPriorityProgram->id : null;
+                    }),
+                Hidden::make('status_pembayaran')
+                    ->default('pending'),
                 Forms\Components\Select::make('pembayaran_id')
                     ->label('Metode Pembayaran')
                     ->relationship('pembayaran', 'nama_pembayaran')
@@ -59,10 +67,10 @@ class PengisianDonasiResource extends Resource
                 TiptapEditor::make('pesan_donatur')
                     ->label('Pesan Donatur')
                     ->placeholder('Tulis pesan atau harapan Anda (opsional)')
-                    ->columnSpanFull() // form field lebar penuh
-                    ->extraAttributes([
-                        'style' => 'max-height:10px; overflow-y:auto;'
-                    ])
+                    ->rows(3)
+                // ->helperText('Pesan ini akan diterima oleh pengelola program.'),
+                // membuat Program automatis dipilih untuk masuk kedalam donasi
+                
             ]);
     }
 
@@ -70,7 +78,7 @@ class PengisianDonasiResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('nama_lengkap_donatur')
+                Tables\Columns\TextColumn::make('user.email')
                     ->label('Nama Lengkap Donatur')
                     ->searchable()
                     ->icon('heroicon-o-user'),
@@ -100,29 +108,29 @@ class PengisianDonasiResource extends Resource
                     ->label('Bayar Sekarang')
                     ->icon('heroicon-o-arrow-up-on-square')
                     ->color('primary')
-                    ->visible(fn($record) => $record->pembayaran_id && !$record->bukti_pembayaran)
+                    ->visible(fn ($record): bool => $record->status_pembayaran === "pending")
                     ->modalHeading('Upload Bukti Pembayaran')
                     ->modalSubmitActionLabel('Upload')
                     ->form([
                         \Filament\Forms\Components\ViewField::make('no_rekening')
                             ->view('filament.custom.no_rekening')
                             ->label('No Rekening'),
-                        \Filament\Forms\Components\FileUpload::make('bukti_pembayaran')
-                            ->label('Bukti Pembayaran (JPG/PNG/PDF)')
+                        \Filament\Forms\Components\SpatieMediaLibraryFileUpload::make('bukti_pembayaran')
+                            ->label('Bukti Pembayaran (JPG/PNG)')
+                            ->collection('bukti_pembayaran_pengisian_lansia')
                             ->image()
-                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'application/pdf'])
-                            ->maxSize(2048)
+                            ->imageEditor()
                             ->required(),
                     ])
-                    ->action(function ($record, array $data) {
-                        $record->bukti_pembayaran = $data['bukti_pembayaran'];
+                    ->action(function ($record) {
+                        $record->status_pembayaran = 'sukses';
                         $record->save();
                     }),
                 \Filament\Tables\Actions\Action::make('detail')
                     ->label('Detail')
                     ->icon('heroicon-o-eye')
                     ->color('info')
-                    ->visible(fn($record) => !empty($record->bukti_pembayaran))
+                    ->visible(fn($record): bool => $record->status_pembayaran !== "pending")
                     ->modalHeading('Detail Donasi')
                     ->modalSubmitAction(false)
                     ->modalCancelActionLabel('Tutup')

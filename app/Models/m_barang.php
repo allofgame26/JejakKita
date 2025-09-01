@@ -16,7 +16,6 @@ class m_barang extends Model
         'nama_barang',
         'kode_barang',
         'nama_satuan',
-        'harga_satuan',
         'deskripsi_barang',
     ];
 
@@ -27,7 +26,12 @@ class m_barang extends Model
 
     public function mProgramPembangunans()
     {
-        return $this->belongsToMany(m_program_pembangunan::class,'t_kebutuhan_barang_programs','barang_id','program_id');
+        return $this->belongsToMany(m_program_pembangunan::class,'t_kebutuhan_barang_programs','barang_id','program_id')->withPivot('jumlah_barang');
+    }
+
+    public function vendor(): BelongsToMany
+    {
+        return $this->belongsToMany(m_vendor::class,'t_transaksi_barangs','vendor_id','barang_id')->withPivot('jumlah_dibeli','harga_satuan','tanggal_beli');
     }
     
 }

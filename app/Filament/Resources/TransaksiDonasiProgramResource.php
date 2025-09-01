@@ -88,15 +88,15 @@ class TransaksiDonasiProgramResource extends Resource
                     ->label('Tanggal Transaksi')
                     ->date('d M Y')
                     ->sortable(),
-                TextColumn::make('user.email')
-                    ->label('E-mail Donatur')
+                TextColumn::make('user.datadiri.nama_lengkap')
+                    ->label('Nama Donatur')
                     ->sortable(),
                 TextColumn::make('program.nama_pembangunan')
                     ->label('Nama Program Pembangunan')
                     ->sortable(),
                 TextColumn::make('jumlah_donasi')
                     ->label('Jumlah Donasi')
-                    ->money('IDR')
+                    ->money('IDR',true)
                     ->prefix('Rp.')
                     ->numeric(),
                 TextColumn::make('status_pembayaran')

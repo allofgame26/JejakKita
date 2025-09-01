@@ -8,6 +8,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
   <style>
     /* Custom colors */
     :root {
@@ -515,74 +516,62 @@
     </div>
   </section>
 
-  <!-- Pembangunan -->
+  <!-- Pembangunan Dinamis -->
   <section class="pembangunan" id="pembangunan" aria-labelledby="pembangunan-heading">
     <h2 id="pembangunan-heading">Pembangunan</h2>
-    <div class="row g-4 justify-content-center">
-      <div class="col-sm-6 col-md-4">
-        <div class="card-pembangunan" tabindex="0" role="region" aria-label="Pembangunan Kelas">
-          <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/bfeb54c0-8457-4202-af69-996e4d81eb1c.png" alt="Photo of classroom construction site with two-story building framework and blue scaffolding" class="card-img-top" onerror="this.style.display='none'"/>
-          <div class="card-body">
-            <h3 class="card-title">Kelas</h3>
-            <p class="card-text">Deskripsi pembangunan kelas</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-6 col-md-4">
-        <div class="card-pembangunan" tabindex="0" role="region" aria-label="Pembangunan Sumur">
-          <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a8d9c2c2-f513-48f1-a1d3-401be20eb3bf.png" alt="Two men building a well near a tree using cement in a school yard" class="card-img-top" onerror="this.style.display='none'" />
-          <div class="card-body">
-            <h3 class="card-title">Sumur</h3>
-            <p class="card-text">Deskripsi pembangunan sumur</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-6 col-md-4">
-        <div class="card-pembangunan" tabindex="0" role="region" aria-label="Pembangunan Pos Satpam">
-          <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a15a5057-d9a3-45a6-806d-eaf6b1b1656b.png" alt="Concrete small security post building under construction with window opening" class="card-img-top" onerror="this.style.display='none'" />
-          <div class="card-body">
-            <h3 class="card-title">Pos satpam</h3>
-            <p class="card-text">Deskripsi pembangunan Pcs satpam</p>
-          </div>
-        </div>
+    <div class="splide" role="group" aria-label="Galeri Pembangunan">
+      <div class="splide__track">
+        <ul class="splide__list">
+          @forelse($dataPembangunan->flatMap(fn($kategori) => $kategori->posts) as $post)
+            <li class="splide__slide">
+              <div class="card-pembangunan" tabindex="0">
+                <img src="{{ $post->getFirstMediaUrl('fitur_image') }}" alt="{{ $post->title }}" class="card-img-top">
+                <div class="card-body">
+                  <h3 class="card-title">{{ $post->title }}</h3>
+                  <div class="card-text">{!! $post->content !!}</div>
+                </div>
+              </div>
+            </li>
+          @empty
+            <div class="col-12 text-center">
+              <p>Belum ada program pembangunan yang ditampilkan saat ini.</p>
+            </div>
+          @endforelse
+        </ul>
       </div>
     </div>
   </section>
 
-  <!-- Galeri Sekolah -->
+  <!-- Galeri Sekolah Dinamis -->
   <section class="galeri" id="galeri" aria-labelledby="galeri-heading">
     <h2 id="galeri-heading">Galeri Sekolah</h2>
-
-    <div class="gallery-group" role="region" aria-label="Galeri Perpustakaan">
-      <div class="gallery-row justify-content-center">
-        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/8e0e494f-7c69-4ff1-a4ef-46f98984689c.png" alt="Three photos of a large library building under construction with concrete extended structures" tabindex="0" onerror="this.style.display='none'"/>
-        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f5195edd-42f7-4b39-9200-d8e65941edff.png" alt="Three photos of a large library building under construction with concrete extended structures" tabindex="0" onerror="this.style.display='none'"/>
-        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/540e0e44-b379-4a0f-943e-9b0f58c9dd2f.png" alt="Three photos of a large library building under construction with concrete extended structures" tabindex="0" onerror="this.style.display='none'"/>
+    
+    @forelse($dataGaleri as $kategori)
+      <div class="gallery-group" role="region" aria-label="Galeri {{ $kategori->title }}">
+        <div class="title mt-2">{{ optional($kategori->posts->first())->title }}</div>
+        <div class="desc">{!! optional($kategori->posts->first())->content !!}</div>
+        
+        <div class="splide" role="group" aria-label="Gambar Galeri {{ $kategori->title }}">
+          <div class="splide__track">
+            <ul class="splide__list">
+              @forelse($kategori->posts->flatMap(fn($post) => $post->getMedia('galeri_image')) as $media)
+                <li class="splide__slide">
+                  <img src="{{ $media->getUrl() }}" alt="{{ $kategori->title }}" tabindex="0" style="width: 100%; height: 200px; object-fit: cover; border-radius: 12px;">
+                </li>
+              @empty
+                 {{-- Kosongkan jika tidak ada gambar galeri --}}
+              @endforelse
+            </ul>
+          </div>
+        </div>
       </div>
-      <div class="title mt-2">Perpustakaan</div>
-      <div class="desc">Fasilitas perpustakaan yang lengkap.</div>
-    </div>
-
-    <div class="gallery-group" role="region" aria-label="Galeri Masjid">
-      <div class="gallery-row justify-content-center">
-        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/502711e8-9668-4c45-b616-be31e17a4602.png" alt="Three photos of completed brick mosque buildings with blue roof and window openings" tabindex="0" onerror="this.style.display='none'"/>
-        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/0b90d4d2-bea0-4c53-a034-3cd47d364877.png" alt="Three photos of completed brick mosque buildings with blue roof and window openings" tabindex="0" onerror="this.style.display='none'"/>
-        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4f77e0fc-88e3-433b-a235-d77c3fd97e70.png" alt="Three photos of completed brick mosque buildings with blue roof and window openings" tabindex="0" onerror="this.style.display='none'"/>
+    @empty
+      <div class="col-12 text-center">
+        <p>Belum ada galeri yang ditampilkan saat ini.</p>
       </div>
-      <div class="title mt-2">Masjid</div>
-      <div class="desc">Fasilitas masjid yang lengkap.</div>
-    </div>
-
-    <div class="gallery-group" role="region" aria-label="Galeri Aula">
-      <div class="gallery-row justify-content-center">
-        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/54fa6fec-a8f5-479e-9ca5-0302934d0192.png" alt="Three photos of a large hall building with steel framework and construction materials" tabindex="0" onerror="this.style.display='none'"/>
-        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f7623d6d-f660-4b57-a23a-b2af784695c5.png" alt="Three photos of a large hall building with steel framework and construction materials" tabindex="0" onerror="this.style.display='none'"/>
-        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/5cc4a217-6c3e-43e2-ab2c-852586dbe681.png" alt="Three photos of a large hall building with steel framework and construction materials" tabindex="0" onerror="this.style.display='none'"/>
-      </div>
-      <div class="title mt-2">Aula</div>
-      <div class="desc">Fasilitas aula yang lengkap.</div>
-    </div>
+    @endforelse
   </section>
+
 
   <!-- Bekerja sama dengan -->
   <section class="partner" aria-label="Partners section">
@@ -641,6 +630,27 @@
 
   <!-- Bootstrap JS Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var splideElements = document.querySelectorAll('.splide');
+      for (var i = 0; i < splideElements.length; i++) {
+        new Splide(splideElements[i], {
+          perPage: 3,
+          gap    : '1.5rem',
+          pagination: false,
+          breakpoints: {
+              992: {
+                  perPage: 2,
+              },
+              576: {
+                  perPage: 1,
+              }
+          }
+        }).mount();
+      }
+    });
+  </script>
 </body>
 </html>
 

@@ -47,7 +47,8 @@ class UserResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name')
-                    ->required(),
+                    ->required()
+                    ->label('Username'),
                 TextInput::make('email')
                     ->email()
                     ->unique(ignoreRecord: TRUE)
@@ -78,7 +79,7 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                ImageColumn::make('profile_url')->label('Profile'),
+                SpatieMediaLibraryImageColumn::make('profile_url')->label('Profile')->collection('profile'),
                 TextColumn::make('name')
                     ->label('username'),
                 TextColumn::make('email')

@@ -29,6 +29,8 @@ class KategoriBarangResource extends Resource
     protected static ?string $pluralLabel = 'Data Kategori Barang';
 
     protected static ?string $label = 'Data Kategori Barang';
+
+    protected static ?int $navigationSort = 11;
     
     public static function form(Form $form): Form
     {

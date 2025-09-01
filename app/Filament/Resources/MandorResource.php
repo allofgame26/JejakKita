@@ -33,6 +33,8 @@ class MandorResource extends Resource
 
     protected static ?string $label = 'Data Mandor';
 
+    protected static ?int $navigationSort = 13;
+
     public static function form(Form $form): Form
     {
         return $form

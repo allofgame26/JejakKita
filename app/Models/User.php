@@ -34,6 +34,7 @@ class User extends Authenticatable implements HasMedia
         'name',
         'email',
         'password',
+        'datadiri_id'
     ];
 
     /**
@@ -46,7 +47,6 @@ class User extends Authenticatable implements HasMedia
         'remember_token',
         'two_factor_recovery_codes',
         'two_factor_secret',
-        'id_identitas',
     ];
 
     /**
@@ -69,7 +69,7 @@ class User extends Authenticatable implements HasMedia
 
     public function datadiri(): BelongsTo
     {
-        return $this->belongsTo(m_data_diri::class);
+        return $this->belongsTo(m_data_diri::class,'datadiri_id','id');
     }
 
     public function getProfileUrlAttribute()
