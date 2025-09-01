@@ -24,7 +24,7 @@ class HistoryResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')->label('Nama Donatur')->searchable(),
-                Tables\Columns\TextColumn::make('jumlah_donasi')->label('Jumlah Donasi'),
+                Tables\Columns\TextColumn::make('jumlah_donasi')->label('Jumlah Donasi')->searchable(),
                 Tables\Columns\TextColumn::make('status_pembayaran')->label('Status'),
                 Tables\Columns\TextColumn::make('pesan_donatur')->label('Pesan'),
                 Tables\Columns\TextColumn::make('created_at')->label('Tanggal')->dateTime(),

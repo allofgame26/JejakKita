@@ -79,22 +79,25 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                ImageColumn::make('profile_url')->label('Profile'),
-                TextColumn::make('name')
-                    ->label('username'),
-                TextColumn::make('email')
-                    ->label('E-Mail'),
-                TextColumn::make('datadiri.nip')
-                    ->label('NIP'),
-                TextColumn::make('roles.name')
-                    ->label('Roles')
-                    ->badge()
+                // ImageColumn::make('profile_url')->label('Profile'),
+                TextColumn::make('name')->label('Username'),
+                TextColumn::make('email')->label('E-Mail'),
+                TextColumn::make('datadiri.nip')->label('NIP'),
+                TextColumn::make('roles.name')->label('Roles')->badge(),
             ])
             ->filters([
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make()
+                    ->label('Detail')
+                    ->icon('heroicon-o-eye')
+                    ->modalHeading('Detail User')
+                    ->modalContent(fn ($record) => view('filament.resources.user-detail', [
+                        'record' => $record
+                    ])),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
