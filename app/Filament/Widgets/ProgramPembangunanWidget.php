@@ -19,7 +19,7 @@ class ProgramPembangunanWidget extends BaseWidget
     {
         return $table
             ->query(
-                m_program_pembangunan::query()
+                m_program_pembangunan::query()->where('status_pendanaan','lengkap')->limit(5)
             )
             ->columns([
                 TextColumn::make('nama_pembangunan')->label('Nama Program'),
