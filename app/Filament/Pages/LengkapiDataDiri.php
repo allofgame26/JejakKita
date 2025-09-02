@@ -2,10 +2,12 @@
 
 namespace App\Filament\Pages;
 
+use App\Filament\Forms\Schemas\DataDiriSchema;
 use App\Models\m_data_diri;
 use Filament\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -44,19 +46,7 @@ class LengkapiDataDiri extends Page implements HasForms
     public function form(Form $form): Form
     {
         return $form
-            ->schema([
-                TextInput::make('nama_lengkap'),
-                TextInput::make('nim'),
-                TextInput::make('tempat_lahir'),
-                DatePicker::make('tanggal_lahir'),
-                TextInput::make('alamat'),
-                Select::make('jenis_kelamin')
-                    ->options([
-                        'laki' => 'Laki - Laki',
-                        'perempuan' => 'Perempuan'
-                ]),
-                TextInput::make('no_telp')
-            ])
+            ->schema(DataDiriSchema::getSchema())
             ->statePath('data');
     }
 
