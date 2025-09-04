@@ -34,6 +34,7 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
+            ->brandName('SDIT-AG')
             ->profile(isSimple: false) // kurang dicustom
             ->emailVerification()
             ->sidebarCollapsibleOnDesktop()
