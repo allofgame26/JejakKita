@@ -33,7 +33,7 @@ class BarangResource extends Resource
 
     protected static ?string $pluralLabel = 'Data Barang';
 
-    protected static ?string $label = 'Data Barang'; 
+    protected static ?string $label = 'Data Barang';
 
     protected static ?int $navigationSort = 12;
 
@@ -47,7 +47,7 @@ class BarangResource extends Resource
                     ->label('Kode Barang'),
                 Select::make('kategoribarang_id')
                     ->required()
-                    ->relationship('kategoriBarang','nama_kategori')
+                    ->relationship('kategoriBarang', 'nama_kategori')
                     ->preload(),
                 TextInput::make('nama_barang')
                     ->required()
@@ -85,18 +85,18 @@ class BarangResource extends Resource
                     ->label('Nama Barang')
                     ->icon('heroicon-o-gift'),
                 TextColumn::make('barang_inventory')
-                    ->getStateUsing(function ($record){
-                        $cekJumlahBarang = t_transaksi_barang::where('barang_id',$record->id)->sum('jumlah_dibeli');
-                        $cekJumlahPemakaian = t_kebutuhan_barang_program::where('barang_id',$record->id)->sum('jumlah_barang');
+                    ->getStateUsing(function ($record) {
+                        $cekJumlahBarang = t_transaksi_barang::where('barang_id', $record->id)->sum('jumlah_dibeli');
+                        $cekJumlahPemakaian = t_kebutuhan_barang_program::where('barang_id', $record->id)->sum('jumlah_barang');
 
                         $inventory = $cekJumlahBarang - $cekJumlahPemakaian;
 
                         return $inventory;
                     })
                     ->badge()
-                    ->color(function ($state){
-                        if($state <= 0 ){
-                             return 'danger';
+                    ->color(function ($state) {
+                        if ($state <= 0) {
+                            return 'danger';
                         } else {
                             return 'success';
                         }
@@ -108,12 +108,13 @@ class BarangResource extends Resource
             ])
             ->filters([
                 SelectFilter::make('kategoriBarang.nama_kategori')
-                    ->relationship('kategoriBarang','nama_kategori')
+                    ->relationship('kategoriBarang', 'nama_kategori')
                     ->preload()
                     ->searchable()
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

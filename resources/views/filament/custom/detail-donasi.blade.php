@@ -78,27 +78,9 @@
                                 $url = $donasi->getFirstMediaUrl('bukti_pembayaran_pengisian_lansia');
                             @endphp
 
-<<<<<<< HEAD
-                            @if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp']))
-                                <div x-data="{ show: false }" class="flex flex-col items-center">
-                                    <img src="{{ $url }}" alt="Bukti Pembayaran"
-                                        class="h-36 w-auto object-cover rounded-lg border border-blue-200 dark:border-gray-700 shadow-sm bg-white dark:bg-gray-900 cursor-zoom-in hover:scale-105 transition-transform duration-300"    
-                                        @click="show = true" title="Klik untuk perbesar">
-                                    <span class="text-xs text-gray-500 mt-1">Klik gambar untuk lihat besar</span>
-                                    <div x-show="show" x-transition
-                                        class="fixed inset-0 z-50 flex items-center justify-center bg-black/70"
-                                        @click.away="show = false">
-                                        <div
-                                            class="bg-white dark:bg-gray-900 p-2 rounded shadow-lg max-w-full max-h-full flex flex-col items-center">
-                                            <img src="{{ $url }}" alt="Bukti Pembayaran"
-                                                class="max-h-[60vh] max-w-[80vw] object-contain rounded">
-                                            <button @click="show = false"
-                                                class="mt-3 px-4 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition">Tutup</button>
-                                        </div>
-=======
                             <div x-data="{ show: false }" class="flex flex-col items-center">
                                 <img src="{{ $url }}" alt="Bukti Pembayaran"
-                                    class="h-36 w-auto object-cover rounded-lg border border-blue-200 dark:border-gray-700 shadow-sm bg-white dark:bg-gray-900 cursor-zoom-in hover:scale-105 transition-transform duration-1500"
+                                    class="h-36 w-auto object-cover rounded-lg border border-blue-200 dark:border-gray-700 shadow-sm bg-white dark:bg-gray-900 cursor-zoom-in hover:scale-105 transition-transform"
                                     @click="show = true" title="Klik untuk perbesar">
                                 <span class="text-xs text-gray-500 mt-1">Klik gambar untuk lihat besar</span>
                                 <div x-show="show" x-transition
@@ -110,7 +92,6 @@
                                             class="max-h-[60vh] max-w-[80vw] object-contain rounded">
                                         <button @click="show = false"
                                             class="mt-3 px-4 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition">Tutup</button>
->>>>>>> fa55b41f293d671c3ab1fcd37db613d0c93728ef
                                     </div>
                                 </div>
                             </div>

@@ -29,7 +29,7 @@ class VendorResource extends Resource
 
     protected static ?string $pluralLabel = 'Data Vendor';
 
-    protected static ?string $label = 'Data Vendor'; 
+    protected static ?string $label = 'Data Vendor';
 
     protected static ?int $navigationSort = 10;
 
@@ -74,6 +74,13 @@ class VendorResource extends Resource
                 //
             ])
             ->actions([
+                \Filament\Tables\Actions\ViewAction::make()
+                    ->label('Detail')
+                    ->icon('heroicon-o-eye')
+                    ->modalHeading('Detail Vendor')
+                    ->modalContent(fn($record) => view('filament.resources.vendor-detail', [
+                        'record' => $record
+                    ])),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])

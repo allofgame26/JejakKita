@@ -74,17 +74,26 @@ class DataDiriResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('index')
-                    ->state( static function (HasTable $livewire, stdClass $rowLoop): string { return (string) ( $rowLoop->iteration + ($livewire->getTableRecordsPerPage() * ( $livewire->getTablePage() - 1 )) ); } ),
+                \Filament\Tables\Columns\SpatieMediaLibraryImageColumn::make('profile')
+                    ->label('Foto Profile')
+                    ->collection('profile')
+                    ->rounded()
+                    ->extraImgAttributes(['class' => 'ring-2 ring-blue-400']),
                 TextColumn::make('nip'),
                 TextColumn::make('nama_lengkap'),
                 TextColumn::make('no_telp'),
             ])
-            ->filters([
-                
-            ])
+            ->filters([])
             ->actions([
+                Tables\Actions\ViewAction::make()
+                    ->label('Detail')
+                    ->icon('heroicon-o-eye')
+                    ->modalHeading('Detail Data Diri')
+                    ->modalContent(fn($record) => view('filament.resources.data-diri-detail', [
+                        'record' => $record
+                    ])),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

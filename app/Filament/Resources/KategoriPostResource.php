@@ -16,6 +16,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
 
 class KategoriPostResource extends Resource
 {
@@ -39,13 +40,15 @@ class KategoriPostResource extends Resource
                     ->label('Nama Kategori')
                     ->required()
                     ->live()
-                    ->live(onBlur: true)
-                    ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', \Str::slug($state))),
+                    ->afterStateUpdated(fn(Set $set, ?string $state) => $set('slug', Str::slug($state)))
+                    ->helperText('Masukkan nama kategori post yang unik dan mudah dipahami.'),
                 TextInput::make('slug')
-                    ->label('slug')
-                    ->readOnly(),
+                    ->label('Slug')
+                    ->readOnly()
+                    ->helperText('Bagian dari URL yang bersifat deskriptif dan mudah dibaca oleh manusia. Slug otomatis dibuat dari nama kategori.'),
                 TextInput::make('content')
-                    ->label('Deskripsi'),
+                    ->label('Deskripsi')
+                    ->helperText('Deskripsi singkat tentang kategori post ini.'),
             ]);
     }
 
@@ -53,14 +56,22 @@ class KategoriPostResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('title')->searchable(),
-                Tables\Columns\TextColumn::make('content'),
+                Tables\Columns\TextColumn::make('title')->label('Nama Kategori')->searchable(),
+                Tables\Columns\TextColumn::make('content')->label('Deskripsi'),
             ])
             ->filters([
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make()
+                    ->label('Detail')
+                    ->icon('heroicon-o-eye')
+                    ->modalHeading('Detail Kategori Post')
+                    ->modalContent(fn($record) => view('filament.resources.kategori-post-detail', [
+                        'record' => $record
+                    ])),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

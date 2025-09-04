@@ -16,7 +16,6 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use FilamentTiptapEditor\TiptapEditor;
 use Filament\Tables\Columns\HtmlColumn;
 use Illuminate\Support\Facades\Auth;
 
@@ -39,10 +38,12 @@ class PengisianDonasiResource extends Resource
         return $form
             ->schema([
                 Hidden::make('user_id')
-                    ->default(fn () => Auth()->id()),
+                    ->default(fn() => Auth()->id()),
                 Hidden::make('program_id')
                     ->default(function () {
-                        $topPriorityProgram = m_program_pembangunan::orderBy('skor_prioritas_akhir','desc')->first()->where('status_pendanaan','belum_lengkap');
+                        $topPriorityProgram = m_program_pembangunan::where('status_pendanaan', 'belum_lengkap')
+                            ->orderBy('skor_prioritas_akhir', 'desc')
+                            ->first();
 
                         return $topPriorityProgram ? $topPriorityProgram->id : null;
                     }),
@@ -54,7 +55,7 @@ class PengisianDonasiResource extends Resource
                     ->searchable()
                     ->preload()
                     ->placeholder('Pilih metode pembayaran')
-                    // ->helperText('Pilih metode pembayaran yang tersedia.')
+                    ->helperText('Pilih metode pembayaran yang tersedia.')
                     ->prefixIcon('heroicon-o-credit-card')
                     ->required(),
                 Forms\Components\TextInput::make('jumlah_donasi')
@@ -62,15 +63,12 @@ class PengisianDonasiResource extends Resource
                     ->numeric()
                     ->prefix('Rp')
                     ->placeholder('0')
-                    // ->helperText('Masukkan nominal donasi dalam rupiah.')
+                    ->helperText('Masukkan nominal donasi dalam rupiah.')
                     ->required(),
-                TiptapEditor::make('pesan_donatur')
+                Forms\Components\Textarea::make('pesan_donatur')
                     ->label('Pesan Donatur')
                     ->placeholder('Tulis pesan atau harapan Anda (opsional)')
                     ->rows(3)
-                // ->helperText('Pesan ini akan diterima oleh pengelola program.'),
-                // membuat Program automatis dipilih untuk masuk kedalam donasi
-                
             ]);
     }
 
@@ -108,7 +106,7 @@ class PengisianDonasiResource extends Resource
                     ->label('Bayar Sekarang')
                     ->icon('heroicon-o-arrow-up-on-square')
                     ->color('primary')
-                    ->visible(fn ($record): bool => $record->status_pembayaran === "pending")
+                    ->visible(fn($record): bool => $record->status_pembayaran === "pending")
                     ->modalHeading('Upload Bukti Pembayaran')
                     ->modalSubmitActionLabel('Upload')
                     ->form([

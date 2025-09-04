@@ -5,7 +5,6 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ProgramPembangunanResource\Pages;
 use App\Filament\Resources\ProgramPembangunanResource\RelationManagers\BarangRelationManager;
 use App\Filament\Resources\ProgramPembangunanResource\RelationManagers\PriorityRelationManager;
-use App\Models\m_periode;
 use App\Models\m_program_pembangunan;
 use App\Models\Priority;
 use App\Models\Priority_Pembangunan;
@@ -19,10 +18,6 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use Filament\Infolists\Components\Section;
-use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
-use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
@@ -33,6 +28,8 @@ use IbrahimBougaoua\FilaProgress\Tables\Columns\ProgressBar;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\DB;
+use Filament\Infolists;
+use Filament\Infolists\Components\TextEntry;
 
 class ProgramPembangunanResource extends Resource
 {
@@ -47,8 +44,6 @@ class ProgramPembangunanResource extends Resource
     protected static ?string $label = 'Data Pembangunan';
 
     protected static ?string $navigationGroup = 'Pembangunan';
-
-    protected static ?int $navigationSort = 14;
 
     public static function form(Form $form): Form
     {
@@ -66,10 +61,6 @@ class ProgramPembangunanResource extends Resource
                     ->searchable()
                     ->preload(),
                 TextInput::make('nama_pembangunan')
-                    ->required(),
-                Select::make('periode_id')
-                    ->label('Periode Pembangunan')
-                    ->options(m_periode::all()->pluck('nama_periode','id'))
                     ->required(),
                 DatePicker::make('tanggal_mulai')
                     ->displayFormat('d M Y')
@@ -106,7 +97,8 @@ class ProgramPembangunanResource extends Resource
                         ->multiple()
                         ->collection('pembangunan'),
                 TextInput::make('deskripsi')
-                        ->required(),
+                        ->required()
+
             ]);
     }
 
@@ -155,8 +147,8 @@ class ProgramPembangunanResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -179,6 +171,20 @@ class ProgramPembangunanResource extends Resource
             'index' => Pages\ListProgramPembangunans::route('/'),
             'create' => Pages\CreateProgramPembangunan::route('/create'),
             'edit' => Pages\EditProgramPembangunan::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getInfolistSchema(): array
+    {
+        return [
+            TextEntry::make('kode_program')->label('Kode Program'),
+            TextEntry::make('nama_pembangunan')->label('Nama Pembangunan'),
+            TextEntry::make('tanggal_mulai')->label('Tanggal Mulai'),
+            TextEntry::make('status')->label('Status'),
+            TextEntry::make('estimasi_biaya')->label('Estimasi Biaya'),
+            TextEntry::make('skor_prioritas_akhir')->label('Prioritas'),
+            TextEntry::make('deskripsi')->label('Deskripsi'),
+            // Tambahkan field lain sesuai kebutuhan
         ];
     }
 }

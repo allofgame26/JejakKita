@@ -58,17 +58,17 @@ class UserResource extends Resource
                     ->password()
                     ->revealable()
                     ->label('Password')
-                    ->dehydrateStateUsing(fn ($state) => $state ? Hash::make($state) : null) //melakukan edit sebuah value yang di inputkan, setelah itu dimasukkan kedalam database
-                    ->required(fn (string $context): bool => $context === 'create')
-                    ->dehydrated(fn ($state) => filled($state)), // melakukan hanya simpan jika kolom diisi 
+                    ->dehydrateStateUsing(fn($state) => $state ? Hash::make($state) : null) //melakukan edit sebuah value yang di inputkan, setelah itu dimasukkan kedalam database
+                    ->required(fn(string $context): bool => $context === 'create')
+                    ->dehydrated(fn($state) => filled($state)), // melakukan hanya simpan jika kolom diisi 
                 Select::make('id_identitas')
                     ->label('Data Diri')
                     ->preload()
-                    ->relationship('datadiri','nama_lengkap')
-                    ->searchable(['nama_lengkap','nip'])
+                    ->relationship('datadiri', 'nama_lengkap')
+                    ->searchable(['nama_lengkap', 'nip'])
                     ->preload(),
                 Select::make('roles')
-                    ->relationship('roles','name')
+                    ->relationship('roles', 'name')
                     ->label('Roles')
                     ->preload()
                     ->searchable()
@@ -79,22 +79,25 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                SpatieMediaLibraryImageColumn::make('profile_url')->label('Profile')->collection('profile'),
-                TextColumn::make('name')
-                    ->label('username'),
-                TextColumn::make('email')
-                    ->label('E-Mail'),
-                TextColumn::make('datadiri.nip')
-                    ->label('NIP'),
-                TextColumn::make('roles.name')
-                    ->label('Roles')
-                    ->badge()
+                // ImageColumn::make('profile_url')->label('Profile'),
+                TextColumn::make('name')->label('Username'),
+                TextColumn::make('email')->label('E-Mail'),
+                TextColumn::make('datadiri.nip')->label('NIP'),
+                TextColumn::make('roles.name')->label('Roles')->badge(),
             ])
             ->filters([
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make()
+                    ->label('Detail')
+                    ->icon('heroicon-o-eye')
+                    ->modalHeading('Detail User')
+                    ->modalContent(fn($record) => view('filament.resources.user-detail', [
+                        'record' => $record
+                    ])),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
