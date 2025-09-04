@@ -17,9 +17,9 @@ class DashboardWidget extends ChartWidget
     {
 
         // ambil data
-        $dataProgram = Trend::model(t_transaksi_donasi_program::class)->between(start: now()->subDays(30),end: now())->perDay()->sum('jumlah_donasi');
+        $dataProgram = Trend::model(t_transaksi_donasi_program::class)->dateColumn('updated_at')->between(start: now()->subDays(30),end: now())->perDay()->sum('jumlah_donasi');
 
-        $dataSpesifik = Trend::model(t_transaksi_donasi_spesifik::class)->between(start: now()->subDays(30),end: now())->perDay()->sum('jumlah_donasi');
+        $dataSpesifik = Trend::model(t_transaksi_donasi_spesifik::class)->dateColumn('updated_at')->between(start: now()->subDays(30),end: now())->perDay()->sum('jumlah_donasi');
 
         // Menggabungkan data
 
