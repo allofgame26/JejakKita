@@ -39,6 +39,7 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
+            ->brandName('JejakKita')
             ->profile(isSimple: false) // kurang dicustom
             ->emailVerification()
             ->sidebarCollapsibleOnDesktop()
