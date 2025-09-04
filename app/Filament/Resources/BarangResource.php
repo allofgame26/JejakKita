@@ -27,100 +27,117 @@ class BarangResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-archive-box-arrow-down';
 
-    protected static ?string $navigationLabel = 'Data Barang';
+    protected static ?string $navigationLabel = 'Daftar Barang';
 
     protected static ?string $navigationGroup = 'Pembangunan';
 
-    protected static ?string $pluralLabel = 'Data Barang';
+    protected static ?string $pluralLabel = 'Daftar Barang';
 
-    protected static ?string $label = 'Data Barang';
+    protected static ?string $label = 'Daftar Barang'; 
 
-    protected static ?int $navigationSort = 12;
+    protected static ?string $slug = 'barangs';
 
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                TextInput::make('kode_barang')
-                    ->required()
-                    ->unique(ignoreRecord: true)
-                    ->label('Kode Barang'),
-                Select::make('kategoribarang_id')
-                    ->required()
-                    ->relationship('kategoriBarang', 'nama_kategori')
-                    ->preload(),
-                TextInput::make('nama_barang')
-                    ->required()
-                    ->label('Nama Barang'),
-                Select::make('nama_satuan')
-                    ->required()
-                    ->label('Nama Satuan')
-                    ->options([
-                        'unit' => 'Unit',
-                        'batang' => 'Batang',
-                        'lembar' => 'Lembar',
-                        'meter_persegi' => 'Meter Persegi',
-                        'meter_kubik' => 'Meter Kubik',
-                        'kilogram' => 'Kilogram',
-                        'sak' => 'Sak',
-                        'roll' => 'Roll',
-                        'paket' => 'Paket',
-                    ]),
-                TextInput::make('deskripsi_barang')
-                    ->required(),
-            ]);
+                ->schema([
+                    Forms\Components\Section::make([
+                        TextInput::make('kode_barang')
+                            ->required()
+                            ->unique(ignoreRecord: true)
+                            ->label('Kode Barang')
+                            ->placeholder('Masukkan kode barang unik')
+                            ->helperText('Kode barang harus unik.'),
+                        Select::make('kategoribarang_id')
+                            ->required()
+                            ->relationship('kategoriBarang','nama_kategori')
+                            ->preload()
+                            ->searchable()
+                            ->label('Kategori Barang')
+                            ->placeholder('Pilih kategori barang'),
+                        TextInput::make('nama_barang')
+                            ->required()
+                            ->label('Nama Barang')
+                            ->placeholder('Masukkan nama barang'),
+                        Select::make('nama_satuan')
+                            ->required()
+                            ->label('Nama Satuan')
+                            ->options([
+                                'unit' => 'Unit',
+                                'batang' => 'Batang',
+                                'lembar' => 'Lembar',
+                                'meter_persegi' => 'Meter Persegi',
+                                'meter_kubik' => 'Meter Kubik',
+                                'kilogram' => 'Kilogram',
+                                'sak' => 'Sak',
+                                'roll' => 'Roll',
+                                'paket' => 'Paket',
+                            ])
+                            ->selectablePlaceholder(condition: true),
+                        TextInput::make('harga_satuan')
+                            ->required()
+                            ->numeric()
+                            ->prefix('Rp.')
+                            ->mask(RawJs::make('$money($input'))
+                            ->stripCharacters(',')
+                            ->placeholder('Masukkan harga satuan')
+                            ->helperText('Harga satuan dalam Rupiah.'),
+                        TextInput::make('deskripsi_barang')
+                            ->required()
+                            ->label('Deskripsi Barang')
+                            ->placeholder('Deskripsi singkat barang'),
+                    ])
+                ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([
-                TextColumn::make('kode_barang')
-                    ->label('Kode Barang')
-                    ->icon('heroicon-o-clipboard-document-list'),
-                TextColumn::make('kategoribarang.nama_kategori')
-                    ->label('Nama Kategori')
-                    ->icon('heroicon-o-archive-box'),
-                TextColumn::make('nama_barang')
-                    ->label('Nama Barang')
-                    ->icon('heroicon-o-gift'),
-                TextColumn::make('barang_inventory')
-                    ->getStateUsing(function ($record) {
-                        $cekJumlahBarang = t_transaksi_barang::where('barang_id', $record->id)->sum('jumlah_dibeli');
-                        $cekJumlahPemakaian = t_kebutuhan_barang_program::where('barang_id', $record->id)->sum('jumlah_barang');
-
-                        $inventory = $cekJumlahBarang - $cekJumlahPemakaian;
-
-                        return $inventory;
-                    })
-                    ->badge()
-                    ->color(function ($state) {
-                        if ($state <= 0) {
-                            return 'danger';
-                        } else {
-                            return 'success';
-                        }
-                    })
-                // TextColumn::make('total_harga')
-                //     ->label('Total Harga')
-                //     ->getStateUsing(fn ($record) => 
-                //         'Rp. ' . number_format($record->jumlah_barang_dibutuhkan * $record->harga_satuan, 0, ',', '.')),
-            ])
-            ->filters([
-                SelectFilter::make('kategoriBarang.nama_kategori')
-                    ->relationship('kategoriBarang', 'nama_kategori')
-                    ->preload()
-                    ->searchable()
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+                ->columns([
+                    TextColumn::make('kode_barang')
+                        ->label('Kode Barang')
+                        ->icon('heroicon-o-clipboard-document-list')
+                        ->searchable()
+                        ->sortable()
+                        ->color('primary')
+                        ->badge(),
+                    TextColumn::make('kategoribarang.nama_kategori')
+                        ->label('Nama Kategori')
+                        ->icon('heroicon-o-archive-box')
+                        ->searchable()
+                        ->sortable()
+                        ->color('success')
+                        ->badge(),
+                    TextColumn::make('nama_barang')
+                        ->label('Nama Barang')
+                        ->icon('heroicon-o-gift')
+                        ->searchable()
+                        ->sortable()
+                        ->color('info')
+                        ->badge(),
+                ])
+                ->filters([
+                    Tables\Filters\SelectFilter::make('nama_barang')
+                        ->label('Nama Barang Panjang'),
+                    Tables\Filters\SelectFilter::make('kategoribarang_id')
+                        ->label('Kategori Barang')
+                        ->options(fn () => m_barang::pluck('kategoribarang_id', 'id')),
+                ])
+                ->actions([
+                    Tables\Actions\ViewAction::make()
+                        ->modalHeading('Detail Barang')
+                        ->label('Detail')
+                        ->modalContent(fn ($record) => view('filament.resources.barang-detail', [
+                            'record' => $record
+                        ])),
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
+                ])
+                ->bulkActions([
+                    Tables\Actions\BulkActionGroup::make([
+                        Tables\Actions\DeleteBulkAction::make(),
+                    ]),
+                ]);
     }
 
     public static function getRelations(): array

@@ -115,7 +115,7 @@ class MandorResource extends Resource
                 TextColumn::make('jenis_kelamin')
                     ->label('Jenis Kelamin')
                     ->badge()
-                    ->color(fn($record) => $record->jenis_kelamin === 'laki' ? 'success' : 'warning'),
+                    ->color(fn ($record) => $record->jenis_kelamin === 'laki' ? 'success' : 'warning'),
             ])
             ->filters([
                 // Tambahkan filter jika diperlukan
@@ -125,7 +125,7 @@ class MandorResource extends Resource
                     ->label('Detail')
                     ->icon('heroicon-o-eye')
                     ->modalHeading('Detail Mandor')
-                    ->modalContent(fn($record) => view('filament.resources.mandor-detail', [
+                    ->modalContent(fn ($record) => view('filament.resources.mandor-detail', [
                         'record' => $record
                     ])),
                 Tables\Actions\EditAction::make(),

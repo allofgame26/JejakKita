@@ -93,7 +93,7 @@ class UserResource extends Resource
                     ->label('Detail')
                     ->icon('heroicon-o-eye')
                     ->modalHeading('Detail User')
-                    ->modalContent(fn($record) => view('filament.resources.user-detail', [
+                    ->modalContent(fn ($record) => view('filament.resources.user-detail', [
                         'record' => $record
                     ])),
                 Tables\Actions\EditAction::make(),

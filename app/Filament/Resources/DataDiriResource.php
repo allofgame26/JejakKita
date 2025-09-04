@@ -89,7 +89,7 @@ class DataDiriResource extends Resource
                     ->label('Detail')
                     ->icon('heroicon-o-eye')
                     ->modalHeading('Detail Data Diri')
-                    ->modalContent(fn($record) => view('filament.resources.data-diri-detail', [
+                    ->modalContent(fn ($record) => view('filament.resources.data-diri-detail', [
                         'record' => $record
                     ])),
                 Tables\Actions\EditAction::make(),

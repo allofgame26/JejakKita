@@ -72,6 +72,13 @@ class MetodePembayaranResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make()
+                ->label('Detail')
+                ->icon('heroicon-o-eye')
+                ->modalHeading('Detail Metode Pembayaran')
+                ->modalContent(fn ($record) => view('filament.resources.metode-pembayaran-detail', [
+                    'record' => $record
+                ])),
+                Tables\Actions\ViewAction::make()
                     ->label('Detail')
                     ->icon('heroicon-o-eye')
                     ->modalHeading('Detail Metode Pembayaran')
@@ -79,6 +86,7 @@ class MetodePembayaranResource extends Resource
                         'record' => $record
                     ])),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([

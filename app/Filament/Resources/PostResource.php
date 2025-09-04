@@ -28,7 +28,7 @@ class PostResource extends Resource
     protected static ?string $model = m_post::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-newspaper';
-
+    
     protected static ?string $navigationLabel = 'Data Postingan';
 
     protected static ?string $navigationGroup = 'Management Konten';
@@ -46,7 +46,7 @@ class PostResource extends Resource
                     ->required()
                     ->reactive()
                     ->unique(ignoreRecord: TRUE)
-                    ->afterStateUpdated(fn(Set $set, ?string $state) => $set('slug', Str::slug($state))),
+                    ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', Str::slug($state))),
                 TextInput::make('slug')
                     ->label('slug')
                     ->readOnly(),
@@ -89,7 +89,7 @@ class PostResource extends Resource
                     ->label('Detail')
                     ->icon('heroicon-o-eye')
                     ->modalHeading('Detail Postingan')
-                    ->modalContent(fn($record) => view('filament.resources.post-detail', [
+                    ->modalContent(fn ($record) => view('filament.resources.post-detail', [
                         'record' => $record
                     ])),
                 Tables\Actions\EditAction::make(),

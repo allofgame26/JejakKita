@@ -45,8 +45,15 @@ class PengisianDonasiResource extends Resource
                             ->orderBy('skor_prioritas_akhir', 'desc')
                             ->first();
 
-                        return $topPriorityProgram ? $topPriorityProgram->id : null;
-                    }),
+                        if ($topPriorityProgram) {
+                            return $topPriorityProgram->id;
+                        }
+
+                        // fallback: ambil program pertama
+                        $anyProgram = m_program_pembangunan::first();
+                        return $anyProgram ? $anyProgram->id : null;
+                    })
+                    ->required(),
                 Hidden::make('status_pembayaran')
                     ->default('pending'),
                 Forms\Components\Select::make('pembayaran_id')
@@ -69,6 +76,8 @@ class PengisianDonasiResource extends Resource
                     ->label('Pesan Donatur')
                     ->placeholder('Tulis pesan atau harapan Anda (opsional)')
                     ->rows(3)
+                // ->helperText('Pesan ini akan diterima oleh pengelola program.'),
+                // membuat Program automatis dipilih untuk masuk kedalam donasi
             ]);
     }
 
