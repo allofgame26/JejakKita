@@ -9,12 +9,14 @@ use App\Models\m_barang;
 use App\Models\t_kebutuhan_barang_program;
 use App\Models\t_transaksi_barang;
 use Filament\Forms;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Support\RawJs;
 use Filament\Tables;
+use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -41,10 +43,9 @@ class BarangResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('kode_barang')
-                    ->required()
-                    ->unique(ignoreRecord: true)
-                    ->label('Kode Barang'),
+                Hidden::make('kode_barang')
+                    ->disabled()
+                    ->dehydrated(false),
                 Select::make('kategoribarang_id')
                     ->required()
                     ->relationship('kategoriBarang','nama_kategori')
@@ -114,6 +115,7 @@ class BarangResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                DeleteAction::make()
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
