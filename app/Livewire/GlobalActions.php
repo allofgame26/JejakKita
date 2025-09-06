@@ -38,7 +38,8 @@ class GlobalActions extends Component implements HasForms, HasActions
 
                     return redirect(request()->header('Referer'));
                 }
-            });
+            })
+            ->visible(fn (): bool => ! Auth::user()->datadiri_id);
     }
 
     public function render()
