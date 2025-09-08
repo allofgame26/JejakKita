@@ -103,21 +103,21 @@
         .hero-content {
             position: relative;
             z-index: 1;
-            max-width: 900px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
-            background: rgba(0, 0, 0, 0.18);
             border-radius: 1.2rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
         }
 
         .hero h1 {
             font-weight: 800;
-            font-size: 3rem;
-            line-height: 1.15;
+            font-size: 3.2rem;
+            line-height: 1.05;
             margin-bottom: 1.2rem;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
             text-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+            word-break: keep-all;
+            white-space: pre-line;
         }
 
         .hero p {
@@ -169,24 +169,75 @@
         }
 
         /* Section shapes and shadows */
-        .shape-purple {
+        .shape-purple,
+        .shape-purple-1,
+        .shape-purple-2,
+        .shape-purple-3,
+        .shape-purple-right-1,
+        .shape-purple-right-2,
+        .shape-purple-right-3 {
             width: 0;
             height: 0;
             border-top: 60px solid transparent;
             border-left: 80px solid #7363a2;
             border-bottom: 60px solid transparent;
             position: absolute;
-            top: 40px;
-            left: 0;
             z-index: 0;
-            opacity: 0.55;
-            transform: translateX(-50px);
             border-radius: 0 0 20px 0;
+            opacity: 0.55;
+        }
+
+        /* Kiri: Layer 1, 2, 3 */
+        .shape-purple-1 {
+            top: 100px;
+            left: 0;
+            transform: translateX(-50px);
+            opacity: 0.55;
+        }
+
+        .shape-purple-2 {
+            top: 100px;
+            left: 0;
+            transform: translateX(-30px);
+            opacity: 0.35;
+            border-left-color: #7363a2cc;
+        }
+
+        .shape-purple-3 {
+            top: 100px;
+            left: 0;
+            transform: translateX(-10px);
+            opacity: 0.18;
+            border-left-color: #7363a2aa;
+        }
+
+        /* Kanan: Layer 1, 2, 3 (mirror) */
+        .shape-purple-right-1 {
+            top: 100px;
+            right: 0;
+            transform: translateX(50px) scaleX(-1);
+            opacity: 0.55;
+        }
+
+        .shape-purple-right-2 {
+            top: 100px;
+            right: 0;
+            transform: translateX(30px) scaleX(-1);
+            opacity: 0.35;
+            border-left-color: #7363a2cc;
+        }
+
+        .shape-purple-right-3 {
+            top: 100px;
+            right: 0;
+            transform: translateX(10px) scaleX(-1);
+            opacity: 0.18;
+            border-left-color: #7363a2aa;
         }
 
         section.tentang-sekolah {
             position: relative;
-            padding-top: 60px;
+            padding-top: 110px;
             padding-bottom: 4rem;
             max-width: 1024px;
             margin: 0 auto 3rem;
@@ -523,6 +574,17 @@
                 align-items: center;
             }
         }
+
+        @media (max-width: 992px) {
+            .hero-content {
+                max-width: 95vw;
+            }
+
+            .hero h1 {
+                font-size: 2.1rem;
+                letter-spacing: 1px;
+            }
+        }
     </style>
 </head>
 
@@ -569,7 +631,12 @@
     <!-- Tentang Sekolah -->
     <section class="tentang-sekolah" id="tentang" aria-labelledby="tentang-heading">
         <h2 id="tentang-heading">Tentang Sekolah</h2>
-        <div class="shape-purple" aria-hidden="true"></div>
+        <div class="shape-purple shape-purple-1"></div>
+        <div class="shape-purple shape-purple-2"></div>
+        <div class="shape-purple shape-purple-3"></div>
+        <div class="shape-purple shape-purple-right-1"></div>
+        <div class="shape-purple shape-purple-right-2"></div>
+        <div class="shape-purple shape-purple-right-3"></div>
         <div class="row g-4">
             <div class="col-md-4">
                 <article tabindex="0" class="card-tentang visi" aria-describedby="visi-desc" role="region"
