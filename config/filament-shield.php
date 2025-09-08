@@ -89,4 +89,12 @@ return [
         'enabled' => true,
     ],
 
+    'auth' => [
+        'register' => [
+            'enabled' => true,
+
+            'role' => 'User',
+        ],
+    ],
+
 ];
