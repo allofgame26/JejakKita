@@ -43,7 +43,7 @@
       align-items: center;
     }
     .navbar-brand .logo-icon > i {
-      color: var(--nav-bg);
+      color: #FFA726;
       font-weight: bold;
       font-size: 1.3rem;
     }
@@ -236,7 +236,7 @@
 <body class="bg-light">
 
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg sticky-top shadow-sm" style="background-color: var(--nav-bg);">
+  <nav class="navbar navbar-expand-lg sticky-top shadow-sm" style="background-color: #FFA726;">
     <div class="container">
       <a class="navbar-brand d-flex align-items-center fw-bold" style="color: var(--nav-link-color);" href="#">
         <div class="logo-icon"><i class="bi bi-mortarboard-fill"></i></div>
