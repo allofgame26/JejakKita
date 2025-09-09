@@ -25,8 +25,10 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Http\Middleware\EnsureProfileIsComplete;
 use App\Models\m_data_diri;
+use App\Models\User;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
+use Filament\Pages\Auth\Register;
 use Illuminate\Support\Facades\Auth;
 
 class AdminPanelProvider extends PanelProvider

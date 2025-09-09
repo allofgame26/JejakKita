@@ -6,9 +6,11 @@ use App\Models\m_barang;
 use App\Models\m_program_pembangunan;
 use App\Models\t_transaksi_donasi_program;
 use App\Models\t_transaksi_donasi_spesifik;
+use App\Models\User;
 use App\Observers\KodeBarangObserver;
 use App\Observers\ProgramPembangunanObserver;
 use App\Observers\TransaksiDonasiObserver;
+use App\Observers\UserObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -30,5 +32,6 @@ class AppServiceProvider extends ServiceProvider
         t_transaksi_donasi_spesifik::observe(TransaksiDonasiObserver::class);
         t_transaksi_donasi_program::observe(TransaksiDonasiObserver::class);
         m_barang::observe(KodeBarangObserver::class);
+        User::observe(UserObserver::class);
     }
 }

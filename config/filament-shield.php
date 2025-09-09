@@ -93,7 +93,7 @@ return [
         'register' => [
             'enabled' => true,
 
-            'role' => 'User',
+            'role' => 'user',
         ],
     ],
 
