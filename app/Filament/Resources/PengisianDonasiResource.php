@@ -37,10 +37,10 @@ class PengisianDonasiResource extends Resource
         return $form
             ->schema([
                 Hidden::make('user_id')
-                    ->default(fn () => Auth()->id()),
+                    ->default(fn () => auth()->id()),
                 Hidden::make('program_id')
                     ->default(function () {
-                        $topPriorityProgram = m_program_pembangunan::orderBy('skor_prioritas_akhir','desc')->first()->where('status_pendanaan','belum_lengkap');
+                        $topPriorityProgram = m_program_pembangunan::where('status_pendanaan','belum_lengkap')->orderBy('skor_prioritas_akhir','desc')->first();
 
                         return $topPriorityProgram ? $topPriorityProgram->id : null;
                     }),
