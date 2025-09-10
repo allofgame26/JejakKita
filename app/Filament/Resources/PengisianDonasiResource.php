@@ -123,7 +123,8 @@ class PengisianDonasiResource extends Resource
                     ->action(function ($record) {
                         $record->status_pembayaran = 'sukses';
                         $record->save();
-                    }),
+                    })
+                    ,
                 \Filament\Tables\Actions\Action::make('detail')
                     ->label('Detail')
                     ->icon('heroicon-o-eye')

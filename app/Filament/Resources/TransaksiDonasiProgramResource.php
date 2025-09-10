@@ -17,13 +17,20 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Wizard;
 use Filament\Forms\Components\Wizard\Step;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\BulkAction;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Console\Migrations\StatusCommand;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -109,7 +116,7 @@ class TransaksiDonasiProgramResource extends Resource
                     }),
                 SpatieMediaLibraryImageColumn::make('bukti_pembayaran')
                     ->label('Bukti Pembayaran')
-                    ->collection('bukti_pembayaran')
+                    ->collection('bukti_pembayaran_transaksi_program')
             ])
             ->filters([
                 SelectFilter::make('pembayaran')
@@ -119,6 +126,37 @@ class TransaksiDonasiProgramResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Action::make('bayar')
+                    ->label('Bayar Sekarang')
+                    ->icon('heroicon-o-arrow-up-on-square')
+                    ->color('primary')
+                    ->visible(fn ($record): bool => $record->status_pembayaran === "pending" && auth()->user()->hasRole('user'))
+                    ->modalHeading('Upload Bukti Pembayaran')
+                    ->modalSubmitActionLabel('Upload')
+                    ->form([
+                        \Filament\Forms\Components\ViewField::make('no_rekening')
+                            ->view('filament.custom.no_rekening')
+                            ->label('No Rekening'),
+                        \Filament\Forms\Components\SpatieMediaLibraryFileUpload::make('bukti_pembayaran')
+                            ->label('Bukti Pembayaran (JPG/PNG)')
+                            ->collection('bukti_pembayaran_transaksi_program')
+                            ->image()
+                            ->imageEditor()
+                            ->required(),
+                    ])
+                    ->action(function ($record){
+                        $record->status_pembayaran = 'sukses';
+                        $record->save();
+                    }),
+                ViewAction::make('detail')
+                    ->label('Detail')
+                    ->icon('heroicon-o-eye')
+                    ->color('info')
+                    ->visible(fn($record): bool => $record->status_pembayaran !== "pending" && auth()->user()->hasRole('user'))
+                    ->modalHeading('Detail Donasi')
+                    ->modalSubmitAction(false)
+                    ->modalCancelActionLabel('Tutup'),
+                    
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -158,6 +196,57 @@ class TransaksiDonasiProgramResource extends Resource
             'index' => Pages\ListTransaksiDonasiPrograms::route('/'),
             'create' => Pages\CreateTransaksiDonasiProgram::route('/create'),
             'edit' => Pages\EditTransaksiDonasiProgram::route('/{record}/edit'),
+        ];
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist->schema(static::getInfolistSchema());
+    }
+
+    public static function getInfolistSchema(): array
+    {
+        return [
+            Section::make('Nama Program')
+                ->columns(2)
+                ->schema([
+                    TextEntry::make('program.nama_pembangunan')
+                        ->label('Nama Pembangunan'),
+                    TextEntry::make('program.estimasi_tanggal_selesai')
+                        ->label('Estimasi Tanggal Selesai')
+                        ->date('d M Y'),
+                    TextEntry::make('program.periode.nama_periode')
+                        ->label('Periode'),
+                ]),
+            
+            Section::make('Pembayaran')
+                ->columns(2)
+                ->schema([
+                    TextEntry::make('pembayaran.nama_pembayaran')
+                        ->label('Nama Pembayaran'),
+                    TextEntry::make('pembayaran.no_rekening')
+                        ->label('Nomor Rekening')
+                        ->badge()
+                        ->copyable(),
+                    TextEntry::make('jumlah_donasi')
+                        ->label('Jumlah Donasi')
+                        ->money('IDR'),
+                    TextEntry::make('status_pembayaran')
+                        ->label('Status Pembayaran')
+                        ->badge()
+                        ->color(fn (string $state): string => match ($state){
+                        'gagal' => 'danger',
+                        'pending' => 'warning',
+                        'sukses' => 'success',
+                        }),
+                    TextEntry::make('pesan_donatur')
+                        ->label('Pesan Donatur'),
+                    SpatieMediaLibraryImageEntry::make('bukti_pembayaran')
+                        ->collection('bukti_pembayaran_transaksi_program')
+                        ->label('Bukti Pembayaran')
+                ]),
+            
+
         ];
     }
 }

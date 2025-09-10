@@ -6,6 +6,7 @@ use App\Filament\Resources\TransaksiDonasiSpesifikResource\Pages;
 use App\Models\m_metode_pembayaran;
 use App\Models\t_kebutuhan_barang_program;
 use App\Models\t_transaksi_donasi_spesifik;
+use Dom\Text;
 use Dvarilek\FilamentTableSelect\Components\Form\TableSelect;
 use Filament\Forms;
 use Filament\Forms\Components\Hidden;
@@ -14,10 +15,17 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Wizard;
 use Filament\Forms\Components\Wizard\Step;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\ViewEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\BulkAction;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -25,6 +33,7 @@ use Filament\Tables\Table;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class TransaksiDonasiSpesifikResource extends Resource
 {
@@ -128,9 +137,6 @@ class TransaksiDonasiSpesifikResource extends Resource
                         'pending' => 'warning',
                         'sukses' => 'success',
                     }),
-                SpatieMediaLibraryImageColumn::make('bukti_pembayaran')
-                    ->label('Bukti Pembayaran')
-                    ->collection('bukti_pembayaran_spesifik')
             ])
             ->filters([
                 SelectFilter::make('program')
@@ -138,6 +144,36 @@ class TransaksiDonasiSpesifikResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Action::make('bayar')
+                    ->label('Bayar Sekarang')
+                    ->icon('heroicon-o-arrow-up-on-square')
+                    ->color('primary')
+                    ->visible(fn ($record): bool => $record->status_pembayaran === "pending" && auth()->user()->hasRole('user'))
+                    ->modalHeading('Upload Bukti Pembayaran')
+                    ->modalSubmitActionLabel('Upload')
+                    ->form([
+                        \Filament\Forms\Components\ViewField::make('no_rekening')
+                            ->view('filament.custom.no_rekening')
+                            ->label('No Rekening'),
+                        \Filament\Forms\Components\SpatieMediaLibraryFileUpload::make('bukti_pembayaran')
+                            ->label('Bukti Pembayaran (JPG/PNG)')
+                            ->collection('bukti_pembayaran_spesifik')
+                            ->image()
+                            ->imageEditor()
+                            ->required(),
+                    ])
+                    ->action(function ($record){
+                        $record->status_pembayaran = 'sukses';
+                        $record->save();
+                    }),
+                ViewAction::make('detail')
+                    ->label('Detail')
+                    ->icon('heroicon-o-eye')
+                    ->color('info')
+                    ->visible(fn($record): bool => $record->status_pembayaran !== "pending" && auth()->user()->hasRole('user'))
+                    ->modalHeading('Detail Donasi')
+                    ->modalSubmitAction(false)
+                    ->modalCancelActionLabel('Tutup'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -177,6 +213,48 @@ class TransaksiDonasiSpesifikResource extends Resource
             'index' => Pages\ListTransaksiDonasiSpesifiks::route('/'),
             'create' => Pages\CreateTransaksiDonasiSpesifik::route('/create'),
             'edit' => Pages\EditTransaksiDonasiSpesifik::route('/{record}/edit'),
+        ];
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist->schema(static::getInfolistSchema());
+    }
+
+    public static function getInfolistSchema(): array
+    {
+        return [
+            Section::make('Pembayaran')
+                ->columns(2)
+                ->schema([
+                    TextEntry::make('pembayaran.nama_pembayaran')
+                        ->label('Nama Pembayaran'),
+                    TextEntry::make('pembayaran.no_rekening')
+                        ->label('Nomor Rekening')
+                        ->badge()
+                        ->copyable(),
+                    TextEntry::make('jumlah_donasi')
+                        ->money('IDR'),
+                    TextEntry::make('status_pembayaran')
+                        ->label('Status Pembayaran')
+                        ->badge()
+                        ->color(fn (string $state): string => match ($state){
+                            'gagal' => 'danger',
+                            'pending' => 'warning',
+                            'sukses' => 'success',
+                        }),
+                    TextEntry::make('pesan_donatur')
+                        ->label('Pesan'),
+                    SpatieMediaLibraryImageEntry::make('bukti_pembayaran')
+                        ->label('Bukti Pembayaran')
+                        ->collection('bukti_pembayaran_spesifik')
+                ]),
+            Section::make('Tabel Barang')
+                ->schema([
+                    ViewEntry::make('kebutuhanBarang')
+                        ->label('')
+                        ->view('filament.infolist.kebutuhan-barang-tabel')    
+                ])
         ];
     }
 
