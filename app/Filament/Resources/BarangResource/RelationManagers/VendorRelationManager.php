@@ -9,11 +9,16 @@ use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\Fieldset;
+use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\AttachAction;
 use Filament\Tables\Actions\DetachAction;
 use Filament\Tables\Actions\DetachBulkAction;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\TextColumn\TextColumnSize;
@@ -64,7 +69,7 @@ class VendorRelationManager extends RelationManager
                 // Tables\Actions\CreateAction::make(),
                 AttachAction::make()
                     ->preloadRecordSelect()
-                    ->label('Tambah Transaksi')
+                    ->label('Tambah Vendor')
                     ->icon('heroicon-o-plus-circle')
                     ->color('warning')
                     ->form(fn (AttachAction $action): array => [
@@ -113,6 +118,77 @@ class VendorRelationManager extends RelationManager
             ->actions([
                 // Tables\Actions\EditAction::make(),
                 // Tables\Actions\DeleteAction::make(),
+                Action::make('bayar')
+                    ->label('Pengumpulan Struk')
+                    ->icon('heroicon-o-arrow-up-on-square')
+                    ->color('primary')
+                    ->visible(fn ($record): bool => $record->status_pembayaran === 'pending')
+                    ->modalHeading('Upload Bukti Pembayaran')
+                    ->modalSubmitActionLabel('Upload')
+                    ->form([
+                        SpatieMediaLibraryFileUpload::make('bukti_pembayaran')
+                            ->label('Nota Pembayaran')
+                            ->collection('pembelian_barang')
+                            ->image()
+                            ->imageEditor()
+                            ->required()
+                    ])
+                    ->action(function (array $data, $record){
+                        $pivot = $record->pivot;
+
+                        $pivot->addMediaFromRequest('bukti_pembayaran')->toMediaCollection('pembelian_barang');
+
+                        $pivot->status_pembayaran = 'sukses';
+                        $pivot->save();
+
+                    }),
+                ViewAction::make('detail')
+                    ->label('Detail')
+                    ->icon('heroicon-o-eye')
+                    ->color('info')
+                    ->visible(fn ($record): bool => $record->status_pembayaran !== 'pending')    
+                    ->modalHeading('Detail Pembelian Barang')
+                    ->modalSubmitAction(false)
+                    ->modalCancelActionLabel('tutup')
+                    ->infolist([
+                        Fieldset::make('vendor')
+                            ->label('Vendor')
+                            ->schema([
+                                TextEntry::make('nama_vendor')
+                                    ->label('Nama Vendor')
+                                    ->icon('heroicon-o-building-storefront'),
+                                TextEntry::make('alamat_vendor')
+                                    ->label('Alamat Vendor')
+                                    ->icon('heroicon-o-building-storefront'),
+                            ])
+                            ->columns(2),
+                        Fieldset::make('Transaksi Pembelian')
+                            ->label('Transaksi Pembelian')
+                            ->schema([
+                                TextEntry::make('pivot.jumlah_dibeli')
+                                    ->label('Jumlah Dibeli')
+                                    ->badge(),
+                                TextEntry::make('pivot.harga_satuan')
+                                    ->label('Harga Satuan')
+                                    ->badge(),
+                                TextEntry::make('pivot.tanggal_beli')
+                                    ->label('Tanggal Pembelian')
+                                    ->date('d M Y'),
+                                TextEntry::make('pivot.status_pembayaran')
+                                    ->label('Status Pembayaran')
+                                    ->badge()
+                                    ->color(fn (string $state): string => match ($state){
+                                        'pending' => 'warning',
+                                        'sukses' => 'success',
+                                        'gagal' => 'danger',
+                                    }),
+                                SpatieMediaLibraryImageEntry::make('pivot.media')
+                                    ->label('Bukti Pembayaran')
+                                    ->collection('pembelian_barang')
+                                    ->visible(fn ($record) => $record->pivot->status_pembayaran === 'sukses'),
+                            ])
+                            ->columns(2)
+                    ]),
                 DetachAction::make()
             ])
             ->bulkActions([

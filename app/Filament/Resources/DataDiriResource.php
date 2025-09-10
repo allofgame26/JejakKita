@@ -14,6 +14,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
@@ -89,7 +90,7 @@ class DataDiriResource extends Resource
                     ->label('Detail')
                     ->icon('heroicon-o-eye')
                     ->modalHeading('Detail Data Diri')
-                    ->modalContent(fn ($record) => view('filament.resources.data-diri-detail', [
+                    ->modalContent(fn($record) => view('filament.resources.data-diri-detail', [
                         'record' => $record
                     ])),
                 Tables\Actions\EditAction::make(),

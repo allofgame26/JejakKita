@@ -31,7 +31,7 @@ class m_barang extends Model
 
     public function vendor(): BelongsToMany
     {
-        return $this->belongsToMany(m_vendor::class,'t_transaksi_barangs','vendor_id','barang_id')->withPivot('jumlah_dibeli','harga_satuan','tanggal_beli');
+        return $this->belongsToMany(m_vendor::class,'t_transaksi_barangs','vendor_id','barang_id')->withPivot('jumlah_dibeli','harga_satuan','tanggal_beli','status_pembayaran');
     }
     
 }

@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Forms\Schemas\DataDiriSchema;
 use App\Filament\Widgets\DashboardWidget;
 use App\Filament\Widgets\TestWidget;
 use App\Filament\Widgets\PorgramPembangunanWidget;
@@ -23,6 +24,12 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Http\Middleware\EnsureProfileIsComplete;
+use App\Models\m_data_diri;
+use App\Models\User;
+use Filament\Actions\Action;
+use Filament\Notifications\Notification;
+use Filament\Pages\Auth\Register;
+use Illuminate\Support\Facades\Auth;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -75,7 +82,11 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
-            ])   
+            ])
+            ->renderHook(
+                'panels::global-search.after',
+                fn () => \Livewire\Livewire::mount(\App\Livewire\GlobalActions::class),
+            )
             ;
     }
 }

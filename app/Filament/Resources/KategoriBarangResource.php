@@ -57,6 +57,8 @@ class KategoriBarangResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('kode_kategori')
+                    ->label('Kode Kategori'),
                 TextColumn::make('nama_kategori')
                     ->label('Nama Kategori')
                     ->searchable()

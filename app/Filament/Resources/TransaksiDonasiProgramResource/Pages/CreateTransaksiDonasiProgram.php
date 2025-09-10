@@ -15,9 +15,11 @@ class CreateTransaksiDonasiProgram extends CreateRecord
     {
         parent::mount();
 
-        if(request()->has('program_id')){
+        if(request()->has('program_id') && request()->has('user_id') && request()->has('status_pembayaran')){
             $this->form->fill([
                 'program_id' =>request()->get('program_id'),
+                'user_id' =>request()->get('user_id'),
+                'status_pembayaran' => request()->get('status_pembayaran'),
             ]);
         }
     }
