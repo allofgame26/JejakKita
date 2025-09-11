@@ -13,6 +13,7 @@ use Filament\Forms;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Wizard;
 use Filament\Forms\Components\Wizard\Step;
@@ -154,12 +155,58 @@ class TransaksiDonasiProgramResource extends Resource
                                     ->label('Nama Lengkap'),
                                 TextEntry::make('user.datadiri.no_telp')
                                     ->label('Nomor Telefon'),
-                            ])
+                            ]),
+                        Section::make('Pembayaran')
+                            ->columns(2)
+                            ->schema([
+                                TextEntry::make('pembayaran.nama_pembayaran')
+                                    ->label('Nama Pembayaran'),
+                                TextEntry::make('pembayaran.no_rekening')
+                                    ->label('Nomor Rekening')
+                                    ->badge()
+                                    ->copyable(),
+                                TextEntry::make('jumlah_donasi')
+                                    ->label('Jumlah Donasi')
+                                    ->money('IDR'),
+                                TextEntry::make('status_pembayaran')
+                                    ->label('Status Pembayaran')
+                                    ->badge()
+                                    ->color(fn (string $state): string => match ($state){
+                                    'gagal' => 'danger',
+                                    'pending' => 'warning',
+                                    'sukses' => 'success',
+                                    }),
+                                TextEntry::make('pesan_donatur')
+                                    ->label('Pesan Donatur'),
+                                SpatieMediaLibraryImageEntry::make('bukti_pembayaran')
+                                    ->collection('bukti_pembayaran_transaksi_program')
+                                    ->label('Bukti Pembayaran')
+                            ]),
                     ])
-                    ->action(function ($record){
-                        $record->status_pembayaran = 'sukses';
-                        $record->save();
-                    }),
+                    ->modalFooterActions(fn ($record) => [
+                            Action::make('tolak')
+                                ->label('Tolak')
+                                ->color('danger')
+                                ->requiresConfirmation()
+                                ->form([
+                                    Textarea::make('alasan_penolakan')
+                                        ->label('Alasan Penolakan')
+                                        ->required()
+                                ])
+                                ->action(function (array $data) use ($record){
+                                    $record->status_pembayaran = 'gagal';
+                                    $record->alasan_penolakan = $data['alasan_penolakan'];
+                                    $record->save();
+                                }),
+                            Action::make('setujui')
+                                ->label('Seujui (ACC)')
+                                ->color('success')
+                                ->requiresConfirmation()
+                                ->action(function () use ($record){
+                                    $record->status_pembayaran = 'sukses';
+                                    $record->save();
+                                })
+                        ]),
                 Action::make('bayar')
                     ->label('Bayar Sekarang')
                     ->icon('heroicon-o-arrow-up-on-square')

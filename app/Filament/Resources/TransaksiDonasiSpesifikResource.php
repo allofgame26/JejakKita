@@ -11,6 +11,7 @@ use Dvarilek\FilamentTableSelect\Components\Form\TableSelect;
 use Filament\Forms;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Wizard;
 use Filament\Forms\Components\Wizard\Step;
@@ -145,6 +146,94 @@ class TransaksiDonasiSpesifikResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Action::make('ACC')
+                    ->label('Validasi Bukti Pembayaran')
+                    ->icon('heroicon-o-check-circle')
+                    ->color('success')
+                    ->visible(fn ($record): bool => $record->status_kirim_bukti_pembayaran === 'sudah' && $record->status_pembayaran === 'pending' && auth()->user()->hasRole(['super_admin','admin']))
+                    ->modalHeading('Detail dan Validasi Pembayaran')
+                    ->modalWidth('3xl')
+                    ->modalSubmitAction(false)
+                    ->modalCancelAction(false)
+                    ->modalCancelActionLabel('Konfirmasi / ACC')
+                    ->infolist([
+                        Section::make('Program')
+                            ->columns(2)
+                            ->schema([
+                                TextEntry::make('program.nama_pembangunan')
+                                    ->label('Nama Pembangunan'),
+                                TextEntry::make('program.kode_pembangunan')
+                                    ->label('Kode Pembangunan'),
+                            ]),
+                        Section::make('Pengguna')
+                            ->columns(2)
+                            ->schema([
+                                TextEntry::make('name')
+                                    ->label('Username'),
+                                TextEntry::make('user.email')
+                                    ->label('E - Mail'),
+                                TextEntry::make('user.datadiri.nama_lengkap')
+                                    ->label('Nama Lengkap'),
+                                TextEntry::make('user.datadiri.no_telp')
+                                    ->label('Nomor Telefon'),
+                            ]),
+                        Section::make('Pembayaran')
+                            ->columns(2)
+                            ->schema([
+                                TextEntry::make('pembayaran.nama_pembayaran')
+                                    ->label('Nama Pembayaran'),
+                                TextEntry::make('pembayaran.no_rekening')
+                                    ->label('Nomor Rekening')
+                                    ->badge()
+                                    ->copyable(),
+                                TextEntry::make('jumlah_donasi')
+                                    ->money('IDR'),
+                                TextEntry::make('status_pembayaran')
+                                    ->label('Status Pembayaran')
+                                    ->badge()
+                                    ->color(fn (string $state): string => match ($state){
+                                        'gagal' => 'danger',
+                                        'pending' => 'warning',
+                                        'sukses' => 'success',
+                                    }),
+                                TextEntry::make('pesan_donatur')
+                                    ->label('Pesan'),
+                                SpatieMediaLibraryImageEntry::make('bukti_pembayaran')
+                                    ->label('Bukti Pembayaran')
+                                    ->collection('bukti_pembayaran_spesifik')
+                        ]),
+                        Section::make('Tabel Barang')
+                            ->schema([
+                                ViewEntry::make('kebutuhanBarang')
+                                    ->label('')
+                                    ->view('filament.infolist.kebutuhan-barang-tabel')    
+                        ])
+                    ])
+                    ->modalFooterActions(fn ($record) => [
+                            Action::make('tolak')
+                                ->label('Tolak')
+                                ->color('danger')
+                                ->requiresConfirmation()
+                                ->form([
+                                    Textarea::make('alasan_penolakan')
+                                        ->label('Alasan Penolakan')
+                                        ->required()
+                                ])
+                                ->action(function (array $data) use ($record){
+                                    $record->status_pembayaran = 'gagal';
+                                    $record->alasan_penolakan = $data['alasan_penolakan'];
+                                    $record->save();
+                                }),
+                            Action::make('setujui')
+                                ->label('Seujui (ACC)')
+                                ->color('success')
+                                ->requiresConfirmation()
+                                ->action(function () use ($record){
+                                    $record->status_pembayaran = 'sukses';
+                                    $record->save();
+                                })
+                        ])
+                    ,
                 Action::make('bayar')
                     ->label('Bayar Sekarang')
                     ->icon('heroicon-o-arrow-up-on-square')
