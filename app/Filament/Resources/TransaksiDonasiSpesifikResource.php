@@ -6,6 +6,7 @@ use App\Filament\Resources\TransaksiDonasiSpesifikResource\Pages;
 use App\Models\m_metode_pembayaran;
 use App\Models\t_kebutuhan_barang_program;
 use App\Models\t_transaksi_donasi_spesifik;
+use App\Models\User;
 use Dom\Text;
 use Dvarilek\FilamentTableSelect\Components\Form\TableSelect;
 use Filament\Forms;
@@ -21,6 +22,8 @@ use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\ViewEntry;
 use Filament\Infolists\Infolist;
+use Filament\Notifications\Notification;
+use Filament\Notifications\Actions\Action as NotificationAction;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -36,6 +39,7 @@ use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use PhpOffice\PhpSpreadsheet\Calculation\TextData\Format;
 
 class TransaksiDonasiSpesifikResource extends Resource
 {
@@ -162,7 +166,7 @@ class TransaksiDonasiSpesifikResource extends Resource
                             ->schema([
                                 TextEntry::make('program.nama_pembangunan')
                                     ->label('Nama Pembangunan'),
-                                TextEntry::make('program.kode_pembangunan')
+                                TextEntry::make('program.kode_program')
                                     ->label('Kode Pembangunan'),
                             ]),
                         Section::make('Pengguna')
@@ -225,15 +229,14 @@ class TransaksiDonasiSpesifikResource extends Resource
                                     $record->save();
                                 }),
                             Action::make('setujui')
-                                ->label('Seujui (ACC)')
+                                ->label('Setujui (ACC)')
                                 ->color('success')
                                 ->requiresConfirmation()
                                 ->action(function () use ($record){
                                     $record->status_pembayaran = 'sukses';
                                     $record->save();
                                 })
-                        ])
-                    ,
+                        ]),
                 Action::make('bayar')
                     ->label('Bayar Sekarang')
                     ->icon('heroicon-o-arrow-up-on-square')
@@ -255,6 +258,19 @@ class TransaksiDonasiSpesifikResource extends Resource
                     ->action(function ($record){
                         $record->status_kirim_bukti_pembayaran = 'sudah';
                         $record->save();
+
+                        $admins = User::role(['Admin','super_admin'])->get();
+
+                        Notification::make()
+                            ->title('Transaksi Baru, Menunggu Validasi')
+                            ->body('Donasi Sejumlah ' . number_format($record->jumlah_donasi, 0, ',', '.') . " dari {$record->user->name} perlu divalidasi")
+                            ->icon('heroicon-o-currency-dollar')
+                            ->actions([
+                                NotificationAction::make('view')
+                                    ->label('Lihat & Validasi Transaksi')
+                                    ->url(route('filament.admin.resources.transaksi-donasi-spesifiks.index'))
+                            ])
+                            ->sendToDatabase($admins);
                     }),
                 ViewAction::make('detail')
                     ->label('Detail')
@@ -354,7 +370,7 @@ class TransaksiDonasiSpesifikResource extends Resource
 
         $user = Auth::user();
 
-        if(!$user->hasRole('Admin')){
+        if(!$user->hasRole(['Admin','super_admin'])){
             $query->where('user_id', $user->id);
         }
 

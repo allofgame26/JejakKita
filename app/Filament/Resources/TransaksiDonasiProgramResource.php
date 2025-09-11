@@ -8,6 +8,7 @@ use App\Models\m_metode_pembayaran;
 use App\Models\m_program_pembangunan;
 use App\Models\t_transaksi_donasi_program;
 use App\Models\TransaksiDonasiProgram;
+use App\Models\User;
 use Dom\Text;
 use Filament\Forms;
 use Filament\Forms\Components\Hidden;
@@ -22,6 +23,8 @@ use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
+use Filament\Notifications\Notification;
+use Filament\Notifications\Actions\Action as NotificationAction;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
@@ -211,7 +214,7 @@ class TransaksiDonasiProgramResource extends Resource
                     ->label('Bayar Sekarang')
                     ->icon('heroicon-o-arrow-up-on-square')
                     ->color('primary')
-                    ->visible(fn ($record): bool => $record->status_pembayaran === "pending" && auth()->user()->hasRole('user'))
+                    ->visible(fn ($record): bool => $record->status_pembayaran === "pending" && $record->status_kirim_bukti_pembayaran === 'belum' && auth()->user()->hasRole('user'))
                     ->modalHeading('Upload Bukti Pembayaran')
                     ->modalSubmitActionLabel('Upload')
                     ->form([
@@ -228,6 +231,19 @@ class TransaksiDonasiProgramResource extends Resource
                     ->action(function ($record){
                         $record->status_kirim_bukti_pembayaran = 'sudah';
                         $record->save();
+
+                        $admins = User::role(['Admin','super_admin'])->get();
+
+                        Notification::make()
+                            ->title('Transaksi Baru, Menunggu Validasi')
+                            ->body('Donasi Sejumlah ' . number_format($record->jumlah_donasi, 0, ',', '.') . " dari {$record->user->name} perlu divalidasi")
+                            ->icon('heroicon-o-currency-dollar')
+                            ->actions([
+                                NotificationAction::make('view')
+                                    ->label('Lihat & Validasi Transaksi')
+                                    ->url(route('filament.admin.resources.transaksi-donasi-programs.index'))
+                            ])
+                            ->sendToDatabase($admins);
                     }),
                 ViewAction::make('detail')
                     ->label('Detail')
@@ -337,7 +353,7 @@ class TransaksiDonasiProgramResource extends Resource
 
         $user = Auth::user();
 
-        if(!$user->hasRole('Admin')){
+        if(!$user->hasRole(['Admin','super_admin'])){
             $query->where('user_id', $user->id);
         }
 
