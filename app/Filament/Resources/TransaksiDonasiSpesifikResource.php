@@ -31,6 +31,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
@@ -163,7 +164,7 @@ class TransaksiDonasiSpesifikResource extends Resource
                             ->required(),
                     ])
                     ->action(function ($record){
-                        $record->status_pembayaran = 'sukses';
+                        $record->status_kirim_bukti_pembayaran = 'sudah';
                         $record->save();
                     }),
                 ViewAction::make('detail')
@@ -256,6 +257,19 @@ class TransaksiDonasiSpesifikResource extends Resource
                         ->view('filament.infolist.kebutuhan-barang-tabel')    
                 ])
         ];
+    }
+
+    public static function getEloquentQuery(): EloquentBuilder
+    {
+        $query = parent::getEloquentQuery();
+
+        $user = Auth::user();
+
+        if(!$user->hasRole('Admin')){
+            $query->where('user_id', $user->id);
+        }
+
+        return $query;
     }
 
 }

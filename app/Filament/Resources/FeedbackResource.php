@@ -22,6 +22,7 @@ use Filament\Tables\Table;
 use IbrahimBougaoua\FilamentRatingStar\Columns\Components\RatingStar;
 use IbrahimBougaoua\FilamentRatingStar\Forms\Components\RatingStar as ComponentsRatingStar;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class FeedbackResource extends Resource
 {
@@ -99,5 +100,18 @@ class FeedbackResource extends Resource
         return [
             'index' => Pages\ManageFeedback::route('/'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        $user = Auth::user();
+
+        if(!$user->hasRole('Admin')){
+            $query->where('user_id', $user->id);
+        }
+
+        return $query;
     }
 }

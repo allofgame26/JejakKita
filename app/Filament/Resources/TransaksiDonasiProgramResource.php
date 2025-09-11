@@ -34,6 +34,7 @@ use Illuminate\Database\Console\Migrations\StatusCommand;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class TransaksiDonasiProgramResource extends Resource
 {
@@ -126,6 +127,39 @@ class TransaksiDonasiProgramResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Action::make('ACC')
+                    ->label('Valiadsi Bukti Pembayaran')
+                    ->icon('heroicon-o-check-circle')
+                    ->color('success')
+                    ->visible(fn ($record): bool => $record->status_kirim_bukti_pembayaran === "sudah" && $record->status_pembayaran === 'pending' && auth()->user()->hasRole(['super_admin','Admin']))
+                    ->modalHeading('Pembayaran Transaksi')
+                    ->modalSubmitActionLabel('Konfirmasi / ACC')
+                    ->infolist([
+                        Section::make('Program')
+                            ->columns(2)
+                            ->schema([
+                                TextEntry::make('program.nama_pembangunan')
+                                    ->label('Nama Pembangunan'),
+                                TextEntry::make('program.kode_pembangunan')
+                                    ->label('Kode Pembangunan'),
+                            ]),
+                        Section::make('Pengguna')
+                            ->columns(2)
+                            ->schema([
+                                TextEntry::make('name')
+                                    ->label('Username'),
+                                TextEntry::make('user.email')
+                                    ->label('E - Mail'),
+                                TextEntry::make('user.datadiri.nama_lengkap')
+                                    ->label('Nama Lengkap'),
+                                TextEntry::make('user.datadiri.no_telp')
+                                    ->label('Nomor Telefon'),
+                            ])
+                    ])
+                    ->action(function ($record){
+                        $record->status_pembayaran = 'sukses';
+                        $record->save();
+                    }),
                 Action::make('bayar')
                     ->label('Bayar Sekarang')
                     ->icon('heroicon-o-arrow-up-on-square')
@@ -145,14 +179,14 @@ class TransaksiDonasiProgramResource extends Resource
                             ->required(),
                     ])
                     ->action(function ($record){
-                        $record->status_pembayaran = 'sukses';
+                        $record->status_kirim_bukti_pembayaran = 'sudah';
                         $record->save();
                     }),
                 ViewAction::make('detail')
                     ->label('Detail')
                     ->icon('heroicon-o-eye')
                     ->color('info')
-                    ->visible(fn($record): bool => $record->status_pembayaran !== "pending" && auth()->user()->hasRole('user'))
+                    ->visible(fn($record): bool => $record->status_pembayaran !== "sukses" && auth()->user()->hasRole('user'))
                     ->modalHeading('Detail Donasi')
                     ->modalSubmitAction(false)
                     ->modalCancelActionLabel('Tutup'),
@@ -248,5 +282,18 @@ class TransaksiDonasiProgramResource extends Resource
             
 
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        $user = Auth::user();
+
+        if(!$user->hasRole('Admin')){
+            $query->where('user_id', $user->id);
+        }
+
+        return $query;
     }
 }
