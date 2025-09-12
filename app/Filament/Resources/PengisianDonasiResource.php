@@ -157,4 +157,17 @@ class PengisianDonasiResource extends Resource
             // 'edit' => Pages\EditPengisianDonasi::route('/{record}/edit'),
         ];
     }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        $user = Auth::user();
+
+        if(!$user->hasRole(['Admin','super_admin'])){
+            $query->where('user_id', $user->id);
+        }
+
+        return $query;
+    }
 }

@@ -63,7 +63,7 @@ class TransaksiDonasiProgramResource extends Resource
                         ->schema([
                             Select::make('program_id')
                                 ->required()
-                                ->relationship('program','nama_pembangunan')
+                                ->relationship('program','nama_pembangunan', modifyQueryUsing: fn (Builder $query) => $query->where('status_pendanaan', 'lengkap'))
                                 ->label('Pilih Program')
                                 ->reactive()
                                 ->live(),
