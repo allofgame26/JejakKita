@@ -302,7 +302,7 @@ class TransaksiDonasiSpesifikResource extends Resource
                         ->action(function (Collection $record) {
                             return $record->each->update(['status_pembayaran' => 'gagal']);
                         }),
-                ]),
+                ])->visible(fn ():bool => auth()->user()->hasRole(['Admin','super_admin'])),
             ]);
     }
 

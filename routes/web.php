@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\KwitansiController;
 use App\Http\Controllers\WelcomeController;
 use App\Models\m_post;
 use Illuminate\Support\Facades\Route;
@@ -36,6 +37,10 @@ Route::get('preview/post/{post}', function (m_post $post){
         'dataGaleri' => $dataGaleri,
     ]);  
 })->name('post.preview');
+
+Route::get('/transaksi/{transaksi}/download-kwitansi', [KwitansiController::class, 'downloadProgram'])
+    ->name('kwitansiProgram.download')
+    ->middleware('auth');
 
 Route::middleware([
     'auth:sanctum',

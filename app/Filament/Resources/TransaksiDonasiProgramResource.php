@@ -88,7 +88,7 @@ class TransaksiDonasiProgramResource extends Resource
                             TextInput::make('pesan_donatur')
                                 ->label('Pesan Donatur')
                         ])->columns(2)
-                ])
+                ])->columnSpanFull()
             ]);
     }
 
@@ -249,11 +249,17 @@ class TransaksiDonasiProgramResource extends Resource
                     ->label('Detail')
                     ->icon('heroicon-o-eye')
                     ->color('info')
-                    ->visible(fn($record): bool => $record->status_pembayaran !== "sukses" && auth()->user()->hasRole('user'))
+                    ->visible(fn($record): bool => $record->status_pembayaran !== "pending" && auth()->user()->hasRole('user'))
                     ->modalHeading('Detail Donasi')
                     ->modalSubmitAction(false)
                     ->modalCancelActionLabel('Tutup'),
-                    
+                Action::make('download')
+                    ->label('Download Kwitansi')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->color('success')
+                    ->url(fn ($record) => route('kwitansiProgram.download', ['transaksi' => $record]))
+                    ->openUrlInNewTab()
+                    ->visible(fn ($record): bool => $record->status_pembayaran === 'sukses'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -276,7 +282,7 @@ class TransaksiDonasiProgramResource extends Resource
                         ->action(function (Collection $record) {
                             return $record->each->update(['status_pembayaran' => 'gagal']);
                         }),
-                ]),
+                ])->visible(fn ():bool => auth()->user()->hasRole(['Admin','super_admin'])),
             ]);
     }
 
