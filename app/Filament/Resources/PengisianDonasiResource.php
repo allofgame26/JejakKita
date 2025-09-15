@@ -123,7 +123,8 @@ class PengisianDonasiResource extends Resource
                     ->action(function ($record) {
                         $record->status_pembayaran = 'sukses';
                         $record->save();
-                    }),
+                    })
+                    ,
                 \Filament\Tables\Actions\Action::make('detail')
                     ->label('Detail')
                     ->icon('heroicon-o-eye')
@@ -155,5 +156,18 @@ class PengisianDonasiResource extends Resource
             'create' => Pages\CreatePengisianDonasi::route('/create'),
             // 'edit' => Pages\EditPengisianDonasi::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        $user = Auth::user();
+
+        if(!$user->hasRole(['Admin','super_admin'])){
+            $query->where('user_id', $user->id);
+        }
+
+        return $query;
     }
 }
