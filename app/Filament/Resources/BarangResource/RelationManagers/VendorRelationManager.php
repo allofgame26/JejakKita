@@ -69,7 +69,7 @@ class VendorRelationManager extends RelationManager
                 // Tables\Actions\CreateAction::make(),
                 AttachAction::make()
                     ->preloadRecordSelect()
-                    ->label('Tambah Vendor')
+                    ->label('Tambah Transaksi Barang')
                     ->icon('heroicon-o-plus-circle')
                     ->color('warning')
                     ->form(fn (AttachAction $action): array => [
@@ -93,10 +93,10 @@ class VendorRelationManager extends RelationManager
                                 Hidden::make('status')
                                     ->default('aktif')
                                 ])
-                            ->createOptionUsing(function (array $data): int {
-                                $newVendor = m_vendor::create($data);
+                                ->createOptionUsing(function (array $data): int {
+                                    $newVendor = m_vendor::create($data);
 
-                                return $newVendor->id;
+                                    return $newVendor->id;
                             }),
                         TextInput::make('jumlah_dibeli')
                             ->numeric()
@@ -110,6 +110,7 @@ class VendorRelationManager extends RelationManager
                             ->native(false)
                             ->displayFormat('d M Y')
                             ->label('Tanggal Pembelian')
+                            ->maxDate(now())
                             ->required(),
                         Hidden::make('status_pembayaran')
                             ->default('pending')
@@ -136,9 +137,7 @@ class VendorRelationManager extends RelationManager
                     ->action(function (array $data, $record){
                         $pivot = $record->pivot;
 
-                        $pivot->addMediaFromRequest('bukti_pembayaran')->toMediaCollection('pembelian_barang');
-
-                        $pivot->status_pembayaran = 'sukses';
+                        $pivot->status_pembayaran = 'berhasil';
                         $pivot->save();
 
                     }),
@@ -179,13 +178,13 @@ class VendorRelationManager extends RelationManager
                                     ->badge()
                                     ->color(fn (string $state): string => match ($state){
                                         'pending' => 'warning',
-                                        'sukses' => 'success',
+                                        'berhasil' => 'success',
                                         'gagal' => 'danger',
                                     }),
-                                SpatieMediaLibraryImageEntry::make('pivot.media')
+                                SpatieMediaLibraryImageEntry::make('bukti_pembayaran')
                                     ->label('Bukti Pembayaran')
                                     ->collection('pembelian_barang')
-                                    ->visible(fn ($record) => $record->pivot->status_pembayaran === 'sukses'),
+                                    ->visible(fn ($record) => $record->pivot->status_pembayaran === 'berhasil'),
                             ])
                             ->columns(2)
                     ]),

@@ -87,7 +87,7 @@ class TransaksiDonasiSpesifikResource extends Resource
                                         ->whereIn('id',$state)
                                         ->get()
                                         ->sum(function ($item){
-                                            return $item->jumlah_barang * ($item->barang->harga_satuan ?? 0);
+                                            return $item->jumlah_barang * ($item->barang->harga_rata ?? 0);
                                         });
 
                                     $set('jumlah_donasi',$totaldonasi);
@@ -143,6 +143,9 @@ class TransaksiDonasiSpesifikResource extends Resource
                         'pending' => 'warning',
                         'sukses' => 'success',
                     }),
+                SpatieMediaLibraryImageColumn::make('bukti_pembayaran')
+                    ->label('Bukti Pembayaran')
+                    ->collection('bukti_pembayaran_spesifik'),
             ])
             ->filters([
                 SelectFilter::make('program')
