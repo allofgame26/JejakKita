@@ -290,7 +290,7 @@ class TransaksiDonasiProgramResource extends Resource
 
         $user = Auth::user();
 
-        if(!$user->hasRole('Admin')){
+        if (!$user->hasRole('Admin')) {
             $query->where('user_id', $user->id);
         }
 

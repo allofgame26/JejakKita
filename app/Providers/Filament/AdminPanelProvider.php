@@ -42,7 +42,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->brandName('SDIT-AG')
-            ->profile(isSimple: false) // kurang dicustom
+            ->profile(isSimple: false)
             ->emailVerification()
             ->sidebarCollapsibleOnDesktop()
             ->registration()
@@ -59,8 +59,6 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                // Widgets\AccountWidget::class,
-                // Widgets\FilamentInfoWidget::class,
                 TestWidget::class, // Widget Bisa ditaruh didalam sini
                 ProgramPembangunanWidget::class,
                 DashboardWidget::class,
