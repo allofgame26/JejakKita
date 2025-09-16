@@ -51,6 +51,11 @@ class TransaksiDonasiSpesifikResource extends Resource
 
     protected static ?string $navigationGroup = 'Transaksi';
 
+    protected static ?string $pluralLabel = 'Data Transaksi Donasi Spesifik';
+
+    protected static ?string $label = 'Data Transaksi Donasi Spesifik';
+
+
     public static function form(Form $form): Form
     {
         return $form
