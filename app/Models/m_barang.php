@@ -35,5 +35,10 @@ class m_barang extends Model
     {
         return $this->belongsToMany(m_vendor::class,'t_transaksi_barangs','barang_id','vendor_id')->using(t_transaksi_barang::class)->withPivot('jumlah_dibeli','harga_satuan','tanggal_beli','status_pembayaran');
     }
+
+    public function transaksiBarang(): HasMany
+    {
+        return $this->hasMany(t_transaksi_barang::class,'barang_id');
+    }
     
 }
