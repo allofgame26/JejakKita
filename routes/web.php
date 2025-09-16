@@ -42,6 +42,10 @@ Route::get('/transaksi/{transaksi}/download-kwitansi', [KwitansiController::clas
     ->name('kwitansiProgram.download')
     ->middleware('auth');
 
+Route::get('/transaksi-spesifikasi/{transaksi}/download-kwitansi', [KwitansiController::class, 'downloadSpesifikasi'])
+    ->name('kwitansiSpesifikasi.download')
+    ->middleware('auth');
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),

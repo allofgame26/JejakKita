@@ -255,12 +255,12 @@ class TransaksiDonasiProgramResource extends Resource
                     ->modalCancelActionLabel('Tutup')
                     ->modalFooterActions(fn ($record) => [
                         Action::make('download')
-                        ->label('Download Kwitansi')
-                        ->icon('heroicon-o-arrow-down-tray')
-                        ->color('success')
-                        ->url(fn ($record) => route('kwitansiProgram.download', ['transaksi' => $record]))
-                        ->openUrlInNewTab()
-                        ->visible(fn ($record): bool => $record->status_pembayaran === 'sukses'),
+                            ->label('Download Kwitansi')
+                            ->icon('heroicon-o-arrow-down-tray')
+                            ->color('success')
+                            ->url(fn ($record) => route('kwitansiProgram.download', ['transaksi' => $record]))
+                            ->openUrlInNewTab()
+                            ->visible(fn ($record): bool => $record->status_pembayaran === 'sukses'),
                     ]),
             ])
             ->bulkActions([
