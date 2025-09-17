@@ -8,11 +8,13 @@ use App\Models\m_metode_pembayaran;
 use App\Models\m_program_pembangunan;
 use App\Models\t_transaksi_donasi_program;
 use App\Models\TransaksiDonasiProgram;
+use App\Models\User;
 use Dom\Text;
 use Filament\Forms;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Wizard;
 use Filament\Forms\Components\Wizard\Step;
@@ -21,6 +23,8 @@ use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
+use Filament\Notifications\Notification;
+use Filament\Notifications\Actions\Action as NotificationAction;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
@@ -59,7 +63,7 @@ class TransaksiDonasiProgramResource extends Resource
                         ->schema([
                             Select::make('program_id')
                                 ->required()
-                                ->relationship('program','nama_pembangunan')
+                                ->relationship('program','nama_pembangunan', modifyQueryUsing: fn (Builder $query) => $query->where('status_pendanaan', 'lengkap'))
                                 ->label('Pilih Program')
                                 ->reactive()
                                 ->live(),
@@ -84,7 +88,7 @@ class TransaksiDonasiProgramResource extends Resource
                             TextInput::make('pesan_donatur')
                                 ->label('Pesan Donatur')
                         ])->columns(2)
-                ])
+                ])->columnSpanFull()
             ]);
     }
 
@@ -154,17 +158,63 @@ class TransaksiDonasiProgramResource extends Resource
                                     ->label('Nama Lengkap'),
                                 TextEntry::make('user.datadiri.no_telp')
                                     ->label('Nomor Telefon'),
-                            ])
+                            ]),
+                        Section::make('Pembayaran')
+                            ->columns(2)
+                            ->schema([
+                                TextEntry::make('pembayaran.nama_pembayaran')
+                                    ->label('Nama Pembayaran'),
+                                TextEntry::make('pembayaran.no_rekening')
+                                    ->label('Nomor Rekening')
+                                    ->badge()
+                                    ->copyable(),
+                                TextEntry::make('jumlah_donasi')
+                                    ->label('Jumlah Donasi')
+                                    ->money('IDR'),
+                                TextEntry::make('status_pembayaran')
+                                    ->label('Status Pembayaran')
+                                    ->badge()
+                                    ->color(fn (string $state): string => match ($state){
+                                    'gagal' => 'danger',
+                                    'pending' => 'warning',
+                                    'sukses' => 'success',
+                                    }),
+                                TextEntry::make('pesan_donatur')
+                                    ->label('Pesan Donatur'),
+                                SpatieMediaLibraryImageEntry::make('bukti_pembayaran')
+                                    ->collection('bukti_pembayaran_transaksi_program')
+                                    ->label('Bukti Pembayaran')
+                            ]),
                     ])
-                    ->action(function ($record){
-                        $record->status_pembayaran = 'sukses';
-                        $record->save();
-                    }),
+                    ->modalFooterActions(fn ($record) => [
+                            Action::make('tolak')
+                                ->label('Tolak')
+                                ->color('danger')
+                                ->requiresConfirmation()
+                                ->form([
+                                    Textarea::make('alasan_penolakan')
+                                        ->label('Alasan Penolakan')
+                                        ->required()
+                                ])
+                                ->action(function (array $data) use ($record){
+                                    $record->status_pembayaran = 'gagal';
+                                    $record->alasan_penolakan = $data['alasan_penolakan'];
+                                    $record->save();
+                                }),
+                            Action::make('setujui')
+                                ->label('Seujui (ACC)')
+                                ->color('success')
+                                ->requiresConfirmation()
+                                ->action(function () use ($record){
+                                    $record->status_pembayaran = 'sukses';
+                                    $record->save();
+                                })
+                        ]),
                 Action::make('bayar')
                     ->label('Bayar Sekarang')
                     ->icon('heroicon-o-arrow-up-on-square')
                     ->color('primary')
-                    ->visible(fn ($record): bool => $record->status_pembayaran === "pending" && auth()->user()->hasRole('user'))
+                    ->visible(fn ($record): bool => $record->status_pembayaran === "pending" && $record->status_kirim_bukti_pembayaran === 'belum' && auth()->user()->hasRole('user'))
                     ->modalHeading('Upload Bukti Pembayaran')
                     ->modalSubmitActionLabel('Upload')
                     ->form([
@@ -181,16 +231,37 @@ class TransaksiDonasiProgramResource extends Resource
                     ->action(function ($record){
                         $record->status_kirim_bukti_pembayaran = 'sudah';
                         $record->save();
+
+                        $admins = User::role(['Admin','super_admin'])->get();
+
+                        Notification::make()
+                            ->title('Transaksi Baru, Menunggu Validasi')
+                            ->body('Donasi Sejumlah ' . number_format($record->jumlah_donasi, 0, ',', '.') . " dari {$record->user->name} perlu divalidasi")
+                            ->icon('heroicon-o-currency-dollar')
+                            ->actions([
+                                NotificationAction::make('view')
+                                    ->label('Lihat & Validasi Transaksi')
+                                    ->url(route('filament.admin.resources.transaksi-donasi-programs.index'))
+                            ])
+                            ->sendToDatabase($admins);
                     }),
                 ViewAction::make('detail')
                     ->label('Detail')
                     ->icon('heroicon-o-eye')
                     ->color('info')
-                    ->visible(fn($record): bool => $record->status_pembayaran !== "sukses" && auth()->user()->hasRole('user'))
+                    ->visible(fn($record): bool => $record->status_pembayaran !== "pending" && auth()->user()->hasRole('user'))
                     ->modalHeading('Detail Donasi')
                     ->modalSubmitAction(false)
-                    ->modalCancelActionLabel('Tutup'),
-                    
+                    ->modalCancelActionLabel('Tutup')
+                    ->modalFooterActions(fn ($record) => [
+                        Action::make('download')
+                        ->label('Download Kwitansi')
+                        ->icon('heroicon-o-arrow-down-tray')
+                        ->color('success')
+                        ->url(fn ($record) => route('kwitansiProgram.download', ['transaksi' => $record]))
+                        ->openUrlInNewTab()
+                        ->visible(fn ($record): bool => $record->status_pembayaran === 'sukses'),
+                    ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -213,7 +284,7 @@ class TransaksiDonasiProgramResource extends Resource
                         ->action(function (Collection $record) {
                             return $record->each->update(['status_pembayaran' => 'gagal']);
                         }),
-                ]),
+                ])->visible(fn ():bool => auth()->user()->hasRole(['Admin','super_admin'])),
             ]);
     }
 
@@ -290,7 +361,7 @@ class TransaksiDonasiProgramResource extends Resource
 
         $user = Auth::user();
 
-        if (!$user->hasRole('Admin')) {
+        if(!$user->hasRole(['Admin','super_admin'])){
             $query->where('user_id', $user->id);
         }
 

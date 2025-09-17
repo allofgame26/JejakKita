@@ -95,51 +95,55 @@ class BarangResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-                ->columns([
-                    TextColumn::make('kode_barang')
-                        ->label('Kode Barang')
-                        ->icon('heroicon-o-clipboard-document-list')
-                        ->searchable()
-                        ->sortable()
-                        ->color('primary')
-                        ->badge(),
-                    TextColumn::make('kategoribarang.nama_kategori')
-                        ->label('Nama Kategori')
-                        ->icon('heroicon-o-archive-box')
-                        ->searchable()
-                        ->sortable()
-                        ->color('success')
-                        ->badge(),
-                    TextColumn::make('nama_barang')
-                        ->label('Nama Barang')
-                        ->icon('heroicon-o-gift')
-                        ->searchable()
-                        ->sortable()
-                        ->color('info')
-                        ->badge(),
-                ])
-                ->filters([
-                    Tables\Filters\SelectFilter::make('nama_barang')
-                        ->label('Nama Barang Panjang'),
-                    Tables\Filters\SelectFilter::make('kategoribarang_id')
-                        ->label('Kategori Barang')
-                        ->options(fn () => m_barang::pluck('kategoribarang_id', 'id')),
-                ])
-                ->actions([
-                    Tables\Actions\ViewAction::make()
-                        ->modalHeading('Detail Barang')
-                        ->label('Detail')
-                        ->modalContent(fn ($record) => view('filament.resources.barang-detail', [
-                            'record' => $record
-                        ])),
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\DeleteAction::make(),
-                ])
-                ->bulkActions([
-                    Tables\Actions\BulkActionGroup::make([
-                        Tables\Actions\DeleteBulkAction::make(),
-                    ]),
-                ]);
+            ->columns([
+                TextColumn::make('kode_barang')
+                    ->label('Kode Barang')
+                    ->icon('heroicon-o-clipboard-document-list'),
+                TextColumn::make('kategoribarang.nama_kategori')
+                    ->label('Nama Kategori')
+                    ->icon('heroicon-o-archive-box'),
+                TextColumn::make('nama_barang')
+                    ->label('Nama Barang')
+                    ->icon('heroicon-o-gift'),
+                TextColumn::make('barang_inventory')
+                    ->getStateUsing(function ($record){
+                        $cekJumlahBarang = t_transaksi_barang::where('barang_id',$record->id)->where('status_pembayaran','berhasil')->sum('jumlah_dibeli');
+                        $cekJumlahPemakaian = t_kebutuhan_barang_program::where('barang_id',$record->id && 'status' === 'diambil')->sum('jumlah_barang');
+
+                        $inventory = $cekJumlahBarang - $cekJumlahPemakaian;
+
+                        return $inventory;
+                    })
+                    ->badge()
+                    ->color(function ($state){
+                        if($state < 0 ){
+                             return 'danger';
+                        } elseif($state > 0) {
+                            return 'success';
+                        } else {
+                            return 'warning';
+                        }
+                    })
+                // TextColumn::make('total_harga')
+                //     ->label('Total Harga')
+                //     ->getStateUsing(fn ($record) => 
+                //         'Rp. ' . number_format($record->jumlah_barang_dibutuhkan * $record->harga_satuan, 0, ',', '.')),
+            ])
+            ->filters([
+                SelectFilter::make('kategoriBarang.nama_kategori')
+                    ->relationship('kategoriBarang','nama_kategori')
+                    ->preload()
+                    ->searchable()
+            ])
+            ->actions([
+                Tables\Actions\EditAction::make(),
+                DeleteAction::make()
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
+            ]);
     }
 
     public static function getRelations(): array

@@ -57,7 +57,7 @@
             background: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80') no-repeat center center/cover;
             color: white;
             text-align: center;
-            padding: 6rem 1rem 5rem;
+            padding: 10rem 1rem 10rem;
         }
 
         .hero::after {

@@ -17,6 +17,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
 
+
 class User extends Authenticatable implements HasMedia
 {
     use HasApiTokens;
