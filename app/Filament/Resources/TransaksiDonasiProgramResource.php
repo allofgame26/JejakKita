@@ -186,21 +186,15 @@ class TransaksiDonasiProgramResource extends Resource
                                     ->label('Bukti Pembayaran')
                             ]),
                     ])
-                    ->modalFooterActions(fn ($record) => [
+                    ->modalFooterActions(fn ($record, Action $action) => [
                             Action::make('tolak')
                                 ->label('Tolak')
                                 ->color('danger')
                                 ->requiresConfirmation()
-                                ->form([
-                                    Textarea::make('alasan_penolakan')
-                                        ->label('Alasan Penolakan')
-                                        ->required()
-                                ])
-                                ->action(function (array $data) use ($record){
+                                ->action(function () use ($record){
                                     $record->status_pembayaran = 'gagal';
-                                    $record->alasan_penolakan = $data['alasan_penolakan'];
                                     $record->save();
-                                }),
+                                })->after(fn () => $action->close()),
                             Action::make('setujui')
                                 ->label('Seujui (ACC)')
                                 ->color('success')
@@ -208,7 +202,7 @@ class TransaksiDonasiProgramResource extends Resource
                                 ->action(function () use ($record){
                                     $record->status_pembayaran = 'sukses';
                                     $record->save();
-                                })
+                                })->after(fn () => $action->close()),
                         ]),
                 Action::make('bayar')
                     ->label('Bayar Sekarang')
