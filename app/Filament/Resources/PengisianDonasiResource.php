@@ -16,6 +16,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Columns\HtmlColumn;
 use Illuminate\Support\Facades\Auth;
 
 class PengisianDonasiResource extends Resource
@@ -61,7 +62,7 @@ class PengisianDonasiResource extends Resource
                     ->searchable()
                     ->preload()
                     ->placeholder('Pilih metode pembayaran')
-                    // ->helperText('Pilih metode pembayaran yang tersedia.')
+                    ->helperText('Pilih metode pembayaran yang tersedia.')
                     ->prefixIcon('heroicon-o-credit-card')
                     ->required(),
                 Forms\Components\TextInput::make('jumlah_donasi')
@@ -69,7 +70,7 @@ class PengisianDonasiResource extends Resource
                     ->numeric()
                     ->prefix('Rp')
                     ->placeholder('0')
-                    // ->helperText('Masukkan nominal donasi dalam rupiah.')
+                    ->helperText('Masukkan nominal donasi dalam rupiah.')
                     ->required(),
                 Forms\Components\Textarea::make('pesan_donatur')
                     ->label('Pesan Donatur')
@@ -77,8 +78,6 @@ class PengisianDonasiResource extends Resource
                     ->rows(3)
                 // ->helperText('Pesan ini akan diterima oleh pengelola program.'),
                 // membuat Program automatis dipilih untuk masuk kedalam donasi
-
-
             ]);
     }
 
@@ -100,8 +99,9 @@ class PengisianDonasiResource extends Resource
                     ->color('success'),
                 Tables\Columns\TextColumn::make('pesan_donatur')
                     ->label('Pesan Donatur')
-                    ->limit(30)
-                    ->icon('heroicon-o-chat-bubble-left-ellipsis'),
+                    ->icon('heroicon-o-chat-bubble-left-ellipsis')
+                    ->limit(60)
+                    ->html(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Tanggal Pengisian')
                     ->dateTime('d M Y H:i')
@@ -164,5 +164,23 @@ class PengisianDonasiResource extends Resource
             'create' => Pages\CreatePengisianDonasi::route('/create'),
             // 'edit' => Pages\EditPengisianDonasi::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        $user = Auth::user();
+
+        if (!$user) {
+            // Jika belum login, kembalikan query tanpa filter
+            return $query;
+        }
+
+        if (!$user->hasRole(['Admin', 'super_admin'])) {
+            $query->where('user_id', $user->id);
+        }
+
+        return $query;
     }
 }

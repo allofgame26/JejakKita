@@ -129,6 +129,7 @@ class MandorResource extends Resource
                         'record' => $record
                     ])),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

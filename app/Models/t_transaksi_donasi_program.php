@@ -50,6 +50,7 @@ class t_transaksi_donasi_program extends Model implements HasMedia
         'pembayaran_id',
         'jumlah_donasi',
         'status_pembayaran',
+        'status_kirim_bukti_pembayaran',
         'pesan_donatur',
     ];
 

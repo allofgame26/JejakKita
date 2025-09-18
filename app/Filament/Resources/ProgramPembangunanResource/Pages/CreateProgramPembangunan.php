@@ -9,4 +9,13 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateProgramPembangunan extends CreateRecord
 {
     protected static string $resource = ProgramPembangunanResource::class;
+
+    protected function getFormActions(): array
+    {
+        return [
+            Actions\ActionGroup::make([
+                Actions\CreateAction::make(),
+            ]),
+        ];
+    }
 }

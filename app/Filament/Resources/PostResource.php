@@ -51,12 +51,12 @@ class PostResource extends Resource
                     ->label('slug')
                     ->readOnly(),
                 Select::make('kategori')
-                    ->relationship('kategori','title')
+                    ->relationship('kategori', 'title')
                     ->preload()
                     ->required()
                     ->multiple(),
                 Hidden::make('user_id')
-                    ->default(fn ()=> auth()->id()),
+                    ->default(fn() => auth()->id()),
                 Toggle::make('is_published')
                     ->label('Di Publish'),
                 TextInput::make('meta_description')

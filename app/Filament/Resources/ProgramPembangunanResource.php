@@ -28,6 +28,8 @@ use IbrahimBougaoua\FilaProgress\Tables\Columns\ProgressBar;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\DB;
+use Filament\Infolists;
+use Filament\Infolists\Components\TextEntry;
 
 class ProgramPembangunanResource extends Resource
 {
@@ -169,6 +171,20 @@ class ProgramPembangunanResource extends Resource
             'index' => Pages\ListProgramPembangunans::route('/'),
             'create' => Pages\CreateProgramPembangunan::route('/create'),
             'edit' => Pages\EditProgramPembangunan::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getInfolistSchema(): array
+    {
+        return [
+            TextEntry::make('kode_program')->label('Kode Program'),
+            TextEntry::make('nama_pembangunan')->label('Nama Pembangunan'),
+            TextEntry::make('tanggal_mulai')->label('Tanggal Mulai'),
+            TextEntry::make('status')->label('Status'),
+            TextEntry::make('estimasi_biaya')->label('Estimasi Biaya'),
+            TextEntry::make('skor_prioritas_akhir')->label('Prioritas'),
+            TextEntry::make('deskripsi')->label('Deskripsi'),
+            // Tambahkan field lain sesuai kebutuhan
         ];
     }
 }

@@ -27,7 +27,8 @@ class m_program_pembangunan extends Model implements HasMedia
         'status',
         'deskripsi',
         'skor_prioritas_akhir',
-        'status_pendanaan'
+        'status_pendanaan',
+        'periode_id'
     ];
 
     public function mandor(): BelongsTo
@@ -67,6 +68,11 @@ class m_program_pembangunan extends Model implements HasMedia
             $this->status_pendanaan = 'lengkap';
             $this->saveQuietly();
         }
+    }
+
+    public function periode(): BelongsTo
+    {
+        return $this->belongsTo(m_periode::class);
     }
 
     // public function sawScore(): float

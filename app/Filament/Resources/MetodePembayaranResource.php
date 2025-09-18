@@ -51,7 +51,7 @@ class MetodePembayaranResource extends Resource
                     ->offColor('danger'),
                 TextInput::make('deskripsi')
                     ->label('Deskripsi')
-                        ->required()
+                    ->required()
             ]);
     }
 
@@ -78,7 +78,15 @@ class MetodePembayaranResource extends Resource
                 ->modalContent(fn ($record) => view('filament.resources.metode-pembayaran-detail', [
                     'record' => $record
                 ])),
+                Tables\Actions\ViewAction::make()
+                    ->label('Detail')
+                    ->icon('heroicon-o-eye')
+                    ->modalHeading('Detail Metode Pembayaran')
+                    ->modalContent(fn($record) => view('filament.resources.metode-pembayaran-detail', [
+                        'record' => $record
+                    ])),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([

@@ -12,6 +12,7 @@ class m_kategori_barang extends Model
 
     protected $fillable = [
         'nama_kategori',
+        'kode_kategori',
         'deskripsi_kategori'
     ];
 

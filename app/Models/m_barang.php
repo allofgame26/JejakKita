@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class m_barang extends Model
 {
@@ -16,8 +17,8 @@ class m_barang extends Model
         'nama_barang',
         'kode_barang',
         'nama_satuan',
-        'harga_satuan',
         'deskripsi_barang',
+        'harga_rata',
     ];
 
     public function kategoriBarang(): BelongsTo
@@ -27,7 +28,12 @@ class m_barang extends Model
 
     public function mProgramPembangunans()
     {
-        return $this->belongsToMany(m_program_pembangunan::class,'t_kebutuhan_barang_programs','barang_id','program_id');
+        return $this->belongsToMany(m_program_pembangunan::class,'t_kebutuhan_barang_programs','barang_id','program_id')->withPivot('jumlah_barang');
+    }
+
+    public function vendor(): BelongsToMany
+    {
+        return $this->belongsToMany(m_vendor::class,'t_transaksi_barangs','barang_id','vendor_id')->using(t_transaksi_barang::class)->withPivot('jumlah_dibeli','harga_satuan','tanggal_beli','status_pembayaran');
     }
     
 }

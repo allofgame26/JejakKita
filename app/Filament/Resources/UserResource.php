@@ -58,17 +58,17 @@ class UserResource extends Resource
                     ->password()
                     ->revealable()
                     ->label('Password')
-                    ->dehydrateStateUsing(fn ($state) => $state ? Hash::make($state) : null) //melakukan edit sebuah value yang di inputkan, setelah itu dimasukkan kedalam database
-                    ->required(fn (string $context): bool => $context === 'create')
-                    ->dehydrated(fn ($state) => filled($state)), // melakukan hanya simpan jika kolom diisi 
+                    ->dehydrateStateUsing(fn($state) => $state ? Hash::make($state) : null) //melakukan edit sebuah value yang di inputkan, setelah itu dimasukkan kedalam database
+                    ->required(fn(string $context): bool => $context === 'create')
+                    ->dehydrated(fn($state) => filled($state)), // melakukan hanya simpan jika kolom diisi 
                 Select::make('id_identitas')
                     ->label('Data Diri')
                     ->preload()
-                    ->relationship('datadiri','nama_lengkap')
-                    ->searchable(['nama_lengkap','nip'])
+                    ->relationship('datadiri', 'nama_lengkap')
+                    ->searchable(['nama_lengkap', 'nip'])
                     ->preload(),
                 Select::make('roles')
-                    ->relationship('roles','name')
+                    ->relationship('roles', 'name')
                     ->label('Roles')
                     ->preload()
                     ->searchable()

@@ -32,9 +32,17 @@ class HistoryResource extends Resource
             ->filters([
                 //
             ])
-            // ->actions([
-            //     Tables\Actions\EditAction::make(),
-            // ])
+            ->actions([
+                \Filament\Tables\Actions\Action::make('detail')
+                    ->label('Detail')
+                    ->icon('heroicon-o-eye')
+                    ->color('info')
+                    ->visible(fn($record): bool => $record->status_pembayaran !== "pending")
+                    ->modalHeading('Detail Donasi')
+                    ->modalSubmitAction(false)
+                    ->modalCancelActionLabel('Tutup')
+                    ->modalContent(fn($record) => view('filament.custom.detail-donasi', ['record' => $record])),
+            ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
