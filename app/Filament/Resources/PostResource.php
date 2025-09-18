@@ -21,7 +21,7 @@ use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use PhpParser\Node\Stmt\Label;
+use Illuminate\Support\Str;
 
 class PostResource extends Resource
 {
@@ -33,9 +33,9 @@ class PostResource extends Resource
 
     protected static ?string $navigationGroup = 'Management Konten';
 
-    protected static ?string $pluralLabel = 'Data Postingan';
-
     protected static ?string $label = 'Data Postingan';
+
+    protected static ?string $slug = 'posts';
 
     public static function form(Form $form): Form
     {
@@ -44,20 +44,19 @@ class PostResource extends Resource
                 TextInput::make('title')
                     ->label('Judul')
                     ->required()
-                    ->live(onBlur: true)
                     ->reactive()
                     ->unique(ignoreRecord: TRUE)
-                    ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', \Str::slug($state))),
+                    ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', Str::slug($state))),
                 TextInput::make('slug')
                     ->label('slug')
                     ->readOnly(),
                 Select::make('kategori')
-                    ->relationship('kategori','title')
+                    ->relationship('kategori', 'title')
                     ->preload()
                     ->required()
                     ->multiple(),
                 Hidden::make('user_id')
-                    ->default(fn ()=> auth()->id()),
+                    ->default(fn() => auth()->id()),
                 Toggle::make('is_published')
                     ->label('Di Publish'),
                 TextInput::make('meta_description')
@@ -66,15 +65,10 @@ class PostResource extends Resource
                 TextInput::make('content')
                     ->label('Deskripsi')
                     ->required(),
-                SpatieMediaLibraryFileUpload::make('fitur_image')
-                    ->label('Fitur Foto')
-                    ->collection('fitur_image')
+                SpatieMediaLibraryFileUpload::make('media')
+                    ->label('Media Foto')
+                    ->collection('media')
                     ->image()->imageEditor(),
-                SpatieMediaLibraryFileUpload::make('galeri_image')
-                    ->label('Galeri Foto')
-                    ->collection('galeri_image')
-                    ->multiple()
-                    ->image()->imageEditor()
             ]);
     }
 
@@ -82,21 +76,24 @@ class PostResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('title')
-                    ->label('Judul'),
-                ToggleColumn::make('is_published')
-                    ->label('Di Publish'),
-                TextColumn::make('created_at')
-                    ->label('Dibuat')
-                    ->date('d M Y'),
-                SpatieMediaLibraryImageColumn::make('fitur_image')
-                    ->collection('fitur_image')
+                TextColumn::make('title')->label('Judul'),
+                ToggleColumn::make('is_published')->label('Di Publish'),
+                TextColumn::make('created_at')->label('Dibuat')->date('d M Y'),
+                SpatieMediaLibraryImageColumn::make('media')->collection('media'),
             ])
             ->filters([
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make()
+                    ->label('Detail')
+                    ->icon('heroicon-o-eye')
+                    ->modalHeading('Detail Postingan')
+                    ->modalContent(fn ($record) => view('filament.resources.post-detail', [
+                        'record' => $record
+                    ])),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

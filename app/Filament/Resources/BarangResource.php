@@ -30,47 +30,67 @@ class BarangResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-archive-box-arrow-down';
 
-    protected static ?string $navigationLabel = 'Data Barang';
+    protected static ?string $navigationLabel = 'Daftar Barang';
 
     protected static ?string $navigationGroup = 'Pembangunan';
 
-    protected static ?string $pluralLabel = 'Data Barang';
+    protected static ?string $pluralLabel = 'Daftar Barang';
 
-    protected static ?string $label = 'Data Barang'; 
+    protected static ?string $label = 'Daftar Barang'; 
 
-    protected static ?int $navigationSort = 12;
+    protected static ?string $slug = 'barangs';
 
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                Hidden::make('kode_barang')
-                    ->disabled()
-                    ->dehydrated(false),
-                Select::make('kategoribarang_id')
-                    ->required()
-                    ->relationship('kategoriBarang','nama_kategori')
-                    ->preload(),
-                TextInput::make('nama_barang')
-                    ->required()
-                    ->label('Nama Barang'),
-                Select::make('nama_satuan')
-                    ->required()
-                    ->label('Nama Satuan')
-                    ->options([
-                        'unit' => 'Unit',
-                        'batang' => 'Batang',
-                        'lembar' => 'Lembar',
-                        'meter_persegi' => 'Meter Persegi',
-                        'meter_kubik' => 'Meter Kubik',
-                        'kilogram' => 'Kilogram',
-                        'sak' => 'Sak',
-                        'roll' => 'Roll',
-                        'paket' => 'Paket',
-                    ]),
-                TextInput::make('deskripsi_barang')
-                    ->required(),
-            ]);
+                ->schema([
+                    Forms\Components\Section::make([
+                        TextInput::make('kode_barang')
+                            ->required()
+                            ->unique(ignoreRecord: true)
+                            ->label('Kode Barang')
+                            ->placeholder('Masukkan kode barang unik')
+                            ->helperText('Kode barang harus unik.'),
+                        Select::make('kategoribarang_id')
+                            ->required()
+                            ->relationship('kategoriBarang','nama_kategori')
+                            ->preload()
+                            ->searchable()
+                            ->label('Kategori Barang')
+                            ->placeholder('Pilih kategori barang'),
+                        TextInput::make('nama_barang')
+                            ->required()
+                            ->label('Nama Barang')
+                            ->placeholder('Masukkan nama barang'),
+                        Select::make('nama_satuan')
+                            ->required()
+                            ->label('Nama Satuan')
+                            ->options([
+                                'unit' => 'Unit',
+                                'batang' => 'Batang',
+                                'lembar' => 'Lembar',
+                                'meter_persegi' => 'Meter Persegi',
+                                'meter_kubik' => 'Meter Kubik',
+                                'kilogram' => 'Kilogram',
+                                'sak' => 'Sak',
+                                'roll' => 'Roll',
+                                'paket' => 'Paket',
+                            ])
+                            ->selectablePlaceholder(condition: true),
+                        TextInput::make('harga_satuan')
+                            ->required()
+                            ->numeric()
+                            ->prefix('Rp.')
+                            ->mask(RawJs::make('$money($input'))
+                            ->stripCharacters(',')
+                            ->placeholder('Masukkan harga satuan')
+                            ->helperText('Harga satuan dalam Rupiah.'),
+                        TextInput::make('deskripsi_barang')
+                            ->required()
+                            ->label('Deskripsi Barang')
+                            ->placeholder('Deskripsi singkat barang'),
+                    ])
+                ]);
     }
 
     public static function table(Table $table): Table

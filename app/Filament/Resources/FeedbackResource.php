@@ -46,7 +46,7 @@ class FeedbackResource extends Resource
             ->schema([
                 Fieldset::make('Feedback')
                     ->schema([
-                        Hidden::make('user_id')->default(fn () => auth()->id()),
+                        Hidden::make('user_id')->default(fn() => auth()->id()),
                         TextInput::make('subject_feedback')->label('Subjek Feedback')->required(),
                         TextInput::make('isi_feedback')->label('Isi Subjek')->required(),
                         ComponentsRatingStar::make('rate')->label('Rating'),
@@ -74,17 +74,26 @@ class FeedbackResource extends Resource
                             ->label('Sampai')
                             ->displayFormat('d M Y'),
                     ])
-                    ->query(function (Builder $query, array $data): Builder{
+                    ->query(function (Builder $query, array $data): Builder {
                         return $query
                             ->when(
-                                $data['created_form'], fn (Builder $query, $date): Builder => $query->where('created_at', '>=', $date),
+                                $data['created_form'],
+                                fn(Builder $query, $date): Builder => $query->where('created_at', '>=', $date),
                             )
                             ->when(
-                                $data['created_until'], fn (Builder $query, $date): Builder => $query->where('created_at', '>=', $date),
+                                $data['created_until'],
+                                fn(Builder $query, $date): Builder => $query->where('created_at', '>=', $date),
                             );
                     })
             ])
             ->actions([
+                \Filament\Tables\Actions\ViewAction::make()
+                    ->label('Detail')
+                    ->icon('heroicon-o-eye')
+                    ->modalHeading('Detail Feedback')
+                    ->modalContent(fn($record) => view('filament.resources.feedback-detail', [
+                        'record' => $record
+                    ])),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])

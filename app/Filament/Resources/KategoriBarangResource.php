@@ -26,30 +26,30 @@ class KategoriBarangResource extends Resource
 
     protected static ?string $navigationGroup = 'Pembangunan';
 
-    protected static ?string $pluralLabel = 'Data Kategori Barang';
+    protected static ?string $pluralLabel = 'Kategori Barang';
 
     protected static ?string $label = 'Data Kategori Barang';
-
-    protected static ?int $navigationSort = 11;
     
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                TextInput::make('kode_kategori')
-                    ->label('Kode Kategori')
-                    ->placeholder('Contoh : SL')
-                    ->required()
-                    ->unique(ignoreRecord: true)
-                    ->minLength(2),
-                TextInput::make('nama_kategori')
-                    ->unique(ignoreRecord: true)
-                    ->label('Nama Kategori')
-                    ->required(),
-                TextInput::make('deskripsi_kategori')
-                    ->label('Deskripsi Kategori')
-                    ->maxLength(500)
-                    ->required(),
+                Forms\Components\Section::make('Data Kategori Barang')
+                    ->description('Masukkan data kategori barang dengan lengkap dan jelas.')
+                    ->schema([
+                        TextInput::make('nama_kategori')
+                            ->unique(ignoreRecord: true)
+                            ->label('Nama Kategori')
+                            ->required()
+                            ->placeholder('Contoh: Material Bangunan')
+                            ->helperText('Nama kategori harus unik dan mudah dipahami.'),
+                        TextInput::make('deskripsi_kategori')
+                            ->label('Deskripsi Kategori')
+                            ->maxLength(500)
+                            ->required()
+                            ->placeholder('Deskripsi singkat kategori barang')
+                            ->helperText('Deskripsi maksimal 500 karakter.'),
+                    ])
             ]);
     }
 
@@ -60,15 +60,23 @@ class KategoriBarangResource extends Resource
                 TextColumn::make('kode_kategori')
                     ->label('Kode Kategori'),
                 TextColumn::make('nama_kategori')
-                    ->label('Nama Kategori'),
+                    ->label('Nama Kategori')
+                    ->searchable()
+                    ->sortable()
+                    ->badge()
+                    ->color('primary'),
                 TextColumn::make('deskripsi_kategori')
                     ->label('Deskripsi Kategori')
+                    ->limit(50)
+                    ->tooltip(fn ($record) => $record->deskripsi_kategori)
+                    ->color('info'),
             ])
             ->filters([
-                //
+                // Tambahkan filter jika diperlukan
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
