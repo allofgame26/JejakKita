@@ -30,6 +30,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\DB;
 use Filament\Infolists;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 
 class ProgramPembangunanResource extends Resource
 {
@@ -174,15 +175,12 @@ class ProgramPembangunanResource extends Resource
         ];
     }
 
-<<<<<<< HEAD
     public static function infolist(Infolist $infolist): Infolist
     {
         // Sekarang kita panggil fungsi yang mengembalikan array, dan memasukkannya ke dalam schema()
         return $infolist->schema(static::getInfolistSchema());
     }
 
-=======
->>>>>>> 6177758ed460e1e22636f2dfb222b9dcda70668a
     public static function getInfolistSchema(): array
     {
         return [
