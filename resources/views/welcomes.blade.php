@@ -134,6 +134,16 @@
             transform: scale(1.05);
         }
 
+        .kontak-section {
+            background-color: #e48e1d;
+
+        }
+
+        .contact-card {
+            background-color: #ffffff;
+    }
+
+
     </style>
 </head>
 
@@ -270,70 +280,40 @@
     </section>
 
     <!-- ========================================================== -->
-    <!-- === BAGIAN PEMBANGUNAN DINAMIS DARI CMS                  === -->
+    <!-- === BAGIAN BERITA DINAMIS DARI CMS                  === -->
     <!-- ========================================================== -->
-    <section class="container my-5 py-5" id="pembangunan">
-        <h2 class="text-center mb-4 section-title">Program Pembangunan</h2>
-        <div class="splide" role="group" aria-label="Program Pembangunan Carousel">
+    @foreach($daftarKategori as $kategori)
+    
+    <section class="container my-5 py-5" id="{{ $kategori->slug }}">
+        {{-- Judul section diambil dari nama kategori --}}
+        <h2 class="text-center mb-4 section-title">{{ $kategori->title }}</h2>
+
+        <div class="splide" role="group" aria-label="Carousel {{ $kategori->title }}">
             <div class="splide__track">
                 <ul class="splide__list">
-                    @forelse($dataPembangunan->flatMap(fn($kategori) => $kategori->posts) as $post)
+                    {{-- Lakukan perulangan untuk setiap POST di dalam kategori ini --}}
+                    @foreach($kategori->posts as $post)
+
+                        {{-- Tampilkan post ini sebagai kartu dengan gambar utama dan deskripsi --}}
                         <li class="splide__slide p-2">
                             <div class="card card-custom">
+                                {{-- Gunakan gambar dari koleksi 'featured_image' --}}
                                 <img src="{{ $post->getFirstMediaUrl('fitur_image') }}" alt="{{ $post->title }}" class="card-img-top">
                                 <div class="card-body">
                                     <h5 class="card-title">{{ $post->title }}</h5>
-                                    <div class="card-text">{!! Str::limit($post->content, 100) !!}</div>
+                                    {{-- Tampilkan konten/deskripsi dari post --}}
+                                    <div class="card-text">{!! Str::limit(strip_tags($post->content), 100) !!}</div>
                                 </div>
                             </div>
                         </li>
-                    @empty
-                        <div class="col-12 text-center">
-                            <p>Belum ada program pembangunan yang ditampilkan saat ini.</p>
-                        </div>
-                    @endforelse
+
+                    @endforeach
                 </ul>
             </div>
         </div>
     </section>
 
-
-    <!-- ========================================================== -->
-    <!-- === BAGIAN GALERI DINAMIS DARI CMS                       === -->
-    <!-- ========================================================== -->
-    <section class="container my-5 py-5" id="galeri">
-        <h2 class="text-center mb-5 section-title">Galeri Sekolah</h2>
-        
-        @forelse($dataGaleri as $kategori)
-            <div class="mb-5">
-                {{-- Ambil judul dari post pertama di kategori ini --}}
-                <h3 class="text-center fw-semibold mb-1">{{ optional($kategori->posts->first())->title }}</h3>
-                {{-- Ambil deskripsi dari post pertama di kategori ini --}}
-                <p class="text-center text-muted mb-4">{!! optional($kategori->posts->first())->content !!}</p>
-                
-                <div class="splide" role="group" aria-label="Galeri Gambar {{ optional($kategori->posts->first())->title }}">
-                    <div class="splide__track">
-                        <ul class="splide__list">
-                            {{-- Lakukan loop pada semua post di kategori ini, lalu ambil semua media dari koleksi 'gallery_images' --}}
-                            @forelse($kategori->posts->flatMap(fn($post) => $post->getMedia('galeri_images')) as $media)
-                                <li class="splide__slide p-2">
-                                    <a href="{{ $media->getUrl() }}" class="gallery-item" data-bs-toggle="tooltip" title="Lihat gambar">
-                                        <img src="{{ $media->getUrl() }}" alt="Gambar Galeri">
-                                    </a>
-                                </li>
-                            @empty
-                                {{-- Jangan tampilkan apa-apa jika tidak ada gambar galeri --}}
-                            @endforelse
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        @empty
-            <div class="col-12 text-center">
-                <p>Belum ada galeri yang ditampilkan saat ini.</p>
-            </div>
-        @endforelse
-    </section>
+    @endforeach
 
 
     <!-- Kontak Kami -->

@@ -10,25 +10,10 @@ class WelcomeController extends Controller
 {
     public function index()
     {
-        $kategoriPembangunan = m_kategori::with([
-            'posts' => function ($query) {
-                $query->where('is_published', 1)->with('media');
-            }
-        ])
-        ->where('title', 'like', 'pembangunan%')
-        ->get();
-
-        $kategoriGaleri = m_kategori::with([
-            'posts' => function ($query) {
-                $query->where('is_published', 1)->with('media');
-            }
-        ])
-        ->where('title', 'like', 'galerisekolah%')
-        ->get();
+        $semuaKategori = m_kategori::has('posts')->with('posts.media')->get();
 
         return view('welcomes', [
-            'dataPembangunan' => $kategoriPembangunan,
-            'dataGaleri' => $kategoriGaleri
+            'daftarKategori' => $semuaKategori,
         ]);
     }
 }

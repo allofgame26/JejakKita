@@ -54,8 +54,7 @@ class PostResource extends Resource
                 Select::make('kategori')
                     ->relationship('kategori','title')
                     ->preload()
-                    ->required()
-                    ->multiple(),
+                    ->required(),
                 Hidden::make('user_id')
                     ->default(fn ()=> auth()->id()),
                 Toggle::make('is_published')
@@ -70,11 +69,6 @@ class PostResource extends Resource
                     ->label('Fitur Foto')
                     ->collection('fitur_image')
                     ->image()->imageEditor(),
-                SpatieMediaLibraryFileUpload::make('galeri_image')
-                    ->label('Galeri Foto')
-                    ->collection('galeri_image')
-                    ->multiple()
-                    ->image()->imageEditor()
             ]);
     }
 
