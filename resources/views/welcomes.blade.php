@@ -57,7 +57,7 @@
             background: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80') no-repeat center center/cover;
             color: white;
             text-align: center;
-            padding: 10rem 1rem 10rem;
+            padding: 10rem 1rem 5rem;
         }
 
         .hero::after {
@@ -71,10 +71,33 @@
         .hero-content {
             position: relative;
             z-index: 1;
-            max-width: 940px;
+            max-width: 80vw;
+            /* Lebar responsif, tidak terlalu sempit */
             margin-left: auto;
             margin-right: auto;
             margin-bottom: 13rem;
+        }
+
+        .hero-content h1 {
+            font-size: 4rem;
+            /* Lebih besar */
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: 2px;
+            text-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+            word-break: keep-all;
+            white-space: pre-line;
+        }
+
+        @media (max-width: 992px) {
+            .hero-content {
+                max-width: 95vw;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+                letter-spacing: 1px;
+            }
         }
 
         .text-shadow-light {
@@ -515,23 +538,23 @@
         <h2 class="text-center fw-bold mb-5 text-shadow-light">Kontak Kami</h2>
         <div class="d-flex flex-wrap justify-content-center gap-4">
             <address class="contact-card p-4 rounded-3 shadow-sm w-100" style="max-width: 280px;">
-                <strong class="d-block fs-5 fw-bold mb-2">Alamat</strong>
+                <strong class="d-block fs-5 fw-bold mb-2 text-black">Alamat</strong>
                 <p class="fs-6 fw-semibold text-muted">Jl. Suru Lor, Suruh, Hargomulyo, Kec. Gedangsari, Kabupaten
                     Gunungkidul, Daerah Istimewa Yogyakarta 55863.</p>
             </address>
             <div class="contact-card p-4 rounded-3 shadow-sm w-100" style="max-width: 280px;">
-                <strong class="d-block fs-5 fw-bold mb-2">Kontak</strong>
+                <strong class="d-block fs-5 fw-bold mb-2 text-black">Kontak</strong>
                 <p class="fs-6 fw-semibold text-muted">Telepon: 081*********</p>
                 <p class="fs-6 fw-semibold text-muted">Email: sdit@gmail.com</p>
             </div>
             <div class="contact-card p-4 rounded-3 shadow-sm w-100" style="max-width: 280px;">
-                <strong class="d-block fs-5 fw-bold mb-2">Jam Operasional</strong>
+                <strong class="d-block fs-5 fw-bold mb-2 text-black">Jam Operasional</strong>
                 <p class="fs-6 fw-semibold text-muted">Senin - Jumat: 06.00 - 15.00 WIB</p>
                 <p class="fs-6 fw-semibold text-muted">Sabtu: 07.00 - 12.00 WIB</p>
                 <p class="fs-6 fw-semibold text-muted">Minggu: Tutup</p>
             </div>
             <div class="contact-card p-4 rounded-3 shadow-sm w-100" style="max-width: 280px;">
-                <strong class="d-block fs-5 fw-bold mb-2">Sosial Media</strong>
+                <strong class="d-block fs-5 fw-bold mb-2 text-black">Sosial Media</strong>
                 <div class="mt-4 fs-6 fw-semibold text-muted">
                     <a href="#" class="d-flex align-items-center gap-2 text-decoration-none text-muted mb-1"><i
                             class="bi bi-instagram"></i> 081*********</a>
