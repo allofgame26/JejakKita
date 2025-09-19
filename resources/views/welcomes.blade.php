@@ -133,12 +133,10 @@
         .gallery-item img:hover {
             transform: scale(1.05);
         }
-
         .kontak-section {
             background-color: #e48e1d;
 
         }
-
         .contact-card {
             background-color: #ffffff;
     }
@@ -205,50 +203,6 @@
                     <span class="d-block fs-6 text-muted">Kepala SDIT Al Asror</span>
                 </div>
                 <a href="#kontak" class="btn btn-hero mt-3">Baca Selengkapnya</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Berita Terbaru (Latest News) -->
-    <section class="container my-5 py-5" id="berita">
-        <h2 class="text-center fw-bold mb-4">Berita Terbaru</h2>
-        <div class="splide" role="group" aria-label="Berita Terbaru Carousel">
-            <div class="splide__track">
-                <ul class="splide__list">
-                    <li class="splide__slide p-2">
-                        <div class="card card-news shadow-sm">
-                            <img src="https://placehold.co/400x300/4c4c4c/FFFFFF?text=Berita+1" alt="Berita 1"
-                                class="card-img-top" style="height: 12rem; object-fit: cover;">
-                            <div class="card-body">
-                                <h5 class="card-title fw-semibold text-dark">Judul Berita Pertama</h5>
-                                <p class="card-text text-muted">Deskripsi singkat tentang berita ini. Berisi informasi
-                                    penting yang menarik perhatian pembaca.</p>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="splide__slide p-2">
-                        <div class="card card-news shadow-sm">
-                            <img src="https://placehold.co/400x300/4c4c4c/FFFFFF?text=Berita+2" alt="Berita 2"
-                                class="card-img-top" style="height: 12rem; object-fit: cover;">
-                            <div class="card-body">
-                                <h5 class="card-title fw-semibold text-dark">Judul Berita Kedua</h5>
-                                <p class="card-text text-muted">Teks yang lebih panjang untuk berita ini, menjelaskan
-                                    detail lebih lanjut tentang acara atau kegiatan sekolah.</p>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="splide__slide p-2">
-                        <div class="card card-news shadow-sm">
-                            <img src="https://placehold.co/400x300/4c4c4c/FFFFFF?text=Berita+3" alt="Berita 3"
-                                class="card-img-top" style="height: 12rem; object-fit: cover;">
-                            <div class="card-body">
-                                <h5 class="card-title fw-semibold text-dark">Judul Berita Ketiga</h5>
-                                <p class="card-text text-muted">Ini adalah berita tentang pencapaian siswa di
-                                    kompetisi. Informasi yang inspiratif dan membanggakan.</p>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
             </div>
         </div>
     </section>

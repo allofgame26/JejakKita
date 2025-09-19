@@ -14,6 +14,7 @@ class m_kategori extends Model
         'title',
         'slug',
         'content',
+        'row',
     ];
 
     public function posts(): BelongsToMany

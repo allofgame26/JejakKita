@@ -10,7 +10,7 @@ class WelcomeController extends Controller
 {
     public function index()
     {
-        $semuaKategori = m_kategori::has('posts')->with('posts.media')->get();
+        $semuaKategori = m_kategori::has('posts')->with('posts.media')->orderBy('row','asc')->get();
 
         return view('welcomes', [
             'daftarKategori' => $semuaKategori,
