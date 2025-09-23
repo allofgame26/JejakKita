@@ -13,7 +13,7 @@ class WelcomeController extends Controller
     {
         $semuaKategori = m_kategori::has('posts')->with('posts.media')->orderBy('row','asc')->get();
 
-        $programDonasi = m_program_pembangunan::where('status_pendanaan', '!=' ,'lengkap')->orderBy('skor_prioritas_akhir', 'desc')->limit(3)->get()->map(function ($program){
+        $programDonasi = m_program_pembangunan::where('status_pendanaan', '!=' ,'lengkap')->with('media')->orderBy('skor_prioritas_akhir', 'desc')->limit(3)->get()->map(function ($program){
             $terkumpul = $program->hitungTotalDonasiTerkumpul();
             $target = $program->estimasi_biaya;
 

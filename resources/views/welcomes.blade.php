@@ -276,7 +276,7 @@
             <div class="col-md-6 col-lg-4">
                 <div class="card card-custom h-100">
                     {{-- Anda bisa menambahkan gambar untuk program jika ada --}}
-                    {{-- <img src="..." class="card-img-top" alt="{{ $program->nama_pembangunan }}"> --}}
+                    <img src="{{ $program->getFirstMediaUrl('pembangunan') }}" class="card-img-top" alt="{{ $program->nama_pembangunan }}">
                     
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">{{ $program->nama_pembangunan }}</h5>
