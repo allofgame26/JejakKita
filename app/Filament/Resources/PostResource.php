@@ -7,6 +7,7 @@ use App\Filament\Resources\PostResource\RelationManagers;
 use App\Models\m_post;
 use Filament\Forms;
 use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
@@ -21,6 +22,7 @@ use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use PhpParser\Node\Stmt\Label;
 
 class PostResource extends Resource
 {
@@ -28,9 +30,13 @@ class PostResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-newspaper';
     
-    protected static ?string $navigationLabel = 'Data Post';
+    protected static ?string $navigationLabel = 'Data Postingan';
 
     protected static ?string $navigationGroup = 'Management Konten';
+
+    protected static ?string $pluralLabel = 'Data Postingan';
+
+    protected static ?string $label = 'Data Postingan';
 
     public static function form(Form $form): Form
     {
@@ -39,28 +45,30 @@ class PostResource extends Resource
                 TextInput::make('title')
                     ->label('Judul')
                     ->required()
+                    ->live(onBlur: true)
                     ->reactive()
+                    ->unique(ignoreRecord: TRUE)
                     ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', \Str::slug($state))),
                 TextInput::make('slug')
                     ->label('slug')
                     ->readOnly(),
                 Select::make('kategori')
                     ->relationship('kategori','title')
-                    ->required()
-                    ->multiple(),
+                    ->preload()
+                    ->required(),
                 Hidden::make('user_id')
                     ->default(fn ()=> auth()->id()),
                 Toggle::make('is_published')
                     ->label('Di Publish'),
                 TextInput::make('meta_description')
-                    ->label('Meta Deskripsi')
+                    ->label('Keyword Deskripsi')
                     ->required(),
-                TextInput::make('content')
+                MarkdownEditor::make('content')
                     ->label('Deskripsi')
                     ->required(),
-                SpatieMediaLibraryFileUpload::make('media')
-                    ->label('Media Foto')
-                    ->collection('media')
+                SpatieMediaLibraryFileUpload::make('fitur_image')
+                    ->label('Fitur Foto')
+                    ->collection('fitur_image')
                     ->image()->imageEditor(),
             ]);
     }
@@ -76,8 +84,8 @@ class PostResource extends Resource
                 TextColumn::make('created_at')
                     ->label('Dibuat')
                     ->date('d M Y'),
-                SpatieMediaLibraryImageColumn::make('media')
-                    ->collection('media')
+                SpatieMediaLibraryImageColumn::make('fitur_image')
+                    ->collection('fitur_image')
             ])
             ->filters([
                 //

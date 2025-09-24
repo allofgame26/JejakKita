@@ -18,6 +18,8 @@ class t_kebutuhan_barang_program extends Model
         'keterangan',
         'barang_id',
         'program_id',
+        'status_pembelian',
+        'jumlah_terpenuhi',
     ];
 
     protected $table = 't_kebutuhan_barang_programs';

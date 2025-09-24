@@ -68,8 +68,8 @@ class EditTransaksiDonasiProgram extends EditRecord
                     ->readOnly(),
                 SpatieMediaLibraryFileUpload::make('bukti_pembayaran')
                     ->label('Bukti Pembayaran')
-                    ->collection('bukti_pembayaran')
-                    ->reactive()
+                    ->collection('bukti_pembayaran_program')
+                    ->image()->imageEditor()
                     ->required()
                     ->image()->imageEditor()
                     // ->afterStateUpdated( function (callable $set, $state){

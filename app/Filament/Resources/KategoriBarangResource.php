@@ -26,12 +26,24 @@ class KategoriBarangResource extends Resource
 
     protected static ?string $navigationGroup = 'Pembangunan';
 
+    protected static ?string $pluralLabel = 'Data Kategori Barang';
+
+    protected static ?string $label = 'Data Kategori Barang';
+
+    protected static ?int $navigationSort = 11;
+    
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
+                TextInput::make('kode_kategori')
+                    ->label('Kode Kategori')
+                    ->placeholder('Contoh : SL')
+                    ->required()
+                    ->unique(ignoreRecord: true)
+                    ->minLength(2),
                 TextInput::make('nama_kategori')
-                    ->unique()
+                    ->unique(ignoreRecord: true)
                     ->label('Nama Kategori')
                     ->required(),
                 TextInput::make('deskripsi_kategori')
@@ -45,6 +57,8 @@ class KategoriBarangResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('kode_kategori')
+                    ->label('Kode Kategori'),
                 TextColumn::make('nama_kategori')
                     ->label('Nama Kategori'),
                 TextColumn::make('deskripsi_kategori')

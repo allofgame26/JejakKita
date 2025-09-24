@@ -15,7 +15,7 @@ class ListBarangs extends ListRecords
     {
         return [
             Actions\CreateAction::make()
-                ->label('Tambah Program')
+                ->label('Tambah Barang')
                 ->icon('heroicon-o-plus-circle'),
         ];
     }

@@ -14,6 +14,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
@@ -31,6 +32,10 @@ class DataDiriResource extends Resource
 
     protected static ?string $navigationGroup = 'Super Admin';
 
+    protected static ?string $pluralLabel = 'Data Diri';
+
+    protected static ?string $label = 'Data Diri';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -38,7 +43,8 @@ class DataDiriResource extends Resource
                 TextInput::make('nama_lengkap')
                     ->required(),
                 TextInput::make('nip')
-                    ->required(),
+                    ->required()
+                    ->unique(ignoreRecord: TRUE),
                 TextInput::make('tempat_lahir')
                     ->required(),
                 DatePicker::make('tanggal_lahir')
@@ -69,8 +75,11 @@ class DataDiriResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('index')
-                    ->state( static function (HasTable $livewire, stdClass $rowLoop): string { return (string) ( $rowLoop->iteration + ($livewire->getTableRecordsPerPage() * ( $livewire->getTablePage() - 1 )) ); } ),
+                // TextColumn::make('index')
+                //     ->state( static function (HasTable $livewire, stdClass $rowLoop): string { return (string) ( $rowLoop->iteration + ($livewire->getTableRecordsPerPage() * ( $livewire->getTablePage() - 1 )) ); } ),
+                SpatieMediaLibraryImageColumn::make('profile')
+                    ->label('Foto Profil')
+                    ->collection('profile'),
                 TextColumn::make('nip'),
                 TextColumn::make('nama_lengkap'),
                 TextColumn::make('no_telp'),

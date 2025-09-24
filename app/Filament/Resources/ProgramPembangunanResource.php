@@ -4,7 +4,14 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProgramPembangunanResource\Pages;
 use App\Filament\Resources\ProgramPembangunanResource\RelationManagers\BarangRelationManager;
+use App\Filament\Resources\ProgramPembangunanResource\RelationManagers\PriorityRelationManager;
+use App\Models\m_periode;
 use App\Models\m_program_pembangunan;
+use App\Models\Priority;
+use App\Models\Priority_Pembangunan;
+use App\Models\t_kebutuhan_barang_program;
+use App\Models\t_transaksi_donasi_program;
+use App\Models\t_transaksi_donasi_spesifik;
 use Dotenv\Util\Str;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
@@ -12,12 +19,20 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\TextColumn\TextColumnSize;
+use Filament\Tables\Enums\RecordCheckboxPosition;
 use Filament\Tables\Table;
+use IbrahimBougaoua\FilaProgress\Tables\Columns\ProgressBar;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\DB;
 
 class ProgramPembangunanResource extends Resource
 {
@@ -27,7 +42,13 @@ class ProgramPembangunanResource extends Resource
 
     protected static ?string $navigationLabel = 'Data Pembangunan';
 
+    protected static ?string $pluralLabel = 'Data Pembangunan';
+
+    protected static ?string $label = 'Data Pembangunan';
+
     protected static ?string $navigationGroup = 'Pembangunan';
+
+    protected static ?int $navigationSort = 14;
 
     public static function form(Form $form): Form
     {
@@ -35,7 +56,7 @@ class ProgramPembangunanResource extends Resource
             ->schema([
                 TextInput::make('kode_program')
                     ->required()
-                    ->unique()
+                    ->unique(ignoreRecord: TRUE)
                     ->validationMessages([
                         'unique' => 'Kode Program sudah Terpakai'
                     ]),
@@ -46,21 +67,25 @@ class ProgramPembangunanResource extends Resource
                     ->preload(),
                 TextInput::make('nama_pembangunan')
                     ->required(),
+                Select::make('periode_id')
+                    ->label('Periode Pembangunan')
+                    ->options(m_periode::all()->pluck('nama_periode','id'))
+                    ->required(),
                 DatePicker::make('tanggal_mulai')
-                    ->displayFormat('d/m/Y')
+                    ->displayFormat('d M Y')
                     ->native(false)
                     ->required()
-                    ->minDate(now())
+                    ->minDate(fn (string $operation): ?string => $operation === 'create' ? now() : null)
                     ->suffixIcon('heroicon-m-calendar')
                     ->live(),
                 DatePicker::make('estimasi_tanggal_selesai')
-                    ->displayFormat('d/m/Y')
+                    ->displayFormat('d M Y')
                     ->native(false)
                     ->required()
                     ->minDate(fn ($get) => $get('tanggal_mulai'))
                     ->suffixIcon('heroicon-m-calendar'),
                 DatePicker::make('tanggal_selesai_aktual')
-                    ->displayFormat('d/m/Y')
+                    ->displayFormat('d M Y')
                     ->native(false)
                     ->minDate(fn ($get) => $get('tanggal_mulai'))
                     ->suffixIcon('heroicon-m-calendar'),
@@ -81,8 +106,7 @@ class ProgramPembangunanResource extends Resource
                         ->multiple()
                         ->collection('pembangunan'),
                 TextInput::make('deskripsi')
-                        ->required()
-
+                        ->required(),
             ]);
     }
 
@@ -91,7 +115,8 @@ class ProgramPembangunanResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('kode_program')
-                    ->label('Kode Program'),
+                    ->label('Kode Program')
+                    ->searchable(),
                 TextColumn::make('nama_pembangunan')
                     ->label('Nama Pembangunan'),
                 TextColumn::make('tanggal_mulai')
@@ -107,11 +132,30 @@ class ProgramPembangunanResource extends Resource
                         'selesai' => 'success',
                         'ditunda' => 'danger',
                     }),
+                ProgressBar::make('progress_program')
+                    ->label('Dana Donasi')
+                    ->getStateUsing(function (m_program_pembangunan $record){
+                        $total = $record->estimasi_biaya;
+
+                        $progress = $record->hitungTotalDonasiTerkumpul();
+                        
+                        return [
+                            'total' => $total,
+                            'progress' => $progress,
+                        ];
+                    }),
+                TextColumn::make('skor_prioritas_akhir')
+                    ->label('Prioritas')
+                    ->icon('heroicon-o-information-circle')
+                    ->numeric(2)
+                    ->sortable()
             ])
+            ->defaultSort('skor_prioritas_akhir','desc')
             ->filters([
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -124,7 +168,8 @@ class ProgramPembangunanResource extends Resource
     public static function getRelations(): array
     {
         return [
-            BarangRelationManager::class
+            BarangRelationManager::class,
+            PriorityRelationManager::class
         ];
     }
 
@@ -134,6 +179,42 @@ class ProgramPembangunanResource extends Resource
             'index' => Pages\ListProgramPembangunans::route('/'),
             'create' => Pages\CreateProgramPembangunan::route('/create'),
             'edit' => Pages\EditProgramPembangunan::route('/{record}/edit'),
+        ];
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        // Sekarang kita panggil fungsi yang mengembalikan array, dan memasukkannya ke dalam schema()
+        return $infolist->schema(static::getInfolistSchema());
+    }
+
+    public static function getInfolistSchema(): array
+    {
+        return [
+            Section::make('Informasi Utama')
+                ->columns(2)
+                ->schema([
+                    TextEntry::make('nama_pembangunan')
+                        ->label('Nama Program'),
+                    TextEntry::make('status')
+                        ->badge(),
+                    TextEntry::make('estimasi_biaya')
+                        ->label('Target Dana')
+                        ->money('IDR'),
+                    TextEntry::make('periode.nama_periode')
+                        ->label('Periode'),
+                ]),
+
+            Section::make('Detail Program')
+                ->schema([
+                    TextEntry::make('deskripsi')
+                        ->label('Deskripsi Program')
+                        ->columnSpanFull(),
+                    SpatieMediaLibraryImageEntry::make('foto_pembangunan')
+                        ->label('Gambar Utama')
+                        ->collection('pembangunan')
+                        ->columnSpanFull(),
+                ])
         ];
     }
 }

@@ -29,6 +29,12 @@ class MandorResource extends Resource
 
     protected static ?string $navigationGroup = 'Pembangunan';
 
+    protected static ?string $pluralLabel = 'Data Mandor';
+
+    protected static ?string $label = 'Data Mandor';
+
+    protected static ?int $navigationSort = 13;
+
     public static function form(Form $form): Form
     {
         return $form
@@ -36,7 +42,7 @@ class MandorResource extends Resource
                 TextInput::make('nama_lengkap')
                     ->required(),
                 TextInput::make('nik')
-                    ->unique()
+                    ->unique(ignoreRecord: true)
                     ->required()
                     ->label('Nomor Induk Kependudukan')
                     ->minLength(16)

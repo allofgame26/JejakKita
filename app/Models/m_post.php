@@ -32,4 +32,10 @@ class m_post extends Model implements HasMedia
     {
         return $this->belongsTo(User::class);
     }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('fitur_image')->singleFile(); // Untuk foto utama
+        $this->addMediaCollection('galeri_images'); // Untuk banyak foto galeri
+    }
 }

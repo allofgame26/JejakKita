@@ -3,8 +3,11 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Pages\MyProfile;
+use App\Filament\Forms\Schemas\DataDiriSchema;
 use App\Filament\Widgets\DashboardWidget;
 use App\Filament\Widgets\TestWidget;
+use App\Filament\Widgets\PorgramPembangunanWidget;
+use App\Filament\Widgets\ProgramPembangunanWidget;
 use Filament\Http\Middleware\Authenticate;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -23,6 +26,14 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use App\Http\Middleware\EnsureProfileIsComplete;
+use App\Models\m_data_diri;
+use App\Models\User;
+use Filament\Actions\Action;
+use Filament\Notifications\Notification;
+use Filament\Pages\Auth\Register;
+use Illuminate\Support\Facades\Auth;
+use Rupadana\ApiService\ApiServicePlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -34,12 +45,15 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
+            ->brandName('JejakKita')
             ->profile(isSimple: false) // kurang dicustom
             ->emailVerification()
             ->sidebarCollapsibleOnDesktop()
             ->registration()
             ->passwordReset()
             ->login()
+            ->databaseNotifications()
+            ->databaseNotificationsPolling('30s')
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -54,6 +68,7 @@ class AdminPanelProvider extends PanelProvider
                 // Widgets\AccountWidget::class,
                 // Widgets\FilamentInfoWidget::class,
                 TestWidget::class, // Widget Bisa ditaruh didalam sini
+                ProgramPembangunanWidget::class,
                 DashboardWidget::class,
             ])
             ->middleware([
@@ -66,13 +81,15 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
-                'verified'
+                'verified',
+                EnsureProfileIsComplete::class,
             ])
             ->authMiddleware([
                 Authenticate::class,
             ])
             ->plugins([
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
+                ApiServicePlugin::make(), 
             ])  
             ->userMenuItems([
                 'profile' => MenuItem::make()
@@ -80,6 +97,10 @@ class AdminPanelProvider extends PanelProvider
                     ->url(fn (): string => MyProfile::getUrl())
                     ->icon('heroicon-o-user')
             ]) 
+            ->renderHook(
+                'panels::global-search.after',
+                fn () => \Livewire\Livewire::mount(\App\Livewire\GlobalActions::class),
+            )
             ;
     }
 }

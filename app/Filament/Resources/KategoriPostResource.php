@@ -13,6 +13,7 @@ use Filament\Forms\Form;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -27,6 +28,10 @@ class KategoriPostResource extends Resource
 
     protected static ?string $navigationGroup = 'Management Konten';
 
+    protected static ?string $pluralLabel = 'Data Kategori Postingan';
+
+    protected static ?string $label = 'Data Kategori Postingan';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -35,12 +40,16 @@ class KategoriPostResource extends Resource
                     ->label('Nama Kategori')
                     ->required()
                     ->live()
+                    ->live(onBlur: true)
                     ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', \Str::slug($state))),
                 TextInput::make('slug')
                     ->label('slug')
                     ->readOnly(),
                 TextInput::make('content')
                     ->label('Deskripsi'),
+                TextInput::make('row')
+                    ->label('Urutan Upload')
+                    ->required(),
             ]);
     }
 
@@ -48,8 +57,9 @@ class KategoriPostResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('title')->searchable(),
-                Tables\Columns\TextColumn::make('content'),
+                Tables\Columns\TextColumn::make('title')->searchable()->label('Judul'),
+                Tables\Columns\TextColumn::make('content')->label('Deksripsi'),
+                TextColumn::make('row')->description('Urutan penataan penampilan didalam Website')->label('Urutan'),
             ])
             ->filters([
                 //

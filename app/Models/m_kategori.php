@@ -14,9 +14,10 @@ class m_kategori extends Model
         'title',
         'slug',
         'content',
+        'row',
     ];
 
-    public function post(): BelongsToMany
+    public function posts(): BelongsToMany
     {
         return $this->belongsToMany(m_post::class,'m_kategori_posts','kategori_id','post_id');
     }

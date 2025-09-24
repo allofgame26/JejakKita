@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\KwitansiController;
+use App\Http\Controllers\WelcomeController;
+use App\Models\m_post;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,9 +16,35 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [WelcomeController::class, 'index']);
+
+Route::get('preview/post/{post}', function (m_post $post){
+    $kategori = $post->kategori()->first();
+
+    $dataPembangunan = collect();
+    $dataGaleri = collect();
+
+    if($kategori){
+        if (str_starts_with($kategori->title, 'pembangunan')){
+            $dataPembangunan = collect([$kategori]);
+        } elseif (str_starts_with($kategori->title, 'galerisekolah')) {
+            $dataGaleri = collect([$kategori]);
+        }
+    }
+
+    return view('welcomes' ,[
+        'dataPembangunan' => $dataPembangunan,
+        'dataGaleri' => $dataGaleri,
+    ]);  
+})->name('post.preview');
+
+Route::get('/transaksi/{transaksi}/download-kwitansi', [KwitansiController::class, 'downloadProgram'])
+    ->name('kwitansiProgram.download')
+    ->middleware('auth');
+
+Route::get('/transaksi-spesifikasi/{transaksi}/download-kwitansi', [KwitansiController::class, 'downloadSpesifikasi'])
+    ->name('kwitansiSpesifikasi.download')
+    ->middleware('auth');
 
 Route::middleware([
     'auth:sanctum',
