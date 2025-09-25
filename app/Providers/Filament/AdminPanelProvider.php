@@ -71,7 +71,7 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
                 EnsureProfileIsComplete::class,
-                // EnsureEmailIsVerified::class,    
+                EnsureEmailIsVerified::class,
             ])
             ->authMiddleware([
                 Authenticate::class,
