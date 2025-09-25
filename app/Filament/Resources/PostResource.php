@@ -7,6 +7,7 @@ use App\Filament\Resources\PostResource\RelationManagers;
 use App\Models\m_post;
 use Filament\Forms;
 use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
@@ -54,27 +55,21 @@ class PostResource extends Resource
                 Select::make('kategori')
                     ->relationship('kategori','title')
                     ->preload()
-                    ->required()
-                    ->multiple(),
+                    ->required(),
                 Hidden::make('user_id')
                     ->default(fn ()=> auth()->id()),
                 Toggle::make('is_published')
                     ->label('Di Publish'),
                 TextInput::make('meta_description')
-                    ->label('Meta Deskripsi')
+                    ->label('Keyword Deskripsi')
                     ->required(),
-                TextInput::make('content')
+                MarkdownEditor::make('content')
                     ->label('Deskripsi')
                     ->required(),
                 SpatieMediaLibraryFileUpload::make('fitur_image')
                     ->label('Fitur Foto')
                     ->collection('fitur_image')
                     ->image()->imageEditor(),
-                SpatieMediaLibraryFileUpload::make('galeri_image')
-                    ->label('Galeri Foto')
-                    ->collection('galeri_image')
-                    ->multiple()
-                    ->image()->imageEditor()
             ]);
     }
 

@@ -186,21 +186,15 @@ class TransaksiDonasiProgramResource extends Resource
                                     ->label('Bukti Pembayaran')
                             ]),
                     ])
-                    ->modalFooterActions(fn ($record) => [
+                    ->modalFooterActions(fn ($record, Action $action) => [
                             Action::make('tolak')
                                 ->label('Tolak')
                                 ->color('danger')
                                 ->requiresConfirmation()
-                                ->form([
-                                    Textarea::make('alasan_penolakan')
-                                        ->label('Alasan Penolakan')
-                                        ->required()
-                                ])
-                                ->action(function (array $data) use ($record){
+                                ->action(function () use ($record){
                                     $record->status_pembayaran = 'gagal';
-                                    $record->alasan_penolakan = $data['alasan_penolakan'];
                                     $record->save();
-                                }),
+                                })->after(fn () => $action->close()),
                             Action::make('setujui')
                                 ->label('Seujui (ACC)')
                                 ->color('success')
@@ -208,7 +202,7 @@ class TransaksiDonasiProgramResource extends Resource
                                 ->action(function () use ($record){
                                     $record->status_pembayaran = 'sukses';
                                     $record->save();
-                                })
+                                })->after(fn () => $action->close()),
                         ]),
                 Action::make('bayar')
                     ->label('Bayar Sekarang')
@@ -252,14 +246,16 @@ class TransaksiDonasiProgramResource extends Resource
                     ->visible(fn($record): bool => $record->status_pembayaran !== "pending" && auth()->user()->hasRole('user'))
                     ->modalHeading('Detail Donasi')
                     ->modalSubmitAction(false)
-                    ->modalCancelActionLabel('Tutup'),
-                Action::make('download')
-                    ->label('Download Kwitansi')
-                    ->icon('heroicon-o-arrow-down-tray')
-                    ->color('success')
-                    ->url(fn ($record) => route('kwitansiProgram.download', ['transaksi' => $record]))
-                    ->openUrlInNewTab()
-                    ->visible(fn ($record): bool => $record->status_pembayaran === 'sukses'),
+                    ->modalCancelActionLabel('Tutup')
+                    ->modalFooterActions(fn ($record) => [
+                        Action::make('download')
+                            ->label('Download Kwitansi')
+                            ->icon('heroicon-o-arrow-down-tray')
+                            ->color('success')
+                            ->url(fn ($record) => route('kwitansiProgram.download', ['transaksi' => $record]))
+                            ->openUrlInNewTab()
+                            ->visible(fn ($record): bool => $record->status_pembayaran === 'sukses'),
+                    ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

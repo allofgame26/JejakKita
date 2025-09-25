@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\BarangResource\Pages;
 use App\Filament\Resources\BarangResource\RelationManagers;
+use App\Filament\Resources\BarangResource\RelationManagers\TransaksiBarangRelationManager;
 use App\Filament\Resources\BarangResource\RelationManagers\VendorRelationManager;
 use App\Models\m_barang;
 use App\Models\t_kebutuhan_barang_program;
@@ -87,8 +88,8 @@ class BarangResource extends Resource
                     ->icon('heroicon-o-gift'),
                 TextColumn::make('barang_inventory')
                     ->getStateUsing(function ($record){
-                        $cekJumlahBarang = t_transaksi_barang::where('barang_id',$record->id)->sum('jumlah_dibeli');
-                        $cekJumlahPemakaian = t_kebutuhan_barang_program::where('barang_id',$record->id)->sum('jumlah_barang');
+                        $cekJumlahBarang = t_transaksi_barang::where('barang_id',$record->id)->where('status_pembayaran','berhasil')->sum('jumlah_dibeli');
+                        $cekJumlahPemakaian = t_kebutuhan_barang_program::where('barang_id',$record->id && 'status' === 'diambil')->sum('jumlah_barang');
 
                         $inventory = $cekJumlahBarang - $cekJumlahPemakaian;
 
@@ -96,10 +97,12 @@ class BarangResource extends Resource
                     })
                     ->badge()
                     ->color(function ($state){
-                        if($state <= 0 ){
+                        if($state < 0 ){
                              return 'danger';
-                        } else {
+                        } elseif($state > 0) {
                             return 'success';
+                        } else {
+                            return 'warning';
                         }
                     })
                 // TextColumn::make('total_harga')
@@ -127,7 +130,8 @@ class BarangResource extends Resource
     public static function getRelations(): array
     {
         return [
-            VendorRelationManager::class
+            // VendorRelationManager::class
+            TransaksiBarangRelationManager::class
         ];
     }
 

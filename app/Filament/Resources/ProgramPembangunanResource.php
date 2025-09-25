@@ -188,10 +188,8 @@ class ProgramPembangunanResource extends Resource
         return $infolist->schema(static::getInfolistSchema());
     }
 
-    // UBAH FUNGSI INI AGAR MENGEMBALIKAN ARRAY
     public static function getInfolistSchema(): array
     {
-        // Tidak lagi menggunakan Infolist::make(), langsung kembalikan array schema
         return [
             Section::make('Informasi Utama')
                 ->columns(2)

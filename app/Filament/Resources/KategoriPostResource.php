@@ -13,6 +13,7 @@ use Filament\Forms\Form;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -46,6 +47,9 @@ class KategoriPostResource extends Resource
                     ->readOnly(),
                 TextInput::make('content')
                     ->label('Deskripsi'),
+                TextInput::make('row')
+                    ->label('Urutan Upload')
+                    ->required(),
             ]);
     }
 
@@ -53,8 +57,9 @@ class KategoriPostResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('title')->searchable(),
-                Tables\Columns\TextColumn::make('content'),
+                Tables\Columns\TextColumn::make('title')->searchable()->label('Judul'),
+                Tables\Columns\TextColumn::make('content')->label('Deksripsi'),
+                TextColumn::make('row')->description('Urutan penataan penampilan didalam Website')->label('Urutan'),
             ])
             ->filters([
                 //

@@ -51,6 +51,11 @@ class TransaksiDonasiSpesifikResource extends Resource
 
     protected static ?string $navigationGroup = 'Transaksi';
 
+    protected static ?string $pluralLabel = 'Data Transaksi Donasi Spesifik';
+
+    protected static ?string $label = 'Data Transaksi Donasi Spesifik';
+
+
     public static function form(Form $form): Form
     {
         return $form
@@ -87,7 +92,7 @@ class TransaksiDonasiSpesifikResource extends Resource
                                         ->whereIn('id',$state)
                                         ->get()
                                         ->sum(function ($item){
-                                            return $item->jumlah_barang * ($item->barang->harga_satuan ?? 0);
+                                            return $item->jumlah_barang * ($item->barang->harga_rata ?? 0);
                                         });
 
                                     $set('jumlah_donasi',$totaldonasi);
@@ -143,6 +148,9 @@ class TransaksiDonasiSpesifikResource extends Resource
                         'pending' => 'warning',
                         'sukses' => 'success',
                     }),
+                SpatieMediaLibraryImageColumn::make('bukti_pembayaran')
+                    ->label('Bukti Pembayaran')
+                    ->collection('bukti_pembayaran_spesifik'),
             ])
             ->filters([
                 SelectFilter::make('program')
@@ -279,7 +287,16 @@ class TransaksiDonasiSpesifikResource extends Resource
                     ->visible(fn($record): bool => $record->status_pembayaran !== "pending" && auth()->user()->hasRole('user'))
                     ->modalHeading('Detail Donasi')
                     ->modalSubmitAction(false)
-                    ->modalCancelActionLabel('Tutup'),
+                    ->modalCancelActionLabel('Tutup')
+                    ->modalFooterActions(fn ($record) => [
+                        Action::make('download')
+                            ->label('Download Kwitansi')
+                            ->icon('heroicon-o-arrow-down-tray')
+                            ->color('success')
+                            ->url(fn ($record) => route('kwitansiSpesifikasi.download', ['transaksi' => $record]))
+                            ->openUrlInNewTab()
+                            ->visible(fn ($record): bool => $record->status_pembayaran === 'sukses'),
+                    ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

@@ -33,6 +33,10 @@
                 <td>{{ $transaksi->created_at }}</td>
             </tr>
             <tr>
+                <td>Nama Lengkap:</td>
+                <td>{{ $transaksi->user->datadiri->nama_lengkap}}</td>
+            </tr>
+            <tr>
                 <td>Diterima Dari:</td>
                 <td>{{ $transaksi->user->name }}</td>
             </tr>

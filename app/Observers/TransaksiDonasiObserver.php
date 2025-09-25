@@ -10,6 +10,7 @@ class TransaksiDonasiObserver
 {
     public function saved(Model $transaksi)
     {
+        // melakukan pengecekan untuk Goal Donasi apakah sudah tercapai atau belum.
         if ($transaksi instanceof t_transaksi_donasi_program){
              if($transaksi->status_pembayaran === 'sukses') {
                 $transaksi->program->cekDanUpdateStatus();
