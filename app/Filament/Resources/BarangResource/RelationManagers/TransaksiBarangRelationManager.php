@@ -3,9 +3,11 @@
 namespace App\Filament\Resources\BarangResource\RelationManagers;
 
 use App\Models\m_vendor;
+use App\Models\t_transaksi_barang;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -14,27 +16,22 @@ use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
-use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\AttachAction;
-use Filament\Tables\Actions\DetachAction;
-use Filament\Tables\Actions\DetachBulkAction;
-use Filament\Tables\Actions\ViewAction;
-use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\TextColumn\TextColumnSize;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class VendorRelationManager extends RelationManager
+class TransaksiBarangRelationManager extends RelationManager
 {
-    protected static string $relationship = 'vendor';
+    protected static string $relationship = 'transaksiBarang';
 
     public function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nama_vendor')
+                Forms\Components\TextInput::make('vendor_id')
                     ->required()
                     ->maxLength(255),
             ]);
@@ -43,38 +40,40 @@ class VendorRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('nama_vendor')
+            ->recordTitleAttribute('vendor_id')
             ->columns([
-                Tables\Columns\TextColumn::make('nama_vendor')
+                Tables\Columns\TextColumn::make('vendor.nama_vendor')
                     ->label('Nama Vendor')
                     ->icon('heroicon-o-user-circle')
                     ->searchable(),
                 TextColumn::make('jumlah_dibeli')
                     ->label('Jumlah Dibeli')
                     ->badge(),
-                TextColumn::make('alamat_vendor')
+                TextColumn::make('vendor.alamat_vendor')
                     ->label('Alamat Vendor')
                     ->icon('heroicon-o-building-storefront'),
-                TextColumn::make('no_telepon')
+                TextColumn::make('vendor.no_telepon')
                     ->label('Nomor Telepon')
                     ->icon('heroicon-o-phone'),
                 TextColumn::make('tanggal_beli')
                     ->date('d M Y'),
-                    
             ])
             ->filters([
                 //
             ])
             ->headerActions([
-                // Tables\Actions\CreateAction::make(),
-                AttachAction::make()
-                    ->preloadRecordSelect()
+                Tables\Actions\CreateAction::make()
                     ->label('Tambah Transaksi Barang')
                     ->icon('heroicon-o-plus-circle')
+                    ->modalHeading('Catat Pembelian Barang')
                     ->color('warning')
-                    ->form(fn (AttachAction $action): array => [
-                        $action->getRecordSelect()
+                    ->form([
+                        Select::make('vendor_id')
+                            ->relationship('vendor', 'nama_vendor')
                             ->label('Pilih Vendor')
+                            ->searchable()
+                            ->preload()
+                            ->required()
                             ->createOptionForm([
                                 TextInput::make('kode_vendor')
                                     ->label('Kode Vendor')
@@ -97,7 +96,7 @@ class VendorRelationManager extends RelationManager
                                     $newVendor = m_vendor::create($data);
 
                                     return $newVendor->id;
-                            }),
+                                }),
                         TextInput::make('jumlah_dibeli')
                             ->numeric()
                             ->label('Jumlah Dibeli')
@@ -114,11 +113,11 @@ class VendorRelationManager extends RelationManager
                             ->required(),
                         Hidden::make('status_pembayaran')
                             ->default('pending')
-                    ])
+                    ]),
             ])
             ->actions([
-                // Tables\Actions\EditAction::make(),
-                // Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
                 Action::make('bayar')
                     ->label('Pengumpulan Struk')
                     ->icon('heroicon-o-arrow-up-on-square')
@@ -135,10 +134,9 @@ class VendorRelationManager extends RelationManager
                             ->required()
                     ])
                     ->action(function (array $data, $record){
-                        $pivot = $record->pivot;
 
-                        $pivot->status_pembayaran = 'berhasil';
-                        $pivot->save();
+                        $record->status_pembayaran = 'berhasil';
+                        $record->save();
 
                     }),
                 ViewAction::make('detail')
@@ -188,12 +186,10 @@ class VendorRelationManager extends RelationManager
                             ])
                             ->columns(2)
                     ]),
-                DetachAction::make()
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    // Tables\Actions\DeleteBulkAction::make(),
-                    DetachBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }

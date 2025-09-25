@@ -27,4 +27,9 @@ class m_vendor extends Model implements HasMedia
     {
         return $this->belongsToMany(m_barang::class,'t_transaksi_barangs','vendor_id','barang_id')->using(t_transaksi_barang::class)->withPivot('jumlah_dibeli','harga_satuan','tanggal_beli','status_pembayaran');
     }
+
+    public function transaksiVendor(): HasMany
+    {
+        return $this->hasMany(t_transaksi_barang::class,'vendor_id');
+    }
 }

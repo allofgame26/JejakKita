@@ -13,6 +13,7 @@ use Filament\Forms\Form;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -47,8 +48,10 @@ class KategoriPostResource extends Resource
                     ->readOnly()
                     ->helperText('Bagian dari URL yang bersifat deskriptif dan mudah dibaca oleh manusia. Slug otomatis dibuat dari nama kategori.'),
                 TextInput::make('content')
-                    ->label('Deskripsi')
-                    ->helperText('Deskripsi singkat tentang kategori post ini.'),
+                    ->label('Deskripsi'),
+                TextInput::make('row')
+                    ->label('Urutan Upload')
+                    ->required(),
             ]);
     }
 
@@ -56,8 +59,9 @@ class KategoriPostResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('title')->label('Nama Kategori')->searchable(),
-                Tables\Columns\TextColumn::make('content')->label('Deskripsi'),
+                Tables\Columns\TextColumn::make('title')->searchable()->label('Judul'),
+                Tables\Columns\TextColumn::make('content')->label('Deksripsi'),
+                TextColumn::make('row')->description('Urutan penataan penampilan didalam Website')->label('Urutan'),
             ])
             ->filters([
                 //

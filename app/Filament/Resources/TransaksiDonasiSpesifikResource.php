@@ -287,7 +287,16 @@ class TransaksiDonasiSpesifikResource extends Resource
                     ->visible(fn($record): bool => $record->status_pembayaran !== "pending" && auth()->user()->hasRole('user'))
                     ->modalHeading('Detail Donasi')
                     ->modalSubmitAction(false)
-                    ->modalCancelActionLabel('Tutup'),
+                    ->modalCancelActionLabel('Tutup')
+                    ->modalFooterActions(fn ($record) => [
+                        Action::make('download')
+                            ->label('Download Kwitansi')
+                            ->icon('heroicon-o-arrow-down-tray')
+                            ->color('success')
+                            ->url(fn ($record) => route('kwitansiSpesifikasi.download', ['transaksi' => $record]))
+                            ->openUrlInNewTab()
+                            ->visible(fn ($record): bool => $record->status_pembayaran === 'sukses'),
+                    ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

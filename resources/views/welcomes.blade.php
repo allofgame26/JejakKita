@@ -12,33 +12,30 @@
     <!-- Splide Carousel CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" />
     <style>
+        /* Mengambil gaya terbaik dari welcomes1.blade.php */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
         body {
             font-family: 'Inter', sans-serif;
             color: #333;
+            background-color: #f8f9fa; /* Latar belakang sedikit abu-abu agar tidak terlalu silau */
         }
 
         :root {
             --primary-color: #becf21;
-            --primary-dark: #adb321;
-            --primary-light: #e2e962;
             --nav-bg: #a4c932;
             --nav-link-color: white;
             --btn-yellow-bg: #e1e844;
             --btn-yellow-bg-hover: #c6d118;
-            --card-border-yellow: #dadd59;
-            --card-border-blue: #5866ef;
-            --card-border-green: #97ab36;
-            --card-border-purple: #7363a2;
             --btn-chat-bg: #4cbb17;
             --btn-chat-bg-hover: #3aa311;
         }
 
+        /* --- Navbar --- */
         .navbar-brand .logo-icon {
-            width: 32px;
-            height: 32px;
-            margin-right: 0.5rem;
+            width: 40px;
+            height: 40px;
+            margin-right: 0.75rem;
             border-radius: 50%;
             background-color: white;
             display: flex;
@@ -48,246 +45,103 @@
 
         .navbar-brand .logo-icon>i {
             color: #FFA726;
-            font-weight: bold;
-            font-size: 1.3rem;
+            font-size: 1.5rem;
         }
 
+        /* --- Hero Section --- */
         .hero {
             position: relative;
             background: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80') no-repeat center center/cover;
             color: white;
             text-align: center;
-            padding: 10rem 1rem 5rem;
+            padding: 8rem 1rem;
         }
 
         .hero::after {
             content: "";
             position: absolute;
             inset: 0;
-            background: rgba(0, 0, 0, 0.43);
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3));
             z-index: 0;
         }
 
         .hero-content {
             position: relative;
             z-index: 1;
-            max-width: 80vw;
-            /* Lebar responsif, tidak terlalu sempit */
-            margin-left: auto;
-            margin-right: auto;
-            margin-bottom: 13rem;
+            max-width: 900px;
+            margin: 0 auto;
         }
 
         .hero-content h1 {
-            font-size: 4rem;
-            /* Lebih besar */
+            font-size: clamp(2.5rem, 5vw, 4rem);
             font-weight: 800;
-            line-height: 1.1;
-            letter-spacing: 2px;
-            text-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
-            word-break: keep-all;
-            white-space: pre-line;
+            line-height: 1.2;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
         }
 
-        @media (max-width: 992px) {
-            .hero-content {
-                max-width: 95vw;
-            }
-
-            .hero-content h1 {
-                font-size: 2.5rem;
-                letter-spacing: 1px;
-            }
+        .hero-content p {
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            font-weight: 400;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
         }
 
-        .text-shadow-light {
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
-        }
-
-        .btn-hero {
-            background-color: var(--btn-yellow-bg);
-            border: none;
-            color: #333;
-            font-weight: 600;
-            padding: 0.625rem 1.5rem;
-            border-radius: 0.5rem;
-            box-shadow: 1px 3px 6px #aaa;
-            transition: background-color 0.3s ease;
-            text-transform: none;
-        }
-
-        .btn-hero:hover {
-            background-color: var(--btn-yellow-bg-hover);
-            color: black;
-        }
-
-        .btn-chat-admin {
-            position: fixed;
-            bottom: 1.25rem;
-            right: 1.5rem;
-            background-color: var(--btn-chat-bg);
-            border: none;
-            color: white;
-            font-weight: 600;
-            padding: 0.5rem 0.8rem;
-            border-radius: 1.5rem;
-            font-size: 0.9rem;
-            box-shadow: 0 3px 6px #3c9b0eaa;
-            cursor: pointer;
-            z-index: 1050;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            user-select: none;
-        }
-
-        .btn-chat-admin:hover {
-            background-color: var(--btn-chat-bg-hover);
-        }
-
-        .card-tentang {
-            position: relative;
-            border-radius: 1rem;
-            border: 1.8px solid var(--card-border-blue);
-            padding: 1.2rem 1.6rem;
-            background-color: #fff;
-            box-shadow: 0 2px 10px rgba(31, 43, 75, 0.1);
-            font-size: 0.95rem;
-            font-weight: 600;
-            min-height: 140px;
-            overflow-wrap: break-word;
-            transition: transform 0.3s ease;
-        }
-
-        .card-tentang:hover {
-            transform: translateY(-8px);
-        }
-
-        .card-tentang.visi {
-            border-color: var(--card-border-purple);
-        }
-
-        .card-tentang.misi {
-            border-color: var(--card-border-yellow);
-        }
-
-        .card-tentang.sejarah {
-            border-color: var(--card-border-green);
-        }
-
-        .card-tentang .title {
+        /* --- Section Styling --- */
+        .section-title {
             font-weight: 700;
-            margin-bottom: 0.6rem;
-            font-size: 1.25rem;
-            color: #373a7b;
+            font-size: 2.25rem;
+            color: #2c3e50;
         }
 
-        .card-news {
-            border: 1px solid rgba(0, 0, 0, 0.125);
-            border-radius: 0.5rem;
-            overflow: hidden;
-            transition: transform 0.3s ease;
-        }
-
-        .card-news:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 8px 12px rgba(31, 43, 75, 0.15);
-        }
-
-        .card-pembangunan {
-            border: 1px solid var(--btn-yellow-bg);
+        /* --- Card Styling (Pembangunan & Berita) --- */
+        .card-custom {
+            border: none;
             border-radius: 12px;
-            box-shadow: 0 1px 8px rgba(31, 43, 75, 0.1);
-            transition: transform 0.3s ease;
-            padding-bottom: 1rem;
             overflow: hidden;
-            background-color: #fff;
-            cursor: default;
-        }
-
-        .card-pembangunan:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 8px 12px rgba(31, 43, 75, 0.15);
-        }
-
-        .card-pembangunan .card-img-top {
-            object-fit: cover;
-            max-height: 180px;
-            border-radius: 12px 12px 0 0;
-            width: 100%;
-        }
-
-        .card-pembangunan .card-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #5866ef;
-            margin-bottom: 0.25rem;
-            cursor: pointer;
-        }
-
-        .card-pembangunan .card-text {
-            font-size: 0.85rem;
-            color: #444;
-            font-weight: 500;
-        }
-
-        .gallery-row img {
-            width: 180px;
-            height: 140px;
-            object-fit: cover;
-            border-radius: 12px;
-            box-shadow: 0 1.5px 4px rgba(0, 0, 0, 0.15);
-            transition: transform 0.3s ease;
-            cursor: pointer;
-        }
-
-        .gallery-row img:hover {
-            transform: scale(1.07);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.25);
-        }
-
-        .partner-logos img {
-            max-width: 140px;
-            height: auto;
-            object-fit: contain;
-            cursor: default;
-        }
-
-        .map-responsive {
-            width: 100%;
-            max-width: 800px;
-            aspect-ratio: 16 / 9;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
-        }
-
-        .map-responsive iframe {
-            width: 100%;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             height: 100%;
-            border: 0;
         }
 
-        .lokasi-section {
-            background: linear-gradient(45deg, var(--primary-light) 0%, #e1e86f 60%, #dbdd68 80%, var(--primary-color) 100%);
+        .card-custom:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
         }
 
+        .card-custom .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .card-custom .card-title {
+            font-weight: 600;
+            color: #34495e;
+        }
+
+        .card-custom .card-text {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        /* --- Galeri --- */
+        .gallery-item img {
+            border-radius: 12px;
+            object-fit: cover;
+            width: 100%;
+            height: 200px;
+            transition: transform 0.3s ease;
+        }
+        .gallery-item img:hover {
+            transform: scale(1.05);
+        }
         .kontak-section {
-            background: url('https://placehold.co/1000x800/222222/FFFFFF?text=Contact+Background') no-repeat center center/cover;
-        }
+            background-color: #e48e1d;
 
+        }
         .contact-card {
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
-        }
+            background-color: #ffffff;
+    }
 
-        /* Custom Splide style for mobile */
-        @media (max-width: 576px) {
-            .splide__arrow {
-                display: none !important;
-            }
-        }
+
     </style>
 </head>
 
@@ -296,27 +150,22 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg sticky-top shadow-sm" style="background-color: #FFA726;">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center fw-bold" style="color: var(--nav-link-color);"
-                href="#">
+            <a class="navbar-brand d-flex align-items-center fw-bold text-white" href="#">
                 <div class="logo-icon"><i class="bi bi-mortarboard-fill"></i></div>
-                <span>Sekolah Dasar Islam Terpadu AL Asror</span>
+                <span>SDIT AL Asror</span>
             </a>
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon" style="color: var(--nav-link-color);"></span>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav align-items-lg-center">
                     <li class="nav-item"><a href="#beranda" class="nav-link text-white fw-semibold">Beranda</a></li>
                     <li class="nav-item"><a href="#tentang" class="nav-link text-white fw-semibold">Tentang</a></li>
-                    <li class="nav-item"><a href="#pembangunan" class="nav-link text-white fw-semibold">Pembangunan</a>
-                    </li>
+                    <li class="nav-item"><a href="#pembangunan" class="nav-link text-white fw-semibold">Pembangunan</a></li>
                     <li class="nav-item"><a href="#galeri" class="nav-link text-white fw-semibold">Galeri</a></li>
-                    <li class="nav-item"><a href="#lokasi" class="nav-link text-white fw-semibold">Lokasi</a></li>
                     <li class="nav-item"><a href="#kontak" class="nav-link text-white fw-semibold">Kontak</a></li>
                     <li class="nav-item">
-                        <a href="http://127.0.0.1:8000/admin/login"
-                            class="btn btn-hero ms-lg-3 px-4 py-1 rounded-3">Login</a>
+                        <a href="{{ route('filament.admin.auth.login') }}" class="btn ms-lg-3 px-4 py-2 rounded-pill" style="background-color: var(--btn-yellow-bg);">Login</a>
                     </li>
                 </ul>
             </div>
@@ -326,20 +175,11 @@
     <!-- Hero Section -->
     <section class="hero" id="beranda">
         <div class="hero-content">
-            <h1 class="fw-bold text-4xl md:text-5xl lh-sm mb-2 text-shadow-light">
-                Sekolah Dasar Islam Terpadu AL Asror<br />Gedangsari, Kab Gunungkidul<br />D.I.Yogyakarta
-            </h1>
-            <p class="fs-5 fw-medium mb-4 text-shadow-light">
-                Membangun generasi cerdas, berkarakter, dan berahlak mulia
-            </p>
-            <a href="#tentang" class="btn btn-hero">Pelajari Lebih Lanjut</a>
+            <h1 class="mb-3">Sekolah Dasar Islam Terpadu AL Asror</h1>
+            <p class="mb-4">Membangun generasi cerdas, berkarakter, dan berakhlak mulia.</p>
+            <a href="#tentang" class="btn btn-lg rounded-pill px-4" style="background-color: var(--btn-yellow-bg);">Pelajari Lebih Lanjut</a>
         </div>
     </section>
-
-    <!-- Chat Admin Button -->
-    <button class="btn-chat-admin">
-        <i class="bi bi-chat-dots-fill"></i> Chat Admin
-    </button>
 
     <!-- Sambutan Kepala Sekolah -->
     <section class="container my-5 py-5">
@@ -369,169 +209,66 @@
 
     <!-- Tentang Sekolah -->
     <section class="container my-5 py-5" id="tentang">
-        <h2 class="text-center fw-bold mb-5">Tentang Sekolah</h2>
+        <h2 class="text-center mb-5 section-title">Tentang Sekolah</h2>
         <div class="row g-4 justify-content-center">
+            {{-- Bagian ini masih statis, bisa Anda buat dinamis jika perlu --}}
             <div class="col-md-4">
-                <article class="card-tentang visi shadow-sm">
-                    <div class="title">Visi</div>
-                    <p class="fs-6 text-muted">Menjadi sekolah dasar yang unggul dalam prestasi, berkarakter, dan
-                        berwawasan lingkungan.</p>
-                </article>
+                <div class="card card-custom p-4 text-center h-100">
+                    <h3 class="card-title">Visi</h3>
+                    <p class="card-text">Menjadi sekolah dasar yang unggul dalam prestasi, berkarakter, dan berwawasan lingkungan.</p>
+                </div>
             </div>
             <div class="col-md-4">
-                <article class="card-tentang misi shadow-sm">
-                    <div class="title">Misi</div>
-                    <p class="fs-6 text-muted">Menyelenggarakan pendidikan yang berkualitas dan mengembangkan potensi
-                        siswa secara optimal.</p>
-                </article>
+                <div class="card card-custom p-4 text-center h-100">
+                    <h3 class="card-title">Misi</h3>
+                    <p class="card-text">Menyelenggarakan pendidikan yang berkualitas dan mengembangkan potensi siswa secara optimal.</p>
+                </div>
             </div>
             <div class="col-md-4">
-                <article class="card-tentang sejarah shadow-sm">
-                    <div class="title">Sejarah</div>
-                    <p class="fs-6 text-muted">Didirikan pada tahun 2024, telah melahirkan banyak alumni yang sukses di
-                        berbagai bidang.</p>
-                </article>
+                <div class="card card-custom p-4 text-center h-100">
+                    <h3 class="card-title">Sejarah</h3>
+                    <p class="card-text">Didirikan pada tahun 2024, telah melahirkan banyak alumni yang sukses di berbagai bidang.</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Berita Terbaru (Latest News) -->
-    <section class="container my-5 py-5" id="berita">
-        <h2 class="text-center fw-bold mb-4">Berita Terbaru</h2>
-        <div class="splide" role="group" aria-label="Berita Terbaru Carousel">
+    <!-- ========================================================== -->
+    <!-- === BAGIAN BERITA DINAMIS DARI CMS                  === -->
+    <!-- ========================================================== -->
+    @foreach($daftarKategori as $kategori)
+    
+    <section class="container my-5 py-5" id="{{ $kategori->slug }}">
+        {{-- Judul section diambil dari nama kategori --}}
+        <h2 class="text-center mb-4 section-title">{{ $kategori->title }}</h2>
+
+        <div class="splide" role="group" aria-label="Carousel {{ $kategori->title }}">
             <div class="splide__track">
                 <ul class="splide__list">
-                    <li class="splide__slide p-2">
-                        <div class="card card-news shadow-sm">
-                            <img src="https://placehold.co/400x300/4c4c4c/FFFFFF?text=Berita+1" alt="Berita 1"
-                                class="card-img-top" style="height: 12rem; object-fit: cover;">
-                            <div class="card-body">
-                                <h5 class="card-title fw-semibold text-dark">Judul Berita Pertama</h5>
-                                <p class="card-text text-muted">Deskripsi singkat tentang berita ini. Berisi informasi
-                                    penting yang menarik perhatian pembaca.</p>
+                    {{-- Lakukan perulangan untuk setiap POST di dalam kategori ini --}}
+                    @foreach($kategori->posts as $post)
+
+                        {{-- Tampilkan post ini sebagai kartu dengan gambar utama dan deskripsi --}}
+                        <li class="splide__slide p-2">
+                            <div class="card card-custom">
+                                {{-- Gunakan gambar dari koleksi 'featured_image' --}}
+                                <img src="{{ $post->getFirstMediaUrl('fitur_image') }}" alt="{{ $post->title }}" class="card-img-top">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ $post->title }}</h5>
+                                    {{-- Tampilkan konten/deskripsi dari post --}}
+                                    <div class="card-text">{!! Str::limit(strip_tags($post->content), 100) !!}</div>
+                                </div>
                             </div>
-                        </div>
-                    </li>
-                    <li class="splide__slide p-2">
-                        <div class="card card-news shadow-sm">
-                            <img src="https://placehold.co/400x300/4c4c4c/FFFFFF?text=Berita+2" alt="Berita 2"
-                                class="card-img-top" style="height: 12rem; object-fit: cover;">
-                            <div class="card-body">
-                                <h5 class="card-title fw-semibold text-dark">Judul Berita Kedua</h5>
-                                <p class="card-text text-muted">Teks yang lebih panjang untuk berita ini, menjelaskan
-                                    detail lebih lanjut tentang acara atau kegiatan sekolah.</p>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="splide__slide p-2">
-                        <div class="card card-news shadow-sm">
-                            <img src="https://placehold.co/400x300/4c4c4c/FFFFFF?text=Berita+3" alt="Berita 3"
-                                class="card-img-top" style="height: 12rem; object-fit: cover;">
-                            <div class="card-body">
-                                <h5 class="card-title fw-semibold text-dark">Judul Berita Ketiga</h5>
-                                <p class="card-text text-muted">Ini adalah berita tentang pencapaian siswa di
-                                    kompetisi. Informasi yang inspiratif dan membanggakan.</p>
-                            </div>
-                        </div>
-                    </li>
+                        </li>
+
+                    @endforeach
                 </ul>
             </div>
         </div>
     </section>
 
-    <!-- Pembangunan Dinamis -->
-    <section class="container my-5 py-5" id="pembangunan">
-        <h2 class="text-center fw-bold mb-4">Pembangunan</h2>
-        <div class="splide" role="group" aria-label="Pembangunan Carousel">
-            <div class="splide__track">
-                <ul class="splide__list">
-                    <!-- Pembangunan Item 1 -->
-                    <li class="splide__slide p-2">
-                        <div class="card card-pembangunan shadow-sm">
-                            <img src="https://placehold.co/400x250/dadd59/444444?text=Pembangunan+1"
-                                alt="Pembangunan gedung baru" class="card-img-top">
-                            <div class="card-body">
-                                <h5 class="card-title">Pembangunan Gedung Baru</h5>
-                                <p class="card-text">Deskripsi singkat pembangunan gedung baru. Proyek ini bertujuan
-                                    untuk meningkatkan fasilitas belajar mengajar.</p>
-                            </div>
-                        </div>
-                    </li>
-                    <!-- Pembangunan Item 2 -->
-                    <li class="splide__slide p-2">
-                        <div class="card card-pembangunan shadow-sm">
-                            <img src="https://placehold.co/400x250/dadd59/444444?text=Pembangunan+2"
-                                alt="Pembangunan lapangan" class="card-img-top">
-                            <div class="card-body">
-                                <h5 class="card-title">Renovasi Lapangan Olahraga</h5>
-                                <p class="card-text">Lapangan olahraga yang baru direnovasi untuk menunjang kegiatan
-                                    ekstrakurikuler siswa.</p>
-                            </div>
-                        </div>
-                    </li>
-                    <!-- Pembangunan Item 3 -->
-                    <li class="splide__slide p-2">
-                        <div class="card card-pembangunan shadow-sm">
-                            <img src="https://placehold.co/400x250/dadd59/444444?text=Pembangunan+3"
-                                alt="Pembangunan kantin" class="card-img-top">
-                            <div class="card-body">
-                                <h5 class="card-title">Pembangunan Kantin Sehat</h5>
-                                <p class="card-text">Kantin baru yang menyediakan makanan sehat dan bergizi bagi
-                                    seluruh warga sekolah.</p>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </section>
+    @endforeach
 
-    <!-- Galeri Sekolah -->
-    <section class="container my-5 py-5" id="galeri">
-        <h2 class="text-center fw-bold mb-4">Galeri Sekolah</h2>
-
-        <!-- Group 1: Kegiatan Pembelajaran -->
-        <div class="text-center mb-5">
-            <h3 class="fw-semibold text-primary mb-1">Kegiatan Pembelajaran</h3>
-            <p class="fs-6 text-muted mb-4">Momen berharga di kelas dan di luar kelas.</p>
-            <div class="d-flex flex-wrap justify-content-center gap-3 gallery-row">
-                <img src="https://placehold.co/200x150/97ab36/ffffff?text=Pembelajaran+1"
-                    alt="Kegiatan Pembelajaran 1" class="shadow-sm">
-                <img src="https://placehold.co/200x150/97ab36/ffffff?text=Pembelajaran+2"
-                    alt="Kegiatan Pembelajaran 2" class="shadow-sm">
-                <img src="https://placehold.co/200x150/97ab36/ffffff?text=Pembelajaran+3"
-                    alt="Kegiatan Pembelajaran 3" class="shadow-sm">
-            </div>
-        </div>
-
-        <!-- Group 2: Fasilitas Sekolah -->
-        <div class="text-center mb-5">
-            <h3 class="fw-semibold text-primary mb-1">Fasilitas Sekolah</h3>
-            <p class="fs-6 text-muted mb-4">Lihat fasilitas terbaik yang kami sediakan.</p>
-            <div class="d-flex flex-wrap justify-content-center gap-3 gallery-row">
-                <img src="https://placehold.co/200x150/dadd59/444444?text=Fasilitas+1" alt="Fasilitas Sekolah 1"
-                    class="shadow-sm">
-                <img src="https://placehold.co/200x150/dadd59/444444?text=Fasilitas+2" alt="Fasilitas Sekolah 2"
-                    class="shadow-sm">
-                <img src="https://placehold.co/200x150/dadd59/444444?text=Fasilitas+3" alt="Fasilitas Sekolah 3"
-                    class="shadow-sm">
-            </div>
-        </div>
-
-        <!-- Group 3: Ekstrakurikuler -->
-        <div class="text-center mb-5">
-            <h3 class="fw-semibold text-primary mb-1">Ekstrakurikuler</h3>
-            <p class="fs-6 text-muted mb-4">Kegiatan di luar jam pelajaran yang seru dan bermanfaat.</p>
-            <div class="d-flex flex-wrap justify-content-center gap-3 gallery-row">
-                <img src="https://placehold.co/200x150/7363a2/ffffff?text=Ekskul+1" alt="Ekstrakurikuler 1"
-                    class="shadow-sm">
-                <img src="https://placehold.co/200x150/7363a2/ffffff?text=Ekskul+2" alt="Ekstrakurikuler 2"
-                    class="shadow-sm">
-                <img src="https://placehold.co/200x150/7363a2/ffffff?text=Ekskul+3" alt="Ekstrakurikuler 3"
-                    class="shadow-sm">
-            </div>
-        </div>
-    </section>
 
     <!-- Kontak Kami -->
     <section class="kontak-section container my-5 py-5 rounded-4 shadow-lg text-white" id="kontak">
@@ -585,15 +322,15 @@
     <section class="container my-5 py-5 text-center">
         <h2 class="fw-bold mb-4">Bekerja sama dengan :</h2>
         <div class="d-flex flex-wrap justify-content-center align-items-center gap-5 partner-logos">
-            <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fakuntansi.polinema.ac.id%2Fprofil%2Fpanduan-identitas-visual%2F&psig=AOvVaw0fEB8UD6BRMS1lfldI4w4u&ust=1757510410121000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCLDnrc3iy48DFQAAAAAdAAAAABAL"
-                alt="Logo of Polinema" class="img-fluid" style="max-width: 140px;">
+            <img src="logo_polinema.png" alt="Logo of Polinema" class="img-fluid" style="max-width: 140px;">
             <img src="Jti_polinema.png" alt="Logo of JTI" class="img-fluid" style="max-width: 140px;">
         </div>
     </section>
 
+
     <!-- Footer -->
-    <footer class="text-center p-4 bg-light text-muted">
-        <p class="mb-0">&copy; 2024 Sekolah Dasar Islam Terpadu AL Asror Gedangsari. All rights reserved.</p>
+    <footer class="text-center p-4 bg-dark text-white">
+        <p class="mb-0">&copy; {{ date('Y') }} Sekolah Dasar Islam Terpadu AL Asror. All rights reserved.</p>
     </footer>
 
     <!-- Bootstrap JS Bundle with Popper -->
@@ -617,7 +354,7 @@
                             },
                             576: {
                                 perPage: 1,
-                                gap: '0.5rem',
+                                gap: '1rem',
                             }
                         }
                     }).mount();

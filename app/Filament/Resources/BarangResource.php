@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\BarangResource\Pages;
 use App\Filament\Resources\BarangResource\RelationManagers;
+use App\Filament\Resources\BarangResource\RelationManagers\TransaksiBarangRelationManager;
 use App\Filament\Resources\BarangResource\RelationManagers\VendorRelationManager;
 use App\Models\m_barang;
 use App\Models\t_kebutuhan_barang_program;
@@ -149,7 +150,8 @@ class BarangResource extends Resource
     public static function getRelations(): array
     {
         return [
-            VendorRelationManager::class
+            // VendorRelationManager::class
+            TransaksiBarangRelationManager::class
         ];
     }
 
