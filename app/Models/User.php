@@ -3,6 +3,9 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Backstage\TwoFactorAuth\Enums\TwoFactorType;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,7 +20,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
 
-class User extends Authenticatable implements HasMedia
+class User extends Authenticatable implements HasMedia, MustVerifyEmail
 {
     use HasApiTokens;
     use HasFactory;
@@ -37,6 +40,7 @@ class User extends Authenticatable implements HasMedia
         'email',
         'password',
         'datadiri_id',
+        'two_factor_type',
     ];
 
     /**
@@ -62,6 +66,7 @@ class User extends Authenticatable implements HasMedia
 
     /**
      * The accessors to append to the model's array form.
+     * 
      *
      * @var array<int, string>
      */
