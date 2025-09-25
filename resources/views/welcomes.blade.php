@@ -483,15 +483,62 @@
       </iframe>
     </div>
   </section>
+    <section class="container my-5 py-5 bg-white rounded-4 shadow-sm" id="donasi">
+    <h2 class="text-center mb-5 section-title">Program Donasi Mendesak</h2>
+    <div class="row g-4 justify-content-center">
+        @forelse($programDonasi as $program)
+            <div class="col-md-6 col-lg-4">
+                <div class="card card-custom h-100">
+                    {{-- Anda bisa menambahkan gambar untuk program jika ada --}}
+                    <img src="{{ $program->getFirstMediaUrl('pembangunan') }}" class="card-img-top" alt="{{ $program->nama_pembangunan }}">
+                    
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ $program->nama_pembangunan }}</h5>
+                        <p class="card-text text-muted small mb-3">{{ $program->deskripsi }}</p>
+                        
+                        {{-- Progress Bar --}}
+                        <div class="progress mt-auto mb-2" style="height: 20px;">
+                            <div class="progress-bar bg-warning text-dark fw-bold" role="progressbar" 
+                                 style="width: {{ $program->persentase_terkumpul }}%;" 
+                                 aria-valuenow="{{ $program->persentase_terkumpul }}" 
+                                 aria-valuemin="0" 
+                                 aria-valuemax="100">
+                                {{ $program->persentase_terkumpul }}%
+                            </div>
+                        </div>
 
-  <!-- Bekerja sama dengan -->
-  <section class="container my-5 py-5 text-center">
-    <h2 class="fw-bold mb-4">Bekerja sama dengan :</h2>
-    <div class="d-flex flex-wrap justify-content-center align-items-center gap-5 partner-logos">
-      <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fakuntansi.polinema.ac.id%2Fprofil%2Fpanduan-identitas-visual%2F&psig=AOvVaw0fEB8UD6BRMS1lfldI4w4u&ust=1757510410121000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCLDnrc3iy48DFQAAAAAdAAAAABAL" alt="Logo of Polinema" class="img-fluid" style="max-width: 140px;">
-      <img src="Jti_polinema.png" alt="Logo of JTI" class="img-fluid" style="max-width: 140px;">
+                        {{-- Info Dana --}}
+                        <div class="d-flex justify-content-between small">
+                            <span class="fw-bold">Terkumpul: <br> Rp {{ number_format($program->dana_terkumpul, 0, ',', '.') }}</span>
+                            <span class="text-end">Target: <br> Rp {{ number_format($program->estimasi_biaya, 0, ',', '.') }}</span>
+                        </div>
+
+                        {{-- Tombol Aksi --}}
+                        @auth
+                            {{-- JIKA PENGGUNA SUDAH LOGIN --}}
+                            {{-- Tombol ini akan mengarah ke halaman create DENGAN membawa ID program --}}
+                            <a href="{{ route('filament.admin.resources.transaksi-donasi-programs.create', ['program_id' => $program->id]) }}" 
+                            class="btn btn-warning w-100 mt-4 fw-bold">
+                            Donasi Sekarang
+                            </a>
+                        @else
+                            {{-- JIKA PENGGUNA BELUM LOGIN (GUEST) --}}
+                            {{-- Tombol ini akan mengarah ke halaman login standar Filament --}}
+                            <a href="{{ route('filament.admin.auth.login') }}" 
+                            class="btn btn-warning w-100 mt-4 fw-bold">
+                            Login untuk Berdonasi
+                            </a>
+                        @endauth
+                    </div>
+                </div>
+            </div>
+        @empty
+            <div class="col-12 text-center">
+                <p>Saat ini tidak ada program donasi yang sedang dibuka.</p>
+            </div>
+        @endforelse
     </div>
-  </section>
+</section>
 
   <!-- Footer -->
   <footer class="text-center p-4 bg-light text-muted">

@@ -10,29 +10,6 @@ use Illuminate\Support\Facades\DB;
 
 class ProgramPembangunanObserver
 {
-    private $sawService;
-
-    public function __construct(PerhitunganSAW $sawService)
-    {
-        $this->sawService = $sawService;
-    }
-
-    public function saved(Priority_Pembangunan $pivot): void
-    {
-        $this->sawService->perhitunganSemua();
-    }
-
-    public function deleted(Priority_Pembangunan $pivot):void 
-    {
-        $this->sawService->perhitunganSemua();
-    }
-    /**
-     * Handle the m_program_pembangunan "created" event.
-     */
-    public function created(m_program_pembangunan $m_program_pembangunan): void
-    {
-        $this->sawService->perhitunganSemua();
-    }
 
     /**
      * Handle the m_program_pembangunan "updated" event.
@@ -45,9 +22,9 @@ class ProgramPembangunanObserver
     /**
      * Handle the m_program_pembangunan "deleted" event.
      */
-    public function deletedProgram(m_program_pembangunan $m_program_pembangunan): void
+    public function deleted(m_program_pembangunan $m_program_pembangunan): void
     {
-        $this->sawService->perhitunganSemua();
+        (new PerhitunganSAW())->perhitunganSemua();
     }
 
     /**

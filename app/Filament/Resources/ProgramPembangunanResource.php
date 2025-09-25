@@ -75,7 +75,7 @@ class ProgramPembangunanResource extends Resource
                     ->displayFormat('d M Y')
                     ->native(false)
                     ->required()
-                    ->minDate(now())
+                    ->minDate(fn (string $operation): ?string => $operation === 'create' ? now() : null)
                     ->suffixIcon('heroicon-m-calendar')
                     ->live(),
                 DatePicker::make('estimasi_tanggal_selesai')

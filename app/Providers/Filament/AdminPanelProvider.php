@@ -30,6 +30,7 @@ use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Pages\Auth\Register;
 use Illuminate\Support\Facades\Auth;
+use Rupadana\ApiService\ApiServicePlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -84,6 +85,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
+                ApiServicePlugin::make(), // harus di masukkan, jika tidak maka API akan tidak terpanggil
             ])
             ->renderHook(
                 'panels::global-search.after',
