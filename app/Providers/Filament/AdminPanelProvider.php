@@ -20,7 +20,6 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Http\Middleware\EnsureProfileIsComplete;
-use Backstage\TwoFactorAuth\TwoFactorAuthPlugin;
 use Illuminate\Auth\Middleware\EnsureEmailIsVerified;
 use Rupadana\ApiService\ApiServicePlugin;
 
@@ -71,7 +70,7 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
                 EnsureProfileIsComplete::class,
-                EnsureEmailIsVerified::class,
+                // EnsureEmailIsVerified::class,
             ])
             ->authMiddleware([
                 Authenticate::class,
@@ -79,7 +78,6 @@ class AdminPanelProvider extends PanelProvider
             ->plugins([
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
                 ApiServicePlugin::make(), // harus di masukkan, jika tidak maka API akan tidak terpanggil
-                TwoFactorAuthPlugin::make()->forced(),
             ])
             ->renderHook(
                 'panels::global-search.after',
