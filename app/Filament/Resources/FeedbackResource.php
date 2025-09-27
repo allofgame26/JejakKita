@@ -90,7 +90,7 @@ class FeedbackResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    // Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -108,7 +108,7 @@ class FeedbackResource extends Resource
 
         $user = Auth::user();
 
-        if(!$user->hasRole('Admin')){
+        if(!$user->hasRole(['Admin','super_admin'])){
             $query->where('user_id', $user->id);
         }
 

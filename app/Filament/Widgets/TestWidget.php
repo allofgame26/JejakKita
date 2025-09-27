@@ -13,6 +13,12 @@ use Illuminate\Support\Number;
 
 class TestWidget extends BaseWidget
 {
+
+    public static function canView(): bool
+    {
+        return auth()->user()->hasAnyRole(['super_admin','Admin']);
+    }
+    
     protected function getStats(): array
     {
 
