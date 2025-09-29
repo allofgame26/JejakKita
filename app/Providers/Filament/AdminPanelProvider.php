@@ -20,6 +20,8 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Http\Middleware\EnsureProfileIsComplete;
+use App\Livewire\Auth\CustomLogin;
+use App\Livewire\Auth\LoginCustom;
 use Rupadana\ApiService\ApiServicePlugin;
 
 class AdminPanelProvider extends PanelProvider
@@ -39,6 +41,7 @@ class AdminPanelProvider extends PanelProvider
             ->registration()
             ->passwordReset()
             ->login()
+            // ->login(CustomLogin::class)
             ->databaseNotifications()
             ->databaseNotificationsPolling('30s')
             ->colors([

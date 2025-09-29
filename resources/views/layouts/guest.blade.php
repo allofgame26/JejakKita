@@ -17,11 +17,17 @@
         <!-- Styles -->
         @livewireStyles
     </head>
-    <body>
-        <div class="font-sans text-gray-900 antialiased">
+    <body class="font-sans text-gray-900 antialiased bg-gradient-to-br from-yellow-50 via-orange-50 to-amber-100 dark:from-gray-900 dark:to-slate-800 transition-colors duration-300">
+        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
+            
+            {{-- Konten utama dari halaman login akan dimasukkan di sini --}}
             {{ $slot }}
+
         </div>
 
+        {{-- Ini untuk memuat script dari komponen Livewire (seperti sapaan, dll) --}}
+        @stack('scripts')
+        
         @livewireScripts
     </body>
 </html>
