@@ -196,7 +196,7 @@
         <div
             class="d-flex flex-column flex-md-row align-items-center bg-white rounded-3 shadow-sm border p-4 p-md-5">
             <div class="flex-shrink-0 me-md-5 mb-4 mb-md-0">
-                 <img src="https://placehold.co/200x200/FFA726/white?text=Kepsek" alt="Foto Kepala Sekolah"
+                 <img src="{{ asset('images/habibie.jpeg') }}" alt="Foto Kepala Sekolah"
                     class="rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
             </div>
             <div class="text-md-start text-center">
@@ -322,7 +322,7 @@
     </section>
 
     @foreach($daftarKategori as $kategori)
-    <section class="container my-5 py-5" id="{{ $kategori->slug }}">
+    <section class="container my-5 py-5" id="galeri">
         <h2 class="text-center mb-4 section-title">{{ $kategori->title }}</h2>
 
         <div class="splide" role="group" aria-label="Carousel {{ $kategori->title }}" data-post-count="{{ $kategori->posts->count() }}">
