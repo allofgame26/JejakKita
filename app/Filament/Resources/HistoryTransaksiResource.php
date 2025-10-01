@@ -24,7 +24,7 @@ class HistoryTransaksiResource extends Resource
 
     protected static ?string $navigationLabel = 'History Transaksi';
 
-    protected static ?string $navigationGroup = 'Manajemen Donasi'; 
+    protected static ?string $navigationGroup = 'Transaksi'; 
 
     public static function form(Form $form): Form
     {
@@ -59,11 +59,11 @@ class HistoryTransaksiResource extends Resource
                 TextColumn::make('jumlah_donasi')
                     ->money('IDR')
                     ->sortable(),
-                BadgeColumn::make('status')
+                BadgeColumn::make('status_pembayaran')
                     ->colors([
                         'warning' => 'pending',
-                        'success' => 'completed',
-                        'danger' => 'failed',
+                        'success' => 'sukses',
+                        'danger' => 'gagal',
                     ])
                     ->searchable(),
             ])
