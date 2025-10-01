@@ -51,8 +51,6 @@ class ProgramPembangunanWidget extends BaseWidget
                     ->icon('heroicon-o-document')
                     ->url(fn ($record) => route('filament.admin.resources.transaksi-donasi-programs.create', [
                         'program_id' => $record->id,
-                        'user_id' => auth()->id(),
-                        'status_pembayaran' => 'pending',
                     ]
                     )),
             ]);

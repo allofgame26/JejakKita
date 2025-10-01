@@ -68,10 +68,6 @@ class TransaksiDonasiProgramResource extends Resource
                                 ->default(request()->query('program_id'))
                                 ->reactive()
                                 ->live(),
-                            Hidden::make('user_id')
-                                ->default(fn ()=> auth()->id()),
-                            Hidden::make('status_pembayaran')
-                                ->default('pending'),
                             Hidden::make('kode_transaksi')
                                 ->dehydrated(false)
                                 ->disabled()

@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\t_transaksi_donasi_program;
+use Illuminate\Support\Facades\Auth;
 
 class KodeTransaksiProgram
 {
@@ -26,6 +27,10 @@ class KodeTransaksiProgram
         } while ($cekCode);
 
         $t_transaksi_donasi_program->kode_transaksi = $code;
+
+        $t_transaksi_donasi_program->status_pembayaran = 'pending'; // untuk widget Program Pembangunan
+
+        $t_transaksi_donasi_program->user_id = Auth()->id(); // untuk Widget Program Pembangunan
     }
     /**
      * Handle the t_transaksi_donasi_program "updated" event.
