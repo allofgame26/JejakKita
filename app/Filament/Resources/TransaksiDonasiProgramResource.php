@@ -71,7 +71,10 @@ class TransaksiDonasiProgramResource extends Resource
                             Hidden::make('user_id')
                                 ->default(fn ()=> auth()->id()),
                             Hidden::make('status_pembayaran')
-                                ->default('pending')
+                                ->default('pending'),
+                            Hidden::make('kode_transaksi')
+                                ->dehydrated(false)
+                                ->disabled()
                         ])->columns(2),
                     Step::make('Pembayaran')
                         ->schema([

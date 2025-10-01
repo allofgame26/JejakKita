@@ -102,6 +102,9 @@ class TransaksiDonasiSpesifikResource extends Resource
                         ->schema([
                             Hidden::make('user_id')
                                 ->default(fn ()=> auth()->id()),
+                            Hidden::make('kode_transaksi')
+                                ->dehydrated(false)
+                                ->disabled(),
                             Hidden::make('status_pembayaran')
                                 ->default('pending'),
                             Select::make('pembayaran_id')
