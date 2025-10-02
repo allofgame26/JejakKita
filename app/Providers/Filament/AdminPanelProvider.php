@@ -43,7 +43,7 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             // ->login(CustomLogin::class)
             ->databaseNotifications()
-            ->databaseNotificationsPolling('30s')
+            ->databaseNotificationsPolling('10s')
             ->colors([
                 'primary' => Color::Amber,
             ])
