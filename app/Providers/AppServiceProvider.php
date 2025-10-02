@@ -44,5 +44,6 @@ class AppServiceProvider extends ServiceProvider
         t_transaksi_barang::observe(KebutuhanTerpenuhi::class);
         t_transaksi_donasi_program::observe(KodeTransaksiProgram::class);
         t_transaksi_donasi_spesifik::observe(KodeTransaksiSpesifik::class);
+        // dipindahkan juga ke EventServiceProvider
     }
 }

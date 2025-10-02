@@ -36,7 +36,7 @@ class TestWidget extends BaseWidget
         $totalPending = $pendingProgram + $pendingSpesifikasi;
 
         return [
-            Stat::make('jumlah_pembangunan',m_program_pembangunan::whereBetween('created_at',[$awalBulan,$akhirBulan])->count())
+            Stat::make('jumlah_pembangunan',m_program_pembangunan::whereBetween('created_at',[$awalBulan,$akhirBulan])->count()->where('status'.'!=',['selesai','ditunda']))
                 ->label('Jumlah Pembangunan')
                 ->description('Jumlah Pembangunan saat ini')
                 ->descriptionIcon('heroicon-o-building-office',IconPosition::Before)
