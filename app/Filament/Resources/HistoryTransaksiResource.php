@@ -15,6 +15,8 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
 
 class HistoryTransaksiResource extends Resource
 {
@@ -39,13 +41,16 @@ class HistoryTransaksiResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('created_at')
-                ->label('Tanggal Transaksi')
-                ->dateTime('d M Y H:i')
-                ->sortable()
-                ->searchable(),
-                TextColumn::make('user.name')
+                    ->label('Tanggal Transaksi')
+                    ->dateTime('d M Y H:i')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('user.datadiri.nama_lengkap')
                     ->label('Nama Donatur')
                     ->sortable()
+                    ->searchable(),
+                TextColumn::make('kode_transaksi')
+                    ->label('Kode Transaksi')
                     ->searchable(),
                 BadgeColumn::make('jenis_transaksi') // Tampilkan jenis transaksi dengan badge
                     ->colors([
@@ -73,7 +78,7 @@ class HistoryTransaksiResource extends Resource
             ->actions([
                 // Tables\Actions\EditAction::make(),
                 // Tables\Actions\DeleteAction::make(),
-                ViewAction::make()
+                ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

@@ -15,6 +15,7 @@ return new class extends Migration
         DB::statement("CREATE OR REPLACE VIEW history_transaksi AS SELECT
                             tdp.id,
                             tdp.user_id,
+                            tdp.kode_transaksi,
                             tdp.pembayaran_id,
                             'Program' AS jenis_transaksi,
                             pp.nama_pembangunan AS deskripsi,
@@ -30,6 +31,7 @@ return new class extends Migration
                             SELECT
                             tds.id,
                             tds.user_id,
+                            tds.kode_transaksi,
                             tds.pembayaran_id,
                             'Spesifik' AS jenis_transaksi,
                             mb.nama_barang AS deskripsi,
