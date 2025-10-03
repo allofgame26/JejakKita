@@ -7,11 +7,16 @@ use App\Filament\Resources\HistoryTransaksiResource\RelationManagers;
 use App\Models\HistoryTransaksi;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -73,12 +78,16 @@ class HistoryTransaksiResource extends Resource
                     ->searchable(),
             ])
             ->filters([
-                //
+                SelectFilter::make('status_pembayaran')
+                    ->options([
+                        'gagal' => 'Gagal',
+                        'pending' => 'Pending',
+                        'sukses' => 'Sukses',
+                    ])->multiple()
             ])
             ->actions([
                 // Tables\Actions\EditAction::make(),
                 // Tables\Actions\DeleteAction::make(),
-                ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

@@ -44,7 +44,7 @@ class TestWidget extends BaseWidget
             Stat::make('dana_terkumpul',Number::currency($total,'IDR'))
                 ->label('Dana Terkumpul')
                 ->color('success')
-                ->description('Dana Gabungan yang sudah terkumpul')
+                ->description('Dana Gabungan yang sudah terkumpul Selama 30 Hari Terakhir')
                 ->descriptionIcon('heroicon-o-credit-card',IconPosition::Before),
             Stat::make('jumlah_pending', $totalPending)
                 ->label('Transaksi Pending')
