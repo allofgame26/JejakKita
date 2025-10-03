@@ -14,6 +14,8 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->command('app:batalkan-transaksi-kadaluarsa')->everyMinute();
+        $schedule->command('report:generate-monthly')->monthlyOn(1, '01:00');
+        // $schedule->command('report:generate-monthly')->everyMinute();
     }
 
     /**

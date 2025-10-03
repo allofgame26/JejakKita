@@ -311,12 +311,39 @@
             </div>
             <div class="col-lg-4">
                 <h4 class="mb-4">Laporan Keuangan</h4>
-                <div class="card card-custom h-100 p-4 text-center">
-                    <i class="bi bi-file-earmark-text display-3 text-warning"></i>
-                    <h5 class="mt-3">Laporan Donasi</h5>
-                    <p class="text-muted small">Kami berkomitmen untuk transparan. Unduh laporan penggunaan dana kami secara berkala untuk melihat bagaimana setiap rupiah Anda memberikan dampak.</p>
-                    <a href="#" class="btn btn-warning mt-auto">Unduh Laporan Terbaru</a>
+                <div class="col-lg-4">
+                <h4 class="mb-4">Laporan Keuangan</h4>
+                <div class="card card-custom h-100 p-4">
+                    <div class="text-center">
+                        <i class="bi bi-file-earmark-text display-3 text-warning"></i>
+                        <h5 class="mt-3">Laporan Donasi Bulanan</h5>
+                        <p class="text-muted small mb-4">Kami berkomitmen untuk transparan. Unduh laporan penggunaan dana kami untuk melihat bagaimana setiap rupiah Anda memberikan dampak.</p>
+                    </div>
+
+                    {{-- Daftar Laporan Dinamis --}}
+                    <ul class="list-group list-group-flush">
+                        @forelse($reports as $report)
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{ $report['name'] }}
+                                <a href="{{ $report['url'] }}" target="_blank" class="btn btn-sm btn-outline-warning">
+                                    <i class="bi bi-download"></i> Unduh
+                                </a>
+                            </li>
+                        @empty
+                            <li class="list-group-item text-center text-muted">
+                                Belum ada laporan yang diterbitkan.
+                            </li>
+                        @endforelse
+                    </ul>
+
+                    {{-- Tombol untuk laporan terbaru --}}
+                    @if($reports->isNotEmpty())
+                        <a href="{{ $reports->first()['url'] }}" target="_blank" class="btn btn-warning mt-auto fw-bold">
+                            Unduh Laporan Terbaru
+                        </a>
+                    @endif
                 </div>
+            </div>
             </div>
         </div>
     </section>

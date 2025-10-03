@@ -13,6 +13,7 @@ use App\Observers\KebutuhanTerpenuhi;
 use App\Observers\KodeBarangObserver;
 use App\Observers\KodeTransaksiProgram;
 use App\Observers\KodeTransaksiSpesifik;
+use App\Observers\Pengeluaran;
 use App\Observers\ProgramPembangunanObserver;
 use App\Observers\RataHargaBarang;
 use App\Observers\TransaksiDonasiObserver;
@@ -46,6 +47,7 @@ class EventServiceProvider extends ServiceProvider
         t_transaksi_barang::class => KebutuhanTerpenuhi::class,
         t_transaksi_donasi_program::class => KodeTransaksiProgram::class,
         t_transaksi_donasi_spesifik::class => KodeTransaksiSpesifik::class,
+        t_transaksi_barang::class => Pengeluaran::class
     ];
 
     /**
