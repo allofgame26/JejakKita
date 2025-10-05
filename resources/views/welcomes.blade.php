@@ -311,8 +311,6 @@
             </div>
             <div class="col-lg-4">
                 <h4 class="mb-4">Laporan Keuangan</h4>
-                <div class="col-lg-4">
-                <h4 class="mb-4">Laporan Keuangan</h4>
                 <div class="card card-custom h-100 p-4">
                     <div class="text-center">
                         <i class="bi bi-file-earmark-text display-3 text-warning"></i>
