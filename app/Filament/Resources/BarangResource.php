@@ -11,6 +11,7 @@ use App\Models\t_kebutuhan_barang_program;
 use App\Models\t_transaksi_barang;
 use Filament\Forms;
 use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -68,7 +69,7 @@ class BarangResource extends Resource
                         'roll' => 'Roll',
                         'paket' => 'Paket',
                     ]),
-                TextInput::make('deskripsi_barang')
+                RichEditor::make('deskripsi_barang')
                     ->required(),
             ]);
     }

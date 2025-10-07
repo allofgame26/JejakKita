@@ -7,6 +7,7 @@ use App\Filament\Resources\VendorResource\RelationManagers;
 use App\Models\m_vendor;
 use Filament\Forms;
 use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -49,7 +50,7 @@ class VendorResource extends Resource
                 TextInput::make('no_telepon')
                     ->label('Nomor Telepon / WhatsApp')
                     ->required(),
-                TextInput::make('keterangan')
+                RichEditor::make('keterangan')
                     ->label('Keterangan'),
                 Hidden::make('status')
                     ->default('aktif')

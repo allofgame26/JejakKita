@@ -8,6 +8,7 @@ use App\Models\m_post;
 use Filament\Forms;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
@@ -63,7 +64,7 @@ class PostResource extends Resource
                 TextInput::make('meta_description')
                     ->label('Keyword Deskripsi')
                     ->required(),
-                MarkdownEditor::make('content')
+                RichEditor::make('content')
                     ->label('Deskripsi')
                     ->required(),
                 SpatieMediaLibraryFileUpload::make('fitur_image')

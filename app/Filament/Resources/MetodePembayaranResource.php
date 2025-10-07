@@ -6,6 +6,7 @@ use App\Filament\Resources\MetodePembayaranResource\Pages;
 use App\Filament\Resources\MetodePembayaranResource\RelationManagers;
 use App\Models\m_metode_pembayaran;
 use Filament\Forms;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -56,7 +57,7 @@ class MetodePembayaranResource extends Resource
                     ->label('Active')
                     ->onColor('success')
                     ->offColor('danger'),
-                TextInput::make('deskripsi')
+                RichEditor::make('deskripsi')
                     ->label('Deskripsi')
                     ->required(),
                 SpatieMediaLibraryFileUpload::make('logo_metode_pembayaran')

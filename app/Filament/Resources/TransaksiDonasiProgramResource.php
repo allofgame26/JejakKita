@@ -13,6 +13,7 @@ use Dom\Text;
 use Filament\Forms;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -85,7 +86,7 @@ class TransaksiDonasiProgramResource extends Resource
                                 ->prefix('Rp.')
                                 ->label('Jumlah Donasi')
                                 ->numeric(),
-                            TextInput::make('pesan_donatur')
+                            RichEditor::make('pesan_donatur')
                                 ->label('Pesan Donatur')
                         ])->columns(2)
                 ])->columnSpanFull()

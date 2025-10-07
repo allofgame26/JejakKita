@@ -31,9 +31,12 @@ class TransaksiBarangRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('vendor_id')
-                    ->required()
-                    ->maxLength(255),
+                Select::make('vendor_id')
+                    ->label('Nama Vendor')
+                    ->options(m_vendor::where('status', 'aktif')->pluck('nama_vendor', 'id'))
+                    ->searchable()
+                    ->required(),
+                
             ]);
     }
 

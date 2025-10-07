@@ -15,6 +15,7 @@ use App\Models\t_transaksi_donasi_spesifik;
 use Dotenv\Util\Str;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
@@ -104,7 +105,7 @@ class ProgramPembangunanResource extends Resource
                 SpatieMediaLibraryFileUpload::make('foto_pembangunan')
                         ->multiple()
                         ->collection('pembangunan'),
-                TextInput::make('deskripsi')
+                RichEditor::make('deskripsi')
                         ->required(),
             ]);
     }

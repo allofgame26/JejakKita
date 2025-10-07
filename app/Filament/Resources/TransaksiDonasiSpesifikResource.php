@@ -11,6 +11,7 @@ use Dom\Text;
 use Dvarilek\FilamentTableSelect\Components\Form\TableSelect;
 use Filament\Forms;
 use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -118,7 +119,7 @@ class TransaksiDonasiSpesifikResource extends Resource
                                 ->disabled()
                                 ->visible(fn ($get) => filled($get('kebutuhan')))
                                 ->dehydrated(),
-                            TextInput::make('pesan_donatur')
+                            RichEditor::make('pesan_donatur')
                                 ->label('Pesan Donatur'),
                             
                         ])

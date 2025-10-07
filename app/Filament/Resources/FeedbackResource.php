@@ -8,6 +8,7 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Radio;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
@@ -48,7 +49,7 @@ class FeedbackResource extends Resource
                     ->schema([
                         Hidden::make('user_id')->default(fn () => auth()->id()),
                         TextInput::make('subject_feedback')->label('Subjek Feedback')->required(),
-                        TextInput::make('isi_feedback')->label('Isi Subjek')->required(),
+                        RichEditor::make('isi_feedback')->label('Isi Subjek')->required(),
                         ComponentsRatingStar::make('rate')->label('Rating'),
                         SpatieMediaLibraryFileUpload::make('Foto feedback')->image()->imageEditor()->multiple()->collection('feedback')->label('Foto Feedback')
                     ])->columns('1')
