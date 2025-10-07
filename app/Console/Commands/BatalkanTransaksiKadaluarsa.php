@@ -33,7 +33,7 @@ class BatalkanTransaksiKadaluarsa extends Command
 
         $waktuBatas = Carbon::now()->subHours(24); // menentukan waktu 24 jam yang lalu
 
-        // mencari transaksi yang sudah melebih i 24 jam
+        // mencari transaksi yang sudah melebihi 24 jam
         $transaksiProgramKadaluarsa = t_transaksi_donasi_program::where('status_pembayaran', 'pending')->where('created_at', '<=' , $waktuBatas)->get();
 
         foreach ($transaksiProgramKadaluarsa as $transaksi){
