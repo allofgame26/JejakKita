@@ -11,6 +11,7 @@ use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
@@ -64,7 +65,7 @@ class PostResource extends Resource
                 TextInput::make('meta_description')
                     ->label('Keyword Deskripsi')
                     ->required(),
-                RichEditor::make('content')
+                Textarea::make('content')
                     ->label('Deskripsi')
                     ->required(),
                 SpatieMediaLibraryFileUpload::make('fitur_image')

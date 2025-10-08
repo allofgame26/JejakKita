@@ -8,6 +8,7 @@ use App\Models\KategoriPost;
 use App\Models\m_kategori;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Set;
@@ -45,7 +46,7 @@ class KategoriPostResource extends Resource
                 TextInput::make('slug')
                     ->label('slug')
                     ->readOnly(),
-                TextInput::make('content')
+                Textarea::make('content')
                     ->label('Deskripsi'),
                 TextInput::make('row')
                     ->label('Urutan Upload')

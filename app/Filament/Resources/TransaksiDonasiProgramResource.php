@@ -86,7 +86,7 @@ class TransaksiDonasiProgramResource extends Resource
                                 ->prefix('Rp.')
                                 ->label('Jumlah Donasi')
                                 ->numeric(),
-                            RichEditor::make('pesan_donatur')
+                            Textarea::make('pesan_donatur')
                                 ->label('Pesan Donatur')
                         ])->columns(2)
                 ])->columnSpanFull()

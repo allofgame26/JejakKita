@@ -11,6 +11,7 @@ use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -49,7 +50,7 @@ class FeedbackResource extends Resource
                     ->schema([
                         Hidden::make('user_id')->default(fn () => auth()->id()),
                         TextInput::make('subject_feedback')->label('Subjek Feedback')->required(),
-                        RichEditor::make('isi_feedback')->label('Isi Subjek')->required(),
+                        Textarea::make('isi_feedback')->label('Isi Subjek')->required(),
                         ComponentsRatingStar::make('rate')->label('Rating'),
                         SpatieMediaLibraryFileUpload::make('Foto feedback')->image()->imageEditor()->multiple()->collection('feedback')->label('Foto Feedback')
                     ])->columns('1')

@@ -9,6 +9,7 @@ use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -50,7 +51,7 @@ class PengeluaranResource extends Resource
                         'Pemasaran' => 'Pemasaran & Promosi',
                         'Lain - Lain' => 'Lain - Lain / Tak Terduga',
                     ]),
-                RichEditor::make('deskripsi')->label('Deskripsi Pengeluaran')->required(),
+                Textarea::make('deskripsi')->label('Deskripsi Pengeluaran')->required(),
                 TextInput::make('jumlah')->label('Jumlah Pengeluaran')->required()->prefix('Rp.'),
             ]);
     }

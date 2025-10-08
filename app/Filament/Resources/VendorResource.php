@@ -8,6 +8,7 @@ use App\Models\m_vendor;
 use Filament\Forms;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -50,7 +51,7 @@ class VendorResource extends Resource
                 TextInput::make('no_telepon')
                     ->label('Nomor Telepon / WhatsApp')
                     ->required(),
-                RichEditor::make('keterangan')
+                Textarea::make('keterangan')
                     ->label('Keterangan'),
                 Hidden::make('status')
                     ->default('aktif')

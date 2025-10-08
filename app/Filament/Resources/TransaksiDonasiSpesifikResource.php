@@ -119,7 +119,7 @@ class TransaksiDonasiSpesifikResource extends Resource
                                 ->disabled()
                                 ->visible(fn ($get) => filled($get('kebutuhan')))
                                 ->dehydrated(),
-                            RichEditor::make('pesan_donatur')
+                            Textarea::make('pesan_donatur')
                                 ->label('Pesan Donatur'),
                             
                         ])

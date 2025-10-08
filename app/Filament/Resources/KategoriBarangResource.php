@@ -7,6 +7,7 @@ use App\Filament\Resources\KategoriBarangResource\RelationManagers;
 use App\Models\KategoriBarang;
 use App\Models\m_kategori_barang;
 use Filament\Forms;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -46,7 +47,7 @@ class KategoriBarangResource extends Resource
                     ->unique(ignoreRecord: true)
                     ->label('Nama Kategori')
                     ->required(),
-                TextInput::make('deskripsi_kategori')
+                Textarea::make('deskripsi_kategori')
                     ->label('Deskripsi Kategori')
                     ->maxLength(500)
                     ->required(),
