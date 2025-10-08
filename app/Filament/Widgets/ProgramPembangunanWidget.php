@@ -24,7 +24,7 @@ class ProgramPembangunanWidget extends BaseWidget
             ->columns([
                 TextColumn::make('nama_pembangunan')->label('Nama Program'),
                 TextColumn::make('status')->badge()->label('Status'),
-                TextColumn::make('estimasi_biaya')->label('Target')->money('IDR', true),
+                TextColumn::make('estimasi_biaya')->label('Target')->money('IDR', true)->placeholder('Tidak ada target'),
                 ProgressBar::make('progress_program')
                     ->label('Dana Donasi')
                     ->getStateUsing(function (m_program_pembangunan $record){

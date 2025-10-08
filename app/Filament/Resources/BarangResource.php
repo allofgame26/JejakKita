@@ -13,6 +13,7 @@ use Filament\Forms;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -69,7 +70,7 @@ class BarangResource extends Resource
                         'roll' => 'Roll',
                         'paket' => 'Paket',
                     ]),
-                RichEditor::make('deskripsi_barang')
+                Textarea::make('deskripsi_barang')
                     ->required(),
             ]);
     }
@@ -88,6 +89,7 @@ class BarangResource extends Resource
                     ->label('Nama Barang')
                     ->icon('heroicon-o-gift'),
                 TextColumn::make('barang_inventory')
+                    ->label('Barang di Gudang')
                     ->getStateUsing(function ($record){
                         $cekJumlahBarang = t_transaksi_barang::where('barang_id',$record->id)->where('status_pembayaran','berhasil')->sum('jumlah_dibeli');
                         $cekJumlahPemakaian = t_kebutuhan_barang_program::where('barang_id',$record->id && 'status' === 'diambil')->sum('jumlah_barang');

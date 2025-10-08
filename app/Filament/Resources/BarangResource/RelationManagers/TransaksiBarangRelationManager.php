@@ -36,7 +36,20 @@ class TransaksiBarangRelationManager extends RelationManager
                     ->options(m_vendor::where('status', 'aktif')->pluck('nama_vendor', 'id'))
                     ->searchable()
                     ->required(),
-                
+                TextInput::make('jumlah_dibeli')
+                    ->label('Jumlah Dibeli')
+                    ->numeric()
+                    ->required(),
+                TextInput::make('harga_satuan')
+                    ->label('Harga Satuan')
+                    ->numeric()
+                    ->required(),
+                DatePicker::make('tanggal_beli')
+                    ->label('Tanggal Pembelian')
+                    ->native(false)
+                    ->displayFormat('d M Y')
+                    ->maxDate(now())
+                    ->required(),
             ]);
     }
 
@@ -52,12 +65,12 @@ class TransaksiBarangRelationManager extends RelationManager
                 TextColumn::make('jumlah_dibeli')
                     ->label('Jumlah Dibeli')
                     ->badge(),
+                TextColumn::make('harga_satuan')
+                    ->label('Harga Satuan')
+                    ->money('IDR', true),
                 TextColumn::make('vendor.alamat_vendor')
                     ->label('Alamat Vendor')
                     ->icon('heroicon-o-building-storefront'),
-                TextColumn::make('vendor.no_telepon')
-                    ->label('Nomor Telepon')
-                    ->icon('heroicon-o-phone'),
                 TextColumn::make('tanggal_beli')
                     ->date('d M Y'),
             ])
@@ -142,53 +155,6 @@ class TransaksiBarangRelationManager extends RelationManager
                         $record->save();
 
                     }),
-                ViewAction::make('detail')
-                    ->label('Detail')
-                    ->icon('heroicon-o-eye')
-                    ->color('info')
-                    ->visible(fn ($record): bool => $record->status_pembayaran !== 'pending')    
-                    ->modalHeading('Detail Pembelian Barang')
-                    ->modalSubmitAction(false)
-                    ->modalCancelActionLabel('tutup')
-                    ->infolist([
-                        Fieldset::make('vendor')
-                            ->label('Vendor')
-                            ->schema([
-                                TextEntry::make('nama_vendor')
-                                    ->label('Nama Vendor')
-                                    ->icon('heroicon-o-building-storefront'),
-                                TextEntry::make('alamat_vendor')
-                                    ->label('Alamat Vendor')
-                                    ->icon('heroicon-o-building-storefront'),
-                            ])
-                            ->columns(2),
-                        Fieldset::make('Transaksi Pembelian')
-                            ->label('Transaksi Pembelian')
-                            ->schema([
-                                TextEntry::make('pivot.jumlah_dibeli')
-                                    ->label('Jumlah Dibeli')
-                                    ->badge(),
-                                TextEntry::make('pivot.harga_satuan')
-                                    ->label('Harga Satuan')
-                                    ->badge(),
-                                TextEntry::make('pivot.tanggal_beli')
-                                    ->label('Tanggal Pembelian')
-                                    ->date('d M Y'),
-                                TextEntry::make('pivot.status_pembayaran')
-                                    ->label('Status Pembayaran')
-                                    ->badge()
-                                    ->color(fn (string $state): string => match ($state){
-                                        'pending' => 'warning',
-                                        'berhasil' => 'success',
-                                        'gagal' => 'danger',
-                                    }),
-                                SpatieMediaLibraryImageEntry::make('bukti_pembayaran')
-                                    ->label('Bukti Pembayaran')
-                                    ->collection('pembelian_barang')
-                                    ->visible(fn ($record) => $record->pivot->status_pembayaran === 'berhasil'),
-                            ])
-                            ->columns(2)
-                    ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
