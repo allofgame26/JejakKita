@@ -8,8 +8,10 @@ use App\Models\m_post;
 use Filament\Forms;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
@@ -29,7 +31,7 @@ class PostResource extends Resource
     protected static ?string $model = m_post::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-newspaper';
-    
+
     protected static ?string $navigationLabel = 'Data Postingan';
 
     protected static ?string $navigationGroup = 'Management Konten';
@@ -47,7 +49,7 @@ class PostResource extends Resource
                     ->required()
                     ->reactive()
                     ->unique(ignoreRecord: TRUE)
-                    ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', Str::slug($state))),
+                    ->afterStateUpdated(fn(Set $set, ?string $state) => $set('slug', Str::slug($state))),
                 TextInput::make('slug')
                     ->label('slug')
                     ->readOnly(),
@@ -62,9 +64,10 @@ class PostResource extends Resource
                 TextInput::make('meta_description')
                     ->label('Keyword Deskripsi')
                     ->required(),
-                MarkdownEditor::make('content')
+                RichEditor::make('content')
                     ->label('Deskripsi')
                     ->required(),
+
                 SpatieMediaLibraryFileUpload::make('media')
                     ->label('Media Foto')
                     ->collection('media')
@@ -89,7 +92,7 @@ class PostResource extends Resource
                     ->label('Detail')
                     ->icon('heroicon-o-eye')
                     ->modalHeading('Detail Postingan')
-                    ->modalContent(fn ($record) => view('filament.resources.post-detail', [
+                    ->modalContent(fn($record) => view('filament.resources.post-detail', [
                         'record' => $record
                     ])),
                 Tables\Actions\EditAction::make(),

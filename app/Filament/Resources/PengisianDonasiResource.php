@@ -72,10 +72,10 @@ class PengisianDonasiResource extends Resource
                     ->placeholder('0')
                     ->helperText('Masukkan nominal donasi dalam rupiah.')
                     ->required(),
-                Forms\Components\Textarea::make('pesan_donatur')
+                Forms\Components\RichEditor::make('pesan_donatur')
                     ->label('Pesan Donatur')
                     ->placeholder('Tulis pesan atau harapan Anda (opsional)')
-                    ->rows(3)
+                    // ->rows(3)
                 // ->helperText('Pesan ini akan diterima oleh pengelola program.'),
                 // membuat Program automatis dipilih untuk masuk kedalam donasi
             ]);

@@ -6,31 +6,21 @@ use App\Filament\Resources\ProgramPembangunanResource\Pages;
 use App\Filament\Resources\ProgramPembangunanResource\RelationManagers\BarangRelationManager;
 use App\Filament\Resources\ProgramPembangunanResource\RelationManagers\PriorityRelationManager;
 use App\Models\m_program_pembangunan;
-use App\Models\Priority;
-use App\Models\Priority_Pembangunan;
-use App\Models\t_kebutuhan_barang_program;
-use App\Models\t_transaksi_donasi_program;
-use App\Models\t_transaksi_donasi_spesifik;
-use Dotenv\Util\Str;
-use Filament\Forms;
+use App\Models\m_periode;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\TextColumn\TextColumnSize;
-use Filament\Tables\Enums\RecordCheckboxPosition;
 use Filament\Tables\Table;
-use IbrahimBougaoua\FilaProgress\Tables\Columns\ProgressBar;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\Facades\DB;
-use Filament\Infolists;
-use Filament\Infolists\Infolist;
-use Filament\Infolists\Components\TextEntry;
 
 class ProgramPembangunanResource extends Resource
 {
@@ -63,46 +53,55 @@ class ProgramPembangunanResource extends Resource
                     ->preload(),
                 TextInput::make('nama_pembangunan')
                     ->required(),
+                Select::make('tipe_donasi')
+                    ->label('Tipe Donasi')
+                    ->options([
+                        'donasi_berkelanjutan' => 'Donasi Berkelanjutan',
+                        'donasi_target' => 'Donasi Target'
+                    ])
+                    ->required()
+                    ->live(),
+                Select::make('periode_id')
+                    ->label('Periode Pembangunan')
+                    ->options(m_periode::all()->pluck('nama_periode','id'))
+                    ->required(),
                 DatePicker::make('tanggal_mulai')
                     ->displayFormat('d M Y')
                     ->native(false)
-                    ->required()
+                    ->required(fn (Get $get):bool  => $get('tipe_donasi') === 'donasi_target')
                     ->minDate(fn (string $operation): ?string => $operation === 'create' ? now() : null)
                     ->suffixIcon('heroicon-m-calendar')
-                    ->live(),
+                    ->live()
+                    ->disabled(fn (Get $get):bool  => $get('tipe_donasi') === 'donasi_berkelanjutan'),
                 DatePicker::make('estimasi_tanggal_selesai')
                     ->displayFormat('d M Y')
                     ->native(false)
-                    ->required()
+                    ->required(fn (Get $get):bool  => $get('tipe_donasi') === 'donasi_target')
                     ->minDate(fn ($get) => $get('tanggal_mulai'))
-                    ->suffixIcon('heroicon-m-calendar'),
+                    ->suffixIcon('heroicon-m-calendar')
+                    ->disabled(fn (Get $get):bool  => $get('tipe_donasi') === 'donasi_berkelanjutan'),
                 DatePicker::make('tanggal_selesai_aktual')
                     ->displayFormat('d M Y')
                     ->native(false)
                     ->minDate(fn ($get) => $get('tanggal_mulai'))
-                    ->suffixIcon('heroicon-m-calendar'),
+                    ->suffixIcon('heroicon-m-calendar')
+                    ->disabled(fn (Get $get):bool  => $get('tipe_donasi') === 'donasi_berkelanjutan'),
                 TextInput::make('estimasi_biaya')
                     ->numeric()
-                    ->required()
-                    ->prefix('Rp. '),
-                Select::make('status')
-                    ->options([
-                        'pendanaan' => 'Pendanaan',
-                        'berjalan' => 'Berjalan',
-                        'selesai' => 'Selesai',
-                        'ditunda' => 'Ditunda',
-                    ])
-                    ->required(),
+                    ->required(fn (Get $get):bool  => $get('tipe_donasi') === 'donasi_target')
+                    ->prefix('Rp.')
+                    ->disabled(fn (Get $get):bool  => $get('tipe_donasi') === 'donasi_berkelanjutan'),
+                Hidden::make('status')
+                    ->default('pendanaan'),
                 SpatieMediaLibraryFileUpload::make('foto_pembangunan')
                         ->multiple()
                         ->collection('pembangunan'),
-                TextInput::make('deskripsi')
-                        ->required()
-
+                RichEditor::make('deskripsi')
+                        ->required(),
             ]);
     }
 
-    public static function table(Table $table): Table
+        public static function table(Table $table): Table
     {
         return $table
             ->columns([
@@ -113,7 +112,15 @@ class ProgramPembangunanResource extends Resource
                     ->label('Nama Pembangunan'),
                 TextColumn::make('tanggal_mulai')
                     ->label('Tanggal Mulai')
-                    ->date('d M Y'),
+                    ->date('d M Y')
+                    ->placeholder('Tidak ada tanggal mulai'),
+                TextColumn::make('tipe_donasi')
+                    ->label('Tipe Donasi')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'donasi_berkelanjutan' => 'primary',
+                        'donasi_target' => 'success',
+                    }),
                 TextColumn::make('status')
                     ->label('Status')
                     ->badge()
@@ -123,23 +130,24 @@ class ProgramPembangunanResource extends Resource
                         'selesai' => 'success',
                         'ditunda' => 'danger',
                     }),
-                ProgressBar::make('progress_program')
-                    ->label('Dana Donasi')
-                    ->getStateUsing(function (m_program_pembangunan $record){
-                        $total = $record->estimasi_biaya;
-
+                TextColumn::make('progress_donasi')
+                    ->label('Progress Donasi')
+                    ->getStateUsing(function (m_program_pembangunan $record) {
+                        $total = $record->estimasi_biaya ?? 0;
                         $progress = $record->hitungTotalDonasiTerkumpul();
                         
-                        return [
-                            'total' => $total,
-                            'progress' => $progress,
-                        ];
-                    }),
+                        if ($total == 0) return 'Target belum ditentukan';
+                        
+                        $percentage = round(($progress / $total) * 100, 1);
+                        return "Rp " . number_format($progress) . " / Rp " . number_format($total) . " ({$percentage}%)";
+                    })
+                    ->wrap(),
                 TextColumn::make('skor_prioritas_akhir')
                     ->label('Prioritas')
                     ->icon('heroicon-o-information-circle')
                     ->numeric(2)
                     ->sortable()
+                    ->placeholder('Berikan prioritas pada program ini'),
             ])
             ->defaultSort('skor_prioritas_akhir','desc')
             ->filters([

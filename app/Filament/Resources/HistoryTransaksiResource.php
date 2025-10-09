@@ -6,6 +6,7 @@ use App\Filament\Resources\HistoryTransaksiResource\Pages;
 use App\Filament\Resources\HistoryTransaksiResource\RelationManagers;
 use App\Models\HistoryTransaksi;
 use Filament\Forms;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
@@ -63,7 +64,7 @@ class HistoryTransaksiResource extends Resource
                         'success' => 'Spesifik',
                     ])
                     ->searchable(),
-                TextColumn::make('deskripsi')
+                Textarea::make('deskripsi')
                     ->searchable()
                     ->limit(40),
                 TextColumn::make('jumlah_donasi')

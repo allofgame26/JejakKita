@@ -22,6 +22,7 @@ class m_program_pembangunan extends Model implements HasMedia
         'mandor_id',
         'kode_program',
         'nama_pembangunan',
+        'tipe_donasi',
         'estimasi_tanggal_selesai',
         'tanggal_mulai',
         'tanggal_selesai_aktual',

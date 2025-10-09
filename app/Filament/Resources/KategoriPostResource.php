@@ -8,6 +8,7 @@ use App\Models\KategoriPost;
 use App\Models\m_kategori;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Set;
@@ -44,10 +45,9 @@ class KategoriPostResource extends Resource
                     ->afterStateUpdated(fn(Set $set, ?string $state) => $set('slug', Str::slug($state)))
                     ->helperText('Masukkan nama kategori post yang unik dan mudah dipahami.'),
                 TextInput::make('slug')
-                    ->label('Slug')
-                    ->readOnly()
-                    ->helperText('Bagian dari URL yang bersifat deskriptif dan mudah dibaca oleh manusia. Slug otomatis dibuat dari nama kategori.'),
-                TextInput::make('content')
+                    ->label('slug')
+                    ->readOnly(),
+                Forms\Components\RichEditor::make('content')
                     ->label('Deskripsi'),
                 TextInput::make('row')
                     ->label('Urutan Upload')

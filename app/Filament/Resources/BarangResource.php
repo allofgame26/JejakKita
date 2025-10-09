@@ -11,7 +11,9 @@ use App\Models\t_kebutuhan_barang_program;
 use App\Models\t_transaksi_barang;
 use Filament\Forms;
 use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -36,61 +38,41 @@ class BarangResource extends Resource
 
     protected static ?string $pluralLabel = 'Daftar Barang';
 
-    protected static ?string $label = 'Daftar Barang'; 
+    protected static ?string $label = 'Daftar Barang';
 
     protected static ?string $slug = 'barangs';
 
     public static function form(Form $form): Form
     {
         return $form
-                ->schema([
-                    Forms\Components\Section::make([
-                        TextInput::make('kode_barang')
-                            ->required()
-                            ->unique(ignoreRecord: true)
-                            ->label('Kode Barang')
-                            ->placeholder('Masukkan kode barang unik')
-                            ->helperText('Kode barang harus unik.'),
-                        Select::make('kategoribarang_id')
-                            ->required()
-                            ->relationship('kategoriBarang','nama_kategori')
-                            ->preload()
-                            ->searchable()
-                            ->label('Kategori Barang')
-                            ->placeholder('Pilih kategori barang'),
-                        TextInput::make('nama_barang')
-                            ->required()
-                            ->label('Nama Barang')
-                            ->placeholder('Masukkan nama barang'),
-                        Select::make('nama_satuan')
-                            ->required()
-                            ->label('Nama Satuan')
-                            ->options([
-                                'unit' => 'Unit',
-                                'batang' => 'Batang',
-                                'lembar' => 'Lembar',
-                                'meter_persegi' => 'Meter Persegi',
-                                'meter_kubik' => 'Meter Kubik',
-                                'kilogram' => 'Kilogram',
-                                'sak' => 'Sak',
-                                'roll' => 'Roll',
-                                'paket' => 'Paket',
-                            ])
-                            ->selectablePlaceholder(condition: true),
-                        TextInput::make('harga_satuan')
-                            ->required()
-                            ->numeric()
-                            ->prefix('Rp.')
-                            ->mask(RawJs::make('$money($input'))
-                            ->stripCharacters(',')
-                            ->placeholder('Masukkan harga satuan')
-                            ->helperText('Harga satuan dalam Rupiah.'),
-                        TextInput::make('deskripsi_barang')
-                            ->required()
-                            ->label('Deskripsi Barang')
-                            ->placeholder('Deskripsi singkat barang'),
-                    ])
-                ]);
+            ->schema([
+                Hidden::make('kode_barang')
+                    ->disabled()
+                    ->dehydrated(false),
+                Select::make('kategoribarang_id')
+                    ->required()
+                    ->relationship('kategoriBarang', 'nama_kategori')
+                    ->preload(),
+                TextInput::make('nama_barang')
+                    ->required()
+                    ->label('Nama Barang'),
+                Select::make('nama_satuan')
+                    ->required()
+                    ->label('Nama Satuan')
+                    ->options([
+                        'unit' => 'Unit',
+                        'batang' => 'Batang',
+                        'lembar' => 'Lembar',
+                        'meter_persegi' => 'Meter Persegi',
+                        'meter_kubik' => 'Meter Kubik',
+                        'kilogram' => 'Kilogram',
+                        'sak' => 'Sak',
+                        'roll' => 'Roll',
+                        'paket' => 'Paket',
+                    ]),
+                RichEditor::make('deskripsi_barang')
+                    ->required(),
+            ]);
     }
 
     public static function table(Table $table): Table
@@ -107,19 +89,20 @@ class BarangResource extends Resource
                     ->label('Nama Barang')
                     ->icon('heroicon-o-gift'),
                 TextColumn::make('barang_inventory')
-                    ->getStateUsing(function ($record){
-                        $cekJumlahBarang = t_transaksi_barang::where('barang_id',$record->id)->where('status_pembayaran','berhasil')->sum('jumlah_dibeli');
-                        $cekJumlahPemakaian = t_kebutuhan_barang_program::where('barang_id',$record->id && 'status' === 'diambil')->sum('jumlah_barang');
+                    ->label('Barang di Gudang')
+                    ->getStateUsing(function ($record) {
+                        $cekJumlahBarang = t_transaksi_barang::where('barang_id', $record->id)->where('status_pembayaran', 'berhasil')->sum('jumlah_dibeli');
+                        $cekJumlahPemakaian = t_kebutuhan_barang_program::where('barang_id', $record->id && 'status' === 'diambil')->sum('jumlah_barang');
 
                         $inventory = $cekJumlahBarang - $cekJumlahPemakaian;
 
                         return $inventory;
                     })
                     ->badge()
-                    ->color(function ($state){
-                        if($state < 0 ){
-                             return 'danger';
-                        } elseif($state > 0) {
+                    ->color(function ($state) {
+                        if ($state < 0) {
+                            return 'danger';
+                        } elseif ($state > 0) {
                             return 'success';
                         } else {
                             return 'warning';
@@ -132,7 +115,7 @@ class BarangResource extends Resource
             ])
             ->filters([
                 SelectFilter::make('kategoriBarang.nama_kategori')
-                    ->relationship('kategoriBarang','nama_kategori')
+                    ->relationship('kategoriBarang', 'nama_kategori')
                     ->preload()
                     ->searchable()
             ])

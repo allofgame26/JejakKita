@@ -7,6 +7,7 @@ use App\Filament\Resources\KategoriBarangResource\RelationManagers;
 use App\Models\KategoriBarang;
 use App\Models\m_kategori_barang;
 use Filament\Forms;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -34,22 +35,20 @@ class KategoriBarangResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Data Kategori Barang')
-                    ->description('Masukkan data kategori barang dengan lengkap dan jelas.')
-                    ->schema([
-                        TextInput::make('nama_kategori')
-                            ->unique(ignoreRecord: true)
-                            ->label('Nama Kategori')
-                            ->required()
-                            ->placeholder('Contoh: Material Bangunan')
-                            ->helperText('Nama kategori harus unik dan mudah dipahami.'),
-                        TextInput::make('deskripsi_kategori')
-                            ->label('Deskripsi Kategori')
-                            ->maxLength(500)
-                            ->required()
-                            ->placeholder('Deskripsi singkat kategori barang')
-                            ->helperText('Deskripsi maksimal 500 karakter.'),
-                    ])
+                TextInput::make('kode_kategori')
+                    ->label('Kode Kategori')
+                    ->placeholder('Contoh : SL')
+                    ->required()
+                    ->unique(ignoreRecord: true)
+                    ->minLength(2),
+                TextInput::make('nama_kategori')
+                    ->unique(ignoreRecord: true)
+                    ->label('Nama Kategori')
+                    ->required(),
+                Forms\Components\RichEditor::make('deskripsi_kategori')
+                    ->label('Deskripsi Kategori')
+                    ->maxLength(500)
+                    ->required(),
             ]);
     }
 

@@ -34,7 +34,8 @@ class BarangRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('nama_barang')
             ->columns([
-                Tables\Columns\TextColumn::make('nama_barang'),
+                Tables\Columns\TextColumn::make('nama_barang')
+                    ->label('Nama Barang'),
                 TextColumn::make('jumlah_barang')
                     ->label('Jumlah Barang'),
                 TextColumn::make('status')

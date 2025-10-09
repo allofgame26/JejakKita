@@ -8,7 +8,9 @@ use App\Models\Prioritas;
 use App\Models\Priority;
 use Filament\Forms;
 use Filament\Forms\Components\Radio;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -46,7 +48,7 @@ class PrioritasResource extends Resource
                     ->required()
                     ->label('Persen')
                     ->suffixIcon('heroicon-o-percent-badge'),
-                TextInput::make('deskripsi_priority')
+                Textarea::make('deskripsi_priority')
                     ->required()
                     ->label('Deskripsi Prioritas'),
                 Radio::make('jenis_kriteria')
