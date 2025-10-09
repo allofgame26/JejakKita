@@ -16,6 +16,7 @@ class t_transaksi_donasi_spesifik extends Model implements HasMedia
     use InteractsWithMedia;
 
     protected $fillable = [
+        'kode_transaksi',
         'user_id',
         'pembayaran_id',
         'jumlah_donasi',

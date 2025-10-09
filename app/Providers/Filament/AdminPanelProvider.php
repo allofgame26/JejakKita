@@ -2,13 +2,10 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Forms\Schemas\DataDiriSchema;
 use App\Filament\Widgets\DashboardWidget;
 use App\Filament\Widgets\TestWidget;
-use App\Filament\Widgets\PorgramPembangunanWidget;
 use App\Filament\Widgets\ProgramPembangunanWidget;
 use Filament\Http\Middleware\Authenticate;
-use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -16,7 +13,6 @@ use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -24,12 +20,8 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Http\Middleware\EnsureProfileIsComplete;
-use App\Models\m_data_diri;
-use App\Models\User;
-use Filament\Actions\Action;
-use Filament\Notifications\Notification;
-use Filament\Pages\Auth\Register;
-use Illuminate\Support\Facades\Auth;
+use App\Livewire\Auth\CustomLogin;
+use App\Livewire\Auth\LoginCustom;
 use Rupadana\ApiService\ApiServicePlugin;
 
 class AdminPanelProvider extends PanelProvider
@@ -49,8 +41,9 @@ class AdminPanelProvider extends PanelProvider
             ->registration()
             ->passwordReset()
             ->login()
+            // ->login(CustomLogin::class)
             ->databaseNotifications()
-            ->databaseNotificationsPolling('30s')
+            ->databaseNotificationsPolling('10s')
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -83,7 +76,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
-                ApiServicePlugin::make(), // harus di masukkan, jika tidak maka API akan tidak terpanggil
+                ApiServicePlugin::make(), // harus di masukkan, jika tidak maka API akan tidak terpanggil yang ada didalam route:list
             ])
             ->renderHook(
                 'panels::global-search.after',

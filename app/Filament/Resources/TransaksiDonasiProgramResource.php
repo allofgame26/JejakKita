@@ -68,10 +68,9 @@ class TransaksiDonasiProgramResource extends Resource
                                 ->default(request()->query('program_id'))
                                 ->reactive()
                                 ->live(),
-                            Hidden::make('user_id')
-                                ->default(fn ()=> auth()->id()),
-                            Hidden::make('status_pembayaran')
-                                ->default('pending')
+                            Hidden::make('kode_transaksi')
+                                ->dehydrated(false)
+                                ->disabled()
                         ])->columns(2),
                     Step::make('Pembayaran')
                         ->schema([
@@ -151,8 +150,8 @@ class TransaksiDonasiProgramResource extends Resource
                         Section::make('Pengguna')
                             ->columns(2)
                             ->schema([
-                                TextEntry::make('name')
-                                    ->label('Username'),
+                                TextEntry::make('user.datadiri.name')
+                                    ->label('Nama Pengguna'),
                                 TextEntry::make('user.email')
                                     ->label('E - Mail'),
                                 TextEntry::make('user.datadiri.nama_lengkap')
@@ -209,7 +208,7 @@ class TransaksiDonasiProgramResource extends Resource
                     ->label('Bayar Sekarang')
                     ->icon('heroicon-o-arrow-up-on-square')
                     ->color('primary')
-                    ->visible(fn ($record): bool => $record->status_pembayaran === "pending" && $record->status_kirim_bukti_pembayaran === 'belum' && auth()->user()->hasRole('user'))
+                    ->visible(fn ($record): bool => $record->status_pembayaran === "pending" && $record->status_kirim_bukti_pembayaran === 'belum' && auth()->user()->hasRole(['user','Admin']))
                     ->modalHeading('Upload Bukti Pembayaran')
                     ->modalSubmitActionLabel('Upload')
                     ->form([

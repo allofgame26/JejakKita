@@ -87,8 +87,7 @@ class ProgramPembangunanResource extends Resource
                     ->prefix('Rp. '),
                 Select::make('status')
                     ->options([
-                        'diajukan' => 'Diajukan',
-                        'direncanakan' => 'Direncanakan',
+                        'pendanaan' => 'Pendanaan',
                         'berjalan' => 'Berjalan',
                         'selesai' => 'Selesai',
                         'ditunda' => 'Ditunda',
@@ -119,8 +118,7 @@ class ProgramPembangunanResource extends Resource
                     ->label('Status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        'diajukan' => 'primary',
-                        'direncanakan' => 'warning',
+                        'pendanaan' => 'warning',
                         'berjalan' => 'info',
                         'selesai' => 'success',
                         'ditunda' => 'danger',

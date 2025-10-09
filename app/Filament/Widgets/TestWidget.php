@@ -13,6 +13,12 @@ use Illuminate\Support\Number;
 
 class TestWidget extends BaseWidget
 {
+
+    public static function canView(): bool
+    {
+        return auth()->user()->hasAnyRole(['super_admin','Admin']);
+    }
+    
     protected function getStats(): array
     {
 
@@ -30,7 +36,7 @@ class TestWidget extends BaseWidget
         $totalPending = $pendingProgram + $pendingSpesifikasi;
 
         return [
-            Stat::make('jumlah_pembangunan',m_program_pembangunan::whereBetween('created_at',[$awalBulan,$akhirBulan])->count())
+            Stat::make('jumlah_pembangunan',m_program_pembangunan::where('status','!=',['selesai','ditunda'])->whereBetween('created_at',[$awalBulan,$akhirBulan])->count())
                 ->label('Jumlah Pembangunan')
                 ->description('Jumlah Pembangunan saat ini')
                 ->descriptionIcon('heroicon-o-building-office',IconPosition::Before)
@@ -38,7 +44,7 @@ class TestWidget extends BaseWidget
             Stat::make('dana_terkumpul',Number::currency($total,'IDR'))
                 ->label('Dana Terkumpul')
                 ->color('success')
-                ->description('Dana Gabungan yang sudah terkumpul')
+                ->description('Dana Gabungan yang sudah terkumpul Selama 30 Hari Terakhir')
                 ->descriptionIcon('heroicon-o-credit-card',IconPosition::Before),
             Stat::make('jumlah_pending', $totalPending)
                 ->label('Transaksi Pending')

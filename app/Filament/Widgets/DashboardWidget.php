@@ -13,6 +13,11 @@ class DashboardWidget extends ChartWidget
 
     protected static ?int $sort = 1;
 
+    public static function canView(): bool
+    {
+        return auth()->user()->hasAnyRole(['super_admin','Admin']);
+    }
+
     protected function getData(): array
     {
 

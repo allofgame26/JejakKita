@@ -6,11 +6,13 @@ use App\Filament\Resources\MetodePembayaranResource\Pages;
 use App\Filament\Resources\MetodePembayaranResource\RelationManagers;
 use App\Models\m_metode_pembayaran;
 use Filament\Forms;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
@@ -37,7 +39,12 @@ class MetodePembayaranResource extends Resource
             ->schema([
                 TextInput::make('nama_pembayaran')
                     ->label('Nama Pembayaran')
-                    ->required(),
+                    ->required()
+                    ->placeholder('Bank Central Asia'),
+                TextInput::make('kode_metode_pembayaran')
+                    ->label('Kode Metode Pembayaran')
+                    ->required()
+                    ->placeholder('BCA'),
                 TextInput::make('no_rekening')
                     ->label('Nomor Rekenening')
                     ->required()
@@ -51,7 +58,11 @@ class MetodePembayaranResource extends Resource
                     ->offColor('danger'),
                 TextInput::make('deskripsi')
                     ->label('Deskripsi')
-                    ->required()
+                    ->required(),
+                SpatieMediaLibraryFileUpload::make('logo_metode_pembayaran')
+                    ->label('Logo Metode Pembayaran')
+                    ->collection('logo_metode_pembayaran')
+                    ->required(),
             ]);
     }
 
@@ -62,6 +73,11 @@ class MetodePembayaranResource extends Resource
                 TextColumn::make('nama_pembayaran')
                     ->label('Nama Pembayaran')
                     ->sortable(),
+                TextColumn::make('kode_metode_pembayaran')
+                    ->label('Kode Metode Pembayaran'),
+                SpatieMediaLibraryImageColumn::make('logo_metode_pembayaran')
+                    ->label('logo')
+                    ->collection('logo_metode_pembayaran'),
                 ToggleColumn::make('is_open')
                     ->label('Active')
                     ->onColor('success')

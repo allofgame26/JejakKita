@@ -507,38 +507,29 @@
                             </div>
                         </div>
 
-                        {{-- Info Dana --}}
-                        <div class="d-flex justify-content-between small">
-                            <span class="fw-bold">Terkumpul: <br> Rp {{ number_format($program->dana_terkumpul, 0, ',', '.') }}</span>
-                            <span class="text-end">Target: <br> Rp {{ number_format($program->estimasi_biaya, 0, ',', '.') }}</span>
-                        </div>
-
-                        {{-- Tombol Aksi --}}
-                        @auth
-                            {{-- JIKA PENGGUNA SUDAH LOGIN --}}
-                            {{-- Tombol ini akan mengarah ke halaman create DENGAN membawa ID program --}}
-                            <a href="{{ route('filament.admin.resources.transaksi-donasi-programs.create', ['program_id' => $program->id]) }}" 
-                            class="btn btn-warning w-100 mt-4 fw-bold">
-                            Donasi Sekarang
-                            </a>
-                        @else
-                            {{-- JIKA PENGGUNA BELUM LOGIN (GUEST) --}}
-                            {{-- Tombol ini akan mengarah ke halaman login standar Filament --}}
-                            <a href="{{ route('filament.admin.auth.login') }}" 
-                            class="btn btn-warning w-100 mt-4 fw-bold">
-                            Login untuk Berdonasi
-                            </a>
-                        @endauth
-                    </div>
+    <section class="container my-5 py-5" id="tentang">
+        <h2 class="text-center mb-5 section-title">Tentang Sekolah</h2>
+        <div class="row g-4 justify-content-center">
+            <div class="col-md-4">
+                <div class="card card-custom p-4 text-center h-100">
+                    <h3 class="card-title">Visi</h3>
+                    <p class="card-text">Menjadi sekolah dasar Islam unggul yang melahirkan generasi cerdas, berkarakter Qur'ani, dan berwawasan lingkungan di kawasan [Nama Daerah].</p>
                 </div>
             </div>
-        @empty
-            <div class="col-12 text-center">
-                <p>Saat ini tidak ada program donasi yang sedang dibuka.</p>
+            <div class="col-md-4">
+                <div class="card card-custom p-4 text-center h-100">
+                    <h3 class="card-title">Misi</h3>
+                    <p class="card-text">Menyelenggarakan pendidikan berkualitas, menanamkan nilai-nilai Islam dalam setiap aspek pembelajaran, dan mengembangkan potensi siswa secara optimal.</p>
+                </div>
             </div>
-        @endforelse
-    </div>
-</section>
+            <div class="col-md-4">
+                <div class="card card-custom p-4 text-center h-100">
+                    <h3 class="card-title">Sejarah</h3>
+                    <p class="card-text">Didirikan pada tahun 2024 atas kepedulian masyarakat untuk menyediakan pendidikan yang layak dan terjangkau di daerah pegunungan.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
   <!-- Footer -->
   <footer class="text-center p-4 bg-light text-muted">

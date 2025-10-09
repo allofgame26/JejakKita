@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -62,12 +64,28 @@ class m_program_pembangunan extends Model implements HasMedia
 
     public function cekDanUpdateStatus(): void
     {
+        $statusSebelumnya = $this->status_pendanaan;
+
         $totaldonasi = $this->hitungTotalDonasiTerkumpul();
 
-        if ($totaldonasi >= $this->estimasi_biaya){
+        if ($totaldonasi >= $this->estimasi_biaya && $statusSebelumnya != 'lengkap'){
             $this->status_pendanaan = 'lengkap';
             $this->saveQuietly();
+
+            $receipt = $this->getAdmin();
+
+            Notification::make()
+                ->title('Pendanaan Program Tercapai')
+                ->body("Program '{$this->nama_pembangunan}' telah berhasil mencapai targer donasi")
+                ->success()
+                ->sendToDatabase($receipt)
+                ->broadcast($receipt);
         }
+    }
+
+    protected function getAdmin()
+    {
+        return User::role(['Admin','super_admin'])->get();
     }
 
     public function periode(): BelongsTo
