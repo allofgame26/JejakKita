@@ -93,7 +93,7 @@ class BarangResource extends Resource
                     ->label('Barang di Gudang')
                     ->getStateUsing(function ($record){
                         $cekJumlahBarang = t_transaksi_barang::where('barang_id',$record->id)->where('status_pembayaran','berhasil')->sum('jumlah_dibeli');
-                        $cekJumlahPemakaian = t_kebutuhan_barang_program::where('barang_id',$record->id && 'status' === 'diambil')->sum('jumlah_barang');
+                        $cekJumlahPemakaian = t_kebutuhan_barang_program::where('barang_id',$record->id)->where('status','diambil')->sum('jumlah_terpenuhi');
 
                         $inventory = $cekJumlahBarang - $cekJumlahPemakaian;
 
@@ -108,7 +108,7 @@ class BarangResource extends Resource
                         } else {
                             return 'warning';
                         }
-                    })
+                    }),
                 // TextColumn::make('total_harga')
                 //     ->label('Total Harga')
                 //     ->getStateUsing(fn ($record) => 

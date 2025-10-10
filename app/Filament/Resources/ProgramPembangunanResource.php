@@ -130,6 +130,7 @@ class ProgramPembangunanResource extends Resource
                 TextColumn::make('tipe_donasi')
                     ->label('Tipe Donasi')
                     ->badge()
+                    ->visible(fn ($record): bool => auth()->user()->hasRole(['admin','super_admin']))
                     ->color(fn (string $state): string => match ($state) {
                         'donasi_berkelanjutan' => 'primary',
                         'donasi_target' => 'success',
@@ -144,7 +145,7 @@ class ProgramPembangunanResource extends Resource
                         'ditunda' => 'danger',
                     }),
                 ProgressBar::make('progress_program')
-                    ->label('Dana Terkumpul')
+                    ->label('Progress Donasi')
                     ->getStateUsing(function (m_program_pembangunan $record){
                         $total = $record->estimasi_biaya;
 
@@ -154,6 +155,14 @@ class ProgramPembangunanResource extends Resource
                             'total' => $total,
                             'progress' => $progress,
                         ];
+                    }),
+                TextColumn::make('hitungTotalDonasiTerkumpul')
+                    ->label('Total Donasi Terkumpul')
+                    ->money('IDR')
+                    ->size(TextColumnSize::Small)
+                    ->sortable()
+                    ->getStateUsing(function (m_program_pembangunan $record){
+                        return $record->hitungTotalDonasiTerkumpul();
                     }),
                 TextColumn::make('skor_prioritas_akhir')
                     ->label('Prioritas')
