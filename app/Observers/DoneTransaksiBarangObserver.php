@@ -2,10 +2,10 @@
 
 namespace App\Observers;
 
-use App\Models\Pengeluaran as ModelsPengeluaran;
+use App\Models\t_kebutuhan_barang_program;
 use App\Models\t_transaksi_barang;
 
-class Pengeluaran
+class DoneTransaksiBarangObserver
 {
     /**
      * Handle the t_transaksi_barang "created" event.
@@ -20,16 +20,17 @@ class Pengeluaran
      */
     public function updated(t_transaksi_barang $t_transaksi_barang): void
     {
-        if ($t_transaksi_barang->isDirty('status_pembayaran') && $t_transaksi_barang->status_pembayaran === 'berhasil')
-        {
-                ModelsPengeluaran::create([
-                    'tanggal' => $t_transaksi_barang->tanggal_beli,
-                    'kategori' => 'Pembelian Material',
-                    'deskripsi' => "Pembelian {$t_transaksi_barang->jumlah_dibeli} {$t_transaksi_barang->barang->nama_satuan} {$t_transaksi_barang->barang->nama_barang} dari {$t_transaksi_barang->vendor->nama_vendor}",
-                    'jumlah' => $t_transaksi_barang->jumlah_dibeli * $t_transaksi_barang->harga_satuan,
-                    'sumber_type' => t_transaksi_barang::class,
-                    'sumber_id' => $t_transaksi_barang->id,
-                ]);
+        if ($t_transaksi_barang->kebutuhan_id && $t_transaksi_barang->wasChanged('status_pembayaran') && $t_transaksi_barang->status_pembayaran === 'sukses'){
+            $kebutuhan = t_kebutuhan_barang_program::find($t_transaksi_barang->kebutuhan_id);
+            if ($kebutuhan){
+                $kebutuhan->increment('jumlah_terpenuhi', $t_transaksi_barang->jumlah_dibeli);
+
+                if ($kebutuhan->jumlah_terpenuhi >= $kebutuhan->jumlah_barang){
+                    $kebutuhan->status_pembelian = 'tersedia';
+                    $kebutuhan->status = 'selesai';
+                    $kebutuhan->save();
+                }
+            }
         }
     }
 

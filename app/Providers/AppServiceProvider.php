@@ -9,8 +9,10 @@ use App\Models\t_transaksi_barang;
 use App\Models\t_transaksi_donasi_program;
 use App\Models\t_transaksi_donasi_spesifik;
 use App\Models\User;
+use App\Observers\DoneTransaksiBarangObserver;
 use App\Observers\KebutuhanTerpenuhi;
 use App\Observers\KodeBarangObserver;
+use App\Observers\KodeProgram;
 use App\Observers\KodeTransaksiProgram;
 use App\Observers\KodeTransaksiSpesifik;
 use App\Observers\Pengeluaran;
@@ -46,6 +48,8 @@ class AppServiceProvider extends ServiceProvider
         t_transaksi_donasi_program::observe(KodeTransaksiProgram::class);
         t_transaksi_donasi_spesifik::observe(KodeTransaksiSpesifik::class);
         t_transaksi_barang::observe(Pengeluaran::class);
+        t_transaksi_barang::observe(DoneTransaksiBarangObserver::class);
+        m_program_pembangunan::observe((KodeProgram::class));
         // dipindahkan juga ke EventServiceProvider
     }
 }

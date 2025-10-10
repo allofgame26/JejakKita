@@ -5,6 +5,7 @@ namespace App\Filament\Resources\ProgramPembangunanResource\RelationManagers;
 use Filament\Forms;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -37,7 +38,8 @@ class BarangRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('nama_barang')
                     ->label('Nama Barang'),
                 TextColumn::make('jumlah_barang')
-                    ->label('Jumlah Barang'),
+                    ->label('Jumlah Barang')
+                    ->numeric(),
                 TextColumn::make('status')
                     ->label('Status')
                     ->description('Barang Sudah Tersedia Digudang')
@@ -62,10 +64,11 @@ class BarangRelationManager extends RelationManager
                     ->form(fn (AttachAction $action) => [
                         $action->getRecordSelect(),
                         TextInput::make('jumlah_barang')
-                            ->numeric(),
+                            ->numeric()
+                            ->required(),
                         Hidden::make('status')
                             ->default('tersedia'),
-                        TextInput::make('keterangan')
+                        Textarea::make('keterangan')
                             ->required(),
                     ]),
             ])

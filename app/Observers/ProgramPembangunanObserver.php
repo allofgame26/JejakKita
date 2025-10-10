@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\DB;
 class ProgramPembangunanObserver
 {
 
+    public function creating(m_program_pembangunan $m_program_pembangunan): void
+    {
+        
+    }
     /**
      * Handle the m_program_pembangunan "updated" event.
      */

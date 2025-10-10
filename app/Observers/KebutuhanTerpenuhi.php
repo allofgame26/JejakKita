@@ -37,6 +37,7 @@ class KebutuhanTerpenuhi
 
                 if ($kebutuhan->jumlah_terpenuhi >= $kebutuhan->jumlah_barang){
                     $kebutuhan->status_pembelian = 'tersedia';
+                    $kebutuhan->status = 'diambil';
                 } else {
                     $kebutuhan->status_pembelian = 'belum_tersedia';
                 }

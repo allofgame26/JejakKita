@@ -46,7 +46,7 @@ class m_program_pembangunan extends Model implements HasMedia
 
     public function donasiprogram(): HasMany
     {
-        return $this->hasMany(t_transaksi_donasi_program::class);
+        return $this->hasMany(t_transaksi_donasi_program::class,'program_id');
     }
 
     public function priority(): BelongsToMany
@@ -93,51 +93,6 @@ class m_program_pembangunan extends Model implements HasMedia
     {
         return $this->belongsTo(m_periode::class);
     }
-
-    // public function sawScore(): float
-    // {
-    //     $kriteria = Priority::all()->keyBy('id');
-
-    //     $nilaiMentah = Priority_Pembangunan::where('program_id', $this->id)->get();
-
-    //     if ($kriteria->isEmpty() || $nilaiMentah->isEmpty()) {
-    //         return 0.0;
-    //     }
-
-    //     $maxMinValues = [];
-
-    //     foreach ($kriteria as $k){
-    //         $query = Priority_Pembangunan::where('priority_id', $k->id);
-    //         if($k->jenis_kriteria == 'benefit'){
-    //             $maxMinValues[$k->id] = $query->max('nilai_priority');
-    //         } else {
-    //             $maxMinValues[$k->id] = $query->min('nilai_priority');
-    //         }
-    //     }
-
-    //     $skorTotal = 0;
-
-    //     foreach ($nilaiMentah as $nilai){
-    //         $kriteriaDetail = $kriteria[$nilai->priority_id];
-    //         $nilaiPrioritas = $nilai->nilai_priority;
-
-    //         $nilaiTernormalisasi = 0;
-
-
-    //         if($nilaiPrioritas > 0 && isset($maxMinValues[$nilai->priority_id])){
-    //             if ($kriteriaDetail->jenis_kriteria == 'benefit'){
-    //                 $nilaiTernormalisasi = $nilaiPrioritas / $maxMinValues[$nilai->priority_id];
-    //             } else {
-    //                 $nilaiTernormalisasi = $maxMinValues[$nilai->priority_id] / $nilaiPrioritas;
-    //             }
-    //         }
-
-    //         $bobot = $kriteriaDetail->persen_priority / 100;
-    //         $skorTotal += $bobot * $nilaiTernormalisasi;
-    //     }
-
-    //     return round($skorTotal, 2);
-    // }
     
     public function calculateAndSavePriorityScore(): void
     {
@@ -163,4 +118,53 @@ class m_program_pembangunan extends Model implements HasMedia
         $this->saveQuietly();
     }
 
-}
+    public function periksaKebutuhanDanKirimNotifikasi()
+    {
+            $totalDonasiMasuk = $this->donasiprogram()->where('status_pembayaran','sukses')->sum('jumlah_donasi');
+            $totalDanaTerpakai = t_transaksi_barang::whereHas('barang.mProgramPembangunans', function ($query) {
+                $query->where('program_id', $this->id);
+                })->where('status_pembayaran','sukses')->sum(DB::raw('jumlah_dibeli * harga_satuan'));
+
+            $danaTersedia = $totalDonasiMasuk - $totalDanaTerpakai;
+
+            $semuaKebutuhan = t_kebutuhan_barang_program::with('barang')
+                ->where('program_id', $this->id)
+                ->whereColumn('jumlah_terpenuhi', '<' , 'jumlah_barang')
+                ->orderBy('created_at', 'asc')
+                ->get();
+
+            foreach ($semuaKebutuhan as $kebutuhan) {
+                $hargaEstimasi = $kebutuhan->barang->harga_rata ?? 0;
+                if ($hargaEstimasi <= 0) {
+                    continue;
+                }
+
+                $jumlahDibutuhkan = $kebutuhan->jumlah_barang - $kebutuhan->jumlah_terpenuhi;
+                $totalEstimasiBiaya = $jumlahDibutuhkan * $hargaEstimasi;
+
+                if ($danaTersedia <= $totalEstimasiBiaya) {
+                    $draftSudahAda = t_transaksi_barang::where('kebutuhan_id', $kebutuhan->id)
+                        ->where('status_pembayaran', 'draft_pembelian')
+                        ->exists();
+
+                    if (!$draftSudahAda) {
+                        t_transaksi_barang::create([
+                            'barang_id' => $kebutuhan->barang_id,
+                            'status_pembayaran' => 'draft_pembelian',
+                            'kebutuhan_id' => $kebutuhan->id,
+                        ]);
+
+                        $namaBarang = $kebutuhan->barang->nama_barang ?? 'Barang Tidak Diketahui';
+                        $receipt = $this->getAdmin();
+
+                        Notification::make()
+                            ->title('Dana Tersedia untuk Pembelian Barang Material')
+                            ->body("Dana untuk Program '{$this->nama_pembangunan}' membutuhkan pembelian {$jumlahDibutuhkan} unit {$namaBarang}. Silakan tinjau dan proses pembelian.")
+                            ->warning()
+                            ->sendToDatabase($receipt)
+                            ->broadcast($receipt);
+                    }
+                }
+            }
+    }
+} 

@@ -145,13 +145,13 @@ class TransaksiDonasiProgramResource extends Resource
                             ->schema([
                                 TextEntry::make('program.nama_pembangunan')
                                     ->label('Nama Pembangunan'),
-                                TextEntry::make('program.kode_pembangunan')
+                                TextEntry::make('program.kode_program')
                                     ->label('Kode Pembangunan'),
                             ]),
                         Section::make('Pengguna')
                             ->columns(2)
                             ->schema([
-                                TextEntry::make('user.datadiri.name')
+                                TextEntry::make('user.name')
                                     ->label('Nama Pengguna'),
                                 TextEntry::make('user.email')
                                     ->label('E - Mail'),
@@ -203,13 +203,13 @@ class TransaksiDonasiProgramResource extends Resource
                                 ->action(function () use ($record){
                                     $record->status_pembayaran = 'sukses';
                                     $record->save();
-                                })->after(fn () => $action->close()),
+                                })->after(fn () => $action->url('filament.admin.resources.transaksi-donasi-programs.index')),
                         ]),
                 Action::make('bayar')
                     ->label('Bayar Sekarang')
                     ->icon('heroicon-o-arrow-up-on-square')
                     ->color('primary')
-                    ->visible(fn ($record): bool => $record->status_pembayaran === "pending" && $record->status_kirim_bukti_pembayaran === 'belum' && auth()->user()->hasRole(['user','Admin']))
+                    ->visible(fn ($record): bool => $record->status_pembayaran === "pending" && $record->status_kirim_bukti_pembayaran === 'belum' && auth()->user()->hasRole(['user','Admin','super_admin']) && $record->user_id = auth()->user()->id)
                     ->modalHeading('Upload Bukti Pembayaran')
                     ->modalSubmitActionLabel('Upload')
                     ->form([

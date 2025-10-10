@@ -20,7 +20,7 @@ class KodeTransaksiSpesifik
             $nomorrandom = mt_rand(1000,9999);
             $tanggalcode = date('ymd');
 
-            $code = 'DP-' . $nomorrandom . '-' . $tanggalcode;
+            $code = 'SP-' . $nomorrandom . '-' . $tanggalcode;
 
             $cekCode = t_transaksi_donasi_spesifik::where('kode_transaksi', $code)->exists();
         } while ($cekCode);

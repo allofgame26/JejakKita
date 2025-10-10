@@ -55,7 +55,8 @@ class BarangResource extends Resource
                     ->preload(),
                 TextInput::make('nama_barang')
                     ->required()
-                    ->label('Nama Barang'),
+                    ->label('Nama Barang')
+                    ->placeholder('Contoh : Nama Barang, Merk, Tipe'),
                 Select::make('nama_satuan')
                     ->required()
                     ->label('Nama Satuan')

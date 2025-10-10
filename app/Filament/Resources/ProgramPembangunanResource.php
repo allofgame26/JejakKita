@@ -19,6 +19,7 @@ use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -57,12 +58,6 @@ class ProgramPembangunanResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('kode_program')
-                    ->required()
-                    ->unique(ignoreRecord: TRUE)
-                    ->validationMessages([
-                        'unique' => 'Kode Program sudah Terpakai'
-                    ]),
                 Select::make('mandor_id')
                     ->required()
                     ->relationship('mandor','nama_lengkap')
@@ -113,8 +108,9 @@ class ProgramPembangunanResource extends Resource
                 SpatieMediaLibraryFileUpload::make('foto_pembangunan')
                         ->multiple()
                         ->collection('pembangunan'),
-                RichEditor::make('deskripsi')
-                        ->required(),
+                Textarea::make('deskripsi')
+                        ->required()
+                        ->label('Deskripsi Program'),
             ]);
     }
 
@@ -148,7 +144,7 @@ class ProgramPembangunanResource extends Resource
                         'ditunda' => 'danger',
                     }),
                 ProgressBar::make('progress_program')
-                    ->label('Dana Donasi')
+                    ->label('Dana Terkumpul')
                     ->getStateUsing(function (m_program_pembangunan $record){
                         $total = $record->estimasi_biaya;
 

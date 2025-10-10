@@ -12,7 +12,10 @@ class TransaksiDonasiObserver
     {
         // melakukan pengecekan untuk Goal Donasi apakah sudah tercapai atau belum.
         if ($transaksi instanceof t_transaksi_donasi_program){
-             if($transaksi->status_pembayaran === 'sukses') {
+             if($transaksi->wasChanged('status_pembayaran') && $transaksi->status_pembayaran === 'sukses')
+
+                $transaksi->program->periksaKebutuhanDanKirimNotifikasi();
+
                 $transaksi->program->cekDanUpdateStatus();
         } elseif ($transaksi instanceof t_transaksi_donasi_spesifik){
              if ($transaksi->status_pembayaran === 'sukses' && $transaksi->wasChanged('status_pembayaran')){
@@ -25,7 +28,5 @@ class TransaksiDonasiObserver
                 }
             }
         }
-    }
-        
     }
 }
