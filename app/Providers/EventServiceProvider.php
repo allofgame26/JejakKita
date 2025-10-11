@@ -18,6 +18,7 @@ use App\Observers\KodeTransaksiSpesifik;
 use App\Observers\Pengeluaran;
 use App\Observers\ProgramPembangunanObserver;
 use App\Observers\RataHargaBarang;
+use App\Observers\tanggalSelesaiPembangunan;
 use App\Observers\TransaksiDonasiObserver;
 use App\Observers\UserObserver;
 use Illuminate\Auth\Events\Registered;
@@ -52,6 +53,7 @@ class EventServiceProvider extends ServiceProvider
         t_transaksi_barang::class => Pengeluaran::class,
         t_transaksi_barang::class => DoneTransaksiBarangObserver::class,
         m_program_pembangunan::class => KodeProgram::class,
+        m_program_pembangunan::class => tanggalSelesaiPembangunan::class,
     ];
 
     /**

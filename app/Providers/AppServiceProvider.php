@@ -18,6 +18,7 @@ use App\Observers\KodeTransaksiSpesifik;
 use App\Observers\Pengeluaran;
 use App\Observers\ProgramPembangunanObserver;
 use App\Observers\RataHargaBarang;
+use App\Observers\tanggalSelesaiPembangunan;
 use App\Observers\TransaksiDonasiObserver;
 use App\Observers\UserObserver;
 use Illuminate\Support\ServiceProvider;
@@ -50,6 +51,7 @@ class AppServiceProvider extends ServiceProvider
         t_transaksi_barang::observe(Pengeluaran::class);
         t_transaksi_barang::observe(DoneTransaksiBarangObserver::class);
         m_program_pembangunan::observe((KodeProgram::class));
+        m_program_pembangunan::observe(tanggalSelesaiPembangunan::class);
         // dipindahkan juga ke EventServiceProvider
     }
 }
