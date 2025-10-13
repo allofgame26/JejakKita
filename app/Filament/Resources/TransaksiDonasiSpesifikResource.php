@@ -93,7 +93,7 @@ class TransaksiDonasiSpesifikResource extends Resource
                                         ->whereIn('id',$state)
                                         ->get()
                                         ->sum(function ($item){
-                                            return ($item->jumlah_barang - $item->jumlah_terpenuhi) * ($item->barang->harga_rata ?? 0);
+                                            return min($item->jumlah_barang,$item->jumlah_terpenuhi) * ($item->barang->harga_rata ?? 0);
                                         });
 
                                     $set('jumlah_donasi',$totaldonasi);

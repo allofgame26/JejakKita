@@ -1,17 +1,21 @@
 @php
     $rekening = $getRecord()?->pembayaran;
 
-    $expired = $getRecord()?->created_at->addHours(24);
+    // Gunakan null-safe operator '?' untuk keamanan jika created_at tidak ada
+    $expired = $getRecord()?->created_at?->addHours(24);
 @endphp
 
-<div 
-    x-data="countdown('{{ $expirationTime->toIso8601String() }}')"
-    x-init="start()"
-    class="p-4 text-center bg-yellow-100 border border-yellow-300 rounded-lg shadow-sm"
->
-    <h3 class="text-lg font-semibold text-gray-800">Selesaikan Pembayaran Dalam</h3>
-    
-    {{-- Tampilan Countdown --}}
+{{-- Hanya tampilkan countdown jika waktu kedaluwarsa berhasil dihitung --}}
+
+@if ($expired)
+    <div 
+        x-data="countdownTimer('{{ $expired->toIso8601String() }}')"
+        x-init="start()"
+        class="p-4 text-center bg-yellow-100 border border-yellow-300 rounded-lg shadow-sm"
+    >
+        <h3 class="text-lg font-semibold text-gray-800">Selesaikan Pembayaran Dalam</h3>
+        
+        {{-- Tampilan Countdown --}}
     <div x-show="!isExpired" class="flex items-center justify-center my-2 space-x-2 text-2xl font-bold text-red-600 md:text-3xl">
         <div class="flex flex-col items-center">
             <span x-text="time.hours" class="px-2 py-1 bg-gray-200 rounded">00</span>
@@ -35,9 +39,10 @@
     </div>
 
     <p class="text-sm text-gray-600">
-        Mohon selesaikan pembayaran sebelum waktu berakhir untuk menghindari pembatalan otomatis.
+        Anda memiliki waktu 24 jam untuk menyelesaikan pembayaran. Mohon selesaikan sebelum waktu berakhir untuk menghindari pembatalan otomatis.
     </p>
 </div>
+@endif
 
 {{-- Informasi Rekening --}}
 
@@ -67,49 +72,3 @@
         <div class="text-red-600">Data rekening tidak ditemukan.</div>
     @endif
 </div>
-
-<script>
-    // Logika Alpine.js untuk countdown
-    document.addEventListener('alpine:initializing', () => {
-        Alpine.data('countdown', (expiryString) => ({
-            expiry: new Date(expiryString).getTime(),
-            isExpired: false,
-            time: {
-                hours: '00',
-                minutes: '00',
-                seconds: '00'
-            },
-            
-            start() {
-                this.updateTime(); // Panggil sekali agar tidak ada jeda 1 detik
-                
-                const interval = setInterval(() => {
-                    this.updateTime();
-                }, 1000);
-            },
-
-            updateTime() {
-                const now = new Date().getTime();
-                const distance = this.expiry - now;
-
-                if (distance < 0) {
-                    this.isExpired = true;
-                    this.time = { hours: '00', minutes: '00', seconds: '00' };
-                    // Hentikan interval jika sudah tidak diperlukan
-                    // clearInterval(interval); // Ini akan error karena scope, cara lebih baik adalah cek isExpired
-                    return;
-                }
-
-                // Perhitungan waktu
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                // Update properti dengan padding (selalu 2 digit)
-                this.time.hours = String(hours).padStart(2, '0');
-                this.time.minutes = String(minutes).padStart(2, '0');
-                this.time.seconds = String(seconds).padStart(2, '0');
-            }
-        }));
-    });
-</script>
