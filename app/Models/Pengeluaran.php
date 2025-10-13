@@ -17,6 +17,12 @@ class Pengeluaran extends Model implements HasMedia
         'deskripsi',
         'jumlah',
         'sumber_type',
-        'sumber_id'
+        'sumber_id',
+        // 'program_id',
     ];
+
+    // public function program()
+    // {
+    //     return $this->belongsTo(m_program_pembangunan::class,'program_id','id');
+    // }
 }

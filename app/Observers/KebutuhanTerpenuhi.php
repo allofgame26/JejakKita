@@ -32,7 +32,7 @@ class KebutuhanTerpenuhi
                 $sisa_kebutuhan = $kebutuhan->jumlah_barang - $kebutuhan->jumlah_terpenuhi;
                 $jumlahUntukDipenuhi = min($jumlahDibeli, $sisa_kebutuhan); //berapa banyak yang bisa dipenuhi dari pembelian
 
-                $kebutuhan->jumlah_terpenuhi += $jumlahUntukDipenuhi; //Menambahkan jumalh_terpenuhi
+                $kebutuhan->jumlah_terpenuhi += $jumlahUntukDipenuhi; //Menambahkan jumalh_terpenuhi dari barang yang baru dibeli
                 $jumlahDibeli -= $jumlahUntukDipenuhi; // mengurangi jumlah yang tersedia dari transaksi ini
 
                 if ($kebutuhan->jumlah_terpenuhi >= $kebutuhan->jumlah_barang){

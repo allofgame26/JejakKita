@@ -295,7 +295,7 @@
                 <div class="card completed-project-card p-3">
                     <div class="row g-0">
                         <div class="col-md-5">
-                            <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80" class="img-fluid rounded-start" alt="Bangunan selesai">
+                        <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80" class="img-fluid rounded-start" alt="Bangunan selesai">
                              <div class="text-center bg-dark text-white p-1 mt-1 rounded-bottom small">Tampilan Setelah Selesai</div>
                         </div>
                         <div class="col-md-7">

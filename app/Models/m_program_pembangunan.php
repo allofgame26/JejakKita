@@ -39,6 +39,11 @@ class m_program_pembangunan extends Model implements HasMedia
         return $this->belongsTo(m_mandor::class,'mandor_id','id');
     }
 
+    public function laporan(): HasMany
+    {
+        return $this->hasMany(Pengeluaran::class,'program_id');
+    }
+
     public function barang()
     {
         return $this->belongsToMany(m_barang::class,'t_kebutuhan_barang_programs','program_id','barang_id')->withPivot('jumlah_barang','status','keterangan');

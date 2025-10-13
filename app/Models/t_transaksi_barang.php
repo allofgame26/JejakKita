@@ -21,7 +21,6 @@ class t_transaksi_barang extends Pivot implements HasMedia
         'harga_satuan',
         'tanggal_beli',
         'status_pembayaran',
-        'kebutuhan_id',
     ];
 
     protected $table = 't_transaksi_barangs';
@@ -34,10 +33,5 @@ class t_transaksi_barang extends Pivot implements HasMedia
     public function vendor(): BelongsTo
     {
         return $this->belongsTo(m_vendor::class,'vendor_id','id');
-    }
-
-    public function kebutuhan(): BelongsTo
-    {
-        return $this->belongsTo(t_kebutuhan_barang_program::class,'kebutuhan_id','id');
     }
 }

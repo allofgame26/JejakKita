@@ -93,7 +93,7 @@ class TransaksiDonasiSpesifikResource extends Resource
                                         ->whereIn('id',$state)
                                         ->get()
                                         ->sum(function ($item){
-                                            return $item->jumlah_barang * ($item->barang->harga_rata ?? 0);
+                                            return ($item->jumlah_barang - $item->jumlah_terpenuhi) * ($item->barang->harga_rata ?? 0);
                                         });
 
                                     $set('jumlah_donasi',$totaldonasi);
@@ -221,25 +221,20 @@ class TransaksiDonasiSpesifikResource extends Resource
                         Section::make('Tabel Barang')
                             ->schema([
                                 ViewEntry::make('kebutuhanBarang')
-                                    ->label('')
+                                    ->label('List Barang')
                                     ->view('filament.infolist.kebutuhan-barang-tabel')    
                         ])
                     ])
-                    ->modalFooterActions(fn ($record) => [
+                    ->modalFooterActions(fn ($record, Action $action) => [
                             Action::make('tolak')
                                 ->label('Tolak')
                                 ->color('danger')
                                 ->requiresConfirmation()
-                                ->form([
-                                    Textarea::make('alasan_penolakan')
-                                        ->label('Alasan Penolakan')
-                                        ->required()
-                                ])
                                 ->action(function (array $data) use ($record){
                                     $record->status_pembayaran = 'gagal';
-                                    $record->alasan_penolakan = $data['alasan_penolakan'];
                                     $record->save();
-                                }),
+                                })->after(fn () => $action->close())
+                                ,
                             Action::make('setujui')
                                 ->label('Setujui (ACC)')
                                 ->color('success')
@@ -247,7 +242,7 @@ class TransaksiDonasiSpesifikResource extends Resource
                                 ->action(function () use ($record){
                                     $record->status_pembayaran = 'sukses';
                                     $record->save();
-                                })
+                                })->after(fn () => $action->close()),
                         ]),
                 Action::make('bayar')
                     ->label('Bayar Sekarang')

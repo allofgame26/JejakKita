@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PengeluaranResource\Pages;
 use App\Filament\Resources\PengeluaranResource\RelationManagers;
+use App\Models\m_program_pembangunan;
 use App\Models\Pengeluaran;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
@@ -51,8 +52,13 @@ class PengeluaranResource extends Resource
                         'Pemasaran' => 'Pemasaran & Promosi',
                         'Lain - Lain' => 'Lain - Lain / Tak Terduga',
                     ]),
-                Textarea::make('deskripsi')->label('Deskripsi Pengeluaran')->required(),
+                // Select::make('program_id')
+                //     ->options(m_program_pembangunan::all()->pluck('nama_program', 'id'))
+                //     ->searchable()
+                //     ->label('Program Pembangunan'),
                 TextInput::make('jumlah')->label('Jumlah Pengeluaran')->required()->prefix('Rp.'),
+                Textarea::make('deskripsi')->label('Deskripsi Pengeluaran')->required(),
+                
             ]);
     }
 
@@ -63,6 +69,7 @@ class PengeluaranResource extends Resource
                 TextColumn::make('tanggal')->date('d m Y')->label('Tanggal Pembelian'),
                 TextColumn::make('kategori')->label('Kategori Pengeluaran'),
                 TextColumn::make('deskripsi')->label('Deskripsi Pengeluaran'),
+                // TextColumn::make('program.nama_program')->label('Program Pembangunan'),
                 TextColumn::make('jumlah')->money('IDR')->label('Jumlah Pengeluaran')
             ])
             ->filters([

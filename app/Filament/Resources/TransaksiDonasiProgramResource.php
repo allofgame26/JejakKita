@@ -203,7 +203,7 @@ class TransaksiDonasiProgramResource extends Resource
                                 ->action(function () use ($record){
                                     $record->status_pembayaran = 'sukses';
                                     $record->save();
-                                })->after(fn () => $action->url('filament.admin.resources.transaksi-donasi-programs.index')),
+                                })->after(fn () => $action->close()),
                         ]),
                 Action::make('bayar')
                     ->label('Bayar Sekarang')

@@ -29,9 +29,7 @@ class ProgramPembangunanWidget extends BaseWidget
                     ->label('Dana Donasi')
                     ->getStateUsing(function (m_program_pembangunan $record){
                         $total = $record->estimasi_biaya;
-
                         $progress = $record->hitungTotalDonasiTerkumpul();
-                        
                         return [
                             'total' => $total,
                             'progress' => $progress,

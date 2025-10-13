@@ -169,7 +169,7 @@ class ProgramPembangunanResource extends Resource
                     ->icon('heroicon-o-information-circle')
                     ->numeric(2)
                     ->sortable()
-                    ->placeholder('Berikan prioritas pada program ini'),
+                    ->placeholder('Belum ada poin prioritas'),
             ])
             ->defaultSort('skor_prioritas_akhir','desc')
             ->filters([
