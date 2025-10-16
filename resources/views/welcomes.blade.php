@@ -310,10 +310,9 @@
                                 </p>
                                 <p class="card-text">
                                     <small class="text-muted">
-                                        Total Dana Terkumpul: Rp {{ number_format($programSelesai->dana_terkumpul, 0, ',', '.') }}
+                                        Total Dana Terkumpul: Rp {{ number_format($programSelesai->estimasi_biaya, 0, ',', '.') }}
                                     </small>
                                 </p>
-                                <a href="#" class="btn btn-outline-secondary btn-sm">Lihat Laporan Akhir</a>
                             </div>
                         </div>
                     </div>

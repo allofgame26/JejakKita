@@ -76,6 +76,7 @@ class m_program_pembangunan extends Model implements HasMedia
 
         if ($totaldonasi >= $this->estimasi_biaya && $statusSebelumnya != 'lengkap'){
             $this->status_pendanaan = 'lengkap';
+            $this->status = 'berjalan';
             $this->saveQuietly();
 
             $receipt = $this->getAdmin();
