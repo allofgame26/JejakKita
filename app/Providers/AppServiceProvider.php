@@ -38,20 +38,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        m_program_pembangunan::observe(ProgramPembangunanObserver::class);
-        Priority_Pembangunan::observe(ProgramPembangunanObserver::class);
-        t_transaksi_donasi_spesifik::observe(TransaksiDonasiObserver::class);
-        t_transaksi_donasi_program::observe(TransaksiDonasiObserver::class);
-        m_barang::observe(KodeBarangObserver::class);
-        User::observe(UserObserver::class);
-        t_transaksi_barang::observe(RataHargaBarang::class);
-        t_transaksi_barang::observe(KebutuhanTerpenuhi::class);
-        t_transaksi_donasi_program::observe(KodeTransaksiProgram::class);
-        t_transaksi_donasi_spesifik::observe(KodeTransaksiSpesifik::class);
-        t_transaksi_barang::observe(Pengeluaran::class);
-        t_transaksi_barang::observe(DoneTransaksiBarangObserver::class);
-        m_program_pembangunan::observe((KodeProgram::class));
-        m_program_pembangunan::observe(tanggalSelesaiPembangunan::class);
-        // dipindahkan juga ke EventServiceProvider
+        
     }
 }

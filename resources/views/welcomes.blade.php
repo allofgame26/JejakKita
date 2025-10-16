@@ -292,22 +292,38 @@
         <div class="row g-4">
             <div class="col-lg-8">
                 <h4 class="mb-4">Program yang Telah Selesai</h4>
+                @if($programSelesai)
                 <div class="card completed-project-card p-3">
                     <div class="row g-0">
                         <div class="col-md-5">
-                        <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80" class="img-fluid rounded-start" alt="Bangunan selesai">
-                             <div class="text-center bg-dark text-white p-1 mt-1 rounded-bottom small">Tampilan Setelah Selesai</div>
+                            <img src="{{ $programSelesai->getFirstMediaUrl('pembangunan') ?: 'https://via.placeholder.com/800x600.png/004466?text=Progres' }}" 
+                                class="img-fluid rounded-start" alt="{{ $programSelesai->nama_pembangunan }}">
+                            <div class="text-center bg-dark text-white p-1 mt-1 rounded-bottom small">
+                                Status: {{ ucfirst($programSelesai->status) }}
+                            </div>
                         </div>
                         <div class="col-md-7">
                             <div class="card-body">
-                                <h5 class="card-title">Pembangunan Fondasi & 2 Ruang Kelas Awal</h5>
-                                <p class="card-text text-muted small">Alhamdulillah, berkat bantuan para donatur, tahap pertama pembangunan telah selesai pada [Bulan, Tahun]. Ini menjadi langkah awal yang sangat penting bagi kami.</p>
-                                <p class="card-text"><small class="text-muted">Total Dana Terkumpul: Rp [Jumlah Dana]</small></p>
+                                <h5 class="card-title">{{ $programSelesai->nama_pembangunan }}</h5>
+                                <p class="card-text text-muted small">
+                                    Alhamdulillah, progres terbaru dari pembangunan sekolah. Terima kasih atas dukungan Anda.
+                                </p>
+                                <p class="card-text">
+                                    <small class="text-muted">
+                                        Total Dana Terkumpul: Rp {{ number_format($programSelesai->dana_terkumpul, 0, ',', '.') }}
+                                    </small>
+                                </p>
                                 <a href="#" class="btn btn-outline-secondary btn-sm">Lihat Laporan Akhir</a>
                             </div>
                         </div>
                     </div>
                 </div>
+            @else
+                {{-- Tampilan jika tidak ada program yang berjalan atau selesai --}}
+                <div class="alert alert-info text-center">
+                    Saat ini belum ada progres pembangunan terbaru yang dapat ditampilkan.
+                </div>
+            @endif
             </div>
             <div class="col-lg-4">
                 <h4 class="mb-4">Laporan Keuangan</h4>

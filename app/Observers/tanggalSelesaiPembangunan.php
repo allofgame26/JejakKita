@@ -23,7 +23,7 @@ class tanggalSelesaiPembangunan
             $m_program_pembangunan->tanggal_selesai_aktual = now();
             $m_program_pembangunan->save();
         } else {
-            $m_program_pembangunan->tanggal_selesai = null;
+            $m_program_pembangunan->tanggal_selesai_aktual = null;
             $m_program_pembangunan->save();
         }
     }

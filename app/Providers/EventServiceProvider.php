@@ -40,20 +40,20 @@ class EventServiceProvider extends ServiceProvider
     ];
 
     protected $observers = [
-        m_program_pembangunan::class => ProgramPembangunanObserver::class,
-        Priority_Pembangunan::class => ProgramPembangunanObserver::class,
-        t_transaksi_donasi_spesifik::class => TransaksiDonasiObserver::class,
-        t_transaksi_donasi_program::class => TransaksiDonasiObserver::class,
-        m_barang::class => KodeBarangObserver::class,
-        User::class => UserObserver::class,
-        t_transaksi_barang::class => RataHargaBarang::class,
-        t_transaksi_barang::class => KebutuhanTerpenuhi::class,
-        t_transaksi_donasi_program::class => KodeTransaksiProgram::class,
-        t_transaksi_donasi_spesifik::class => KodeTransaksiSpesifik::class,
-        t_transaksi_barang::class => Pengeluaran::class,
-        t_transaksi_barang::class => DoneTransaksiBarangObserver::class,
-        m_program_pembangunan::class => KodeProgram::class,
-        m_program_pembangunan::class => tanggalSelesaiPembangunan::class,
+        m_program_pembangunan::class => [ProgramPembangunanObserver::class],
+        Priority_Pembangunan::class => [ProgramPembangunanObserver::class],
+        t_transaksi_donasi_spesifik::class => [TransaksiDonasiObserver::class],
+        t_transaksi_donasi_program::class => [TransaksiDonasiObserver::class],
+        m_barang::class => [KodeBarangObserver::class],
+        User::class => [UserObserver::class],
+        t_transaksi_barang::class => [RataHargaBarang::class],
+        t_transaksi_barang::class => [KebutuhanTerpenuhi::class],
+        t_transaksi_donasi_program::class => [KodeTransaksiProgram::class],
+        t_transaksi_donasi_spesifik::class => [KodeTransaksiSpesifik::class],
+        t_transaksi_barang::class => [Pengeluaran::class],
+        t_transaksi_barang::class => [DoneTransaksiBarangObserver::class],
+        m_program_pembangunan::class => [KodeProgram::class],
+        m_program_pembangunan::class => [tanggalSelesaiPembangunan::class],
     ];
 
     /**

@@ -13,6 +13,8 @@ class WelcomeController extends Controller
 {
     public function index()
     {
+        $programSelesai = m_program_pembangunan::whereIn('status',['berjalan','selesai'])->latest('updated_at')->first();
+
         $semuaKategori = m_kategori::has('posts')->with('posts.media')->orderBy('row','asc')->get();
 
         $programDonasi = m_program_pembangunan::where('status_pendanaan', '!=' ,'lengkap')->with('media')->orderBy('skor_prioritas_akhir', 'desc')->limit(3)->get()->map(function ($program){
@@ -51,6 +53,7 @@ class WelcomeController extends Controller
             'daftarKategori' => $semuaKategori,
             'programDonasi' => $programDonasi,
             'reports' => $reports,
+            'programSelesai' => $programSelesai,
         ]);
     }
 }
