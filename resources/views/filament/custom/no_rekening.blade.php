@@ -2,47 +2,28 @@
     $rekening = $getRecord()?->pembayaran;
 
     // Gunakan null-safe operator '?' untuk keamanan jika created_at tidak ada
-    $expired = $getRecord()?->created_at?->addHours(24);
+    $startTime = $getRecord()?->created_at ?? now();
+    $expired = $startTime->copy()->addHours(24);
 @endphp
 
 {{-- Hanya tampilkan countdown jika waktu kedaluwarsa berhasil dihitung --}}
 
-@if ($expired)
-    <div 
-        x-data="countdownTimer('{{ $expired->toIso8601String() }}')"
-        x-init="start()"
-        class="p-4 text-center bg-yellow-100 border border-yellow-300 rounded-lg shadow-sm"
-    >
-        <h3 class="text-lg font-semibold text-gray-800">Selesaikan Pembayaran Dalam</h3>
+    <div class="p-4 text-center bg-yellow-100 border border-yellow-300 rounded-lg shadow-sm">
+        <h3 class="text-lg font-semibold text-gray-800">Tanggal Transaksi:</h3>
         
-        {{-- Tampilan Countdown --}}
-    <div x-show="!isExpired" class="flex items-center justify-center my-2 space-x-2 text-2xl font-bold text-red-600 md:text-3xl">
-        <div class="flex flex-col items-center">
-            <span x-text="time.hours" class="px-2 py-1 bg-gray-200 rounded">00</span>
-            <span class="text-xs font-normal text-gray-500">Jam</span>
+        <div class="my-2 text-2xl font-bold text-red-600 md:text-3xl">
+            {{ $startTime->translatedFormat('d F Y, H:i') }} WIB
         </div>
-        <span>:</span>
-        <div class="flex flex-col items-center">
-            <span x-text="time.minutes" class="px-2 py-1 bg-gray-200 rounded">00</span>
-            <span class="text-xs font-normal text-gray-500">Menit</span>
+        <h3 class="text-lg font-semibold text-gray-800">Selesaikan Pembayaran Sebelum:</h3>
+        
+        <div class="my-2 text-2xl font-bold text-red-600 md:text-3xl">
+            {{ $expired->translatedFormat('d F Y, H:i') }} WIB
         </div>
-        <span>:</span>
-        <div class="flex flex-col items-center">
-            <span x-text="time.seconds" class="px-2 py-1 bg-gray-200 rounded">00</span>
-            <span class="text-xs font-normal text-gray-500">Detik</span>
-        </div>
-    </div>
 
-    {{-- Tampilan Setelah Waktu Habis --}}
-    <div x-show="isExpired" class="my-2 text-2xl font-bold text-red-700" style="display: none;">
-        Waktu Pembayaran Telah Habis
+        <p class="text-sm text-gray-600">
+            Anda memiliki waktu 24 jam untuk menyelesaikan pembayaran. Mohon selesaikan sebelum waktu berakhir untuk menghindari pembatalan otomatis.
+        </p>
     </div>
-
-    <p class="text-sm text-gray-600">
-        Anda memiliki waktu 24 jam untuk menyelesaikan pembayaran. Mohon selesaikan sebelum waktu berakhir untuk menghindari pembatalan otomatis.
-    </p>
-</div>
-@endif
 
 {{-- Informasi Rekening --}}
 
