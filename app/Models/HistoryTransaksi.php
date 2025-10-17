@@ -21,6 +21,6 @@ class HistoryTransaksi extends Model
 
     public function metodePembayaran():BelongsTo
     {
-        return $this->belongsTo(m_metode_pembayaran::class);
+        return $this->belongsTo(m_metode_pembayaran::class, 'pembayaran_id','id');
     }
 }

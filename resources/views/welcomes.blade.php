@@ -326,35 +326,47 @@
             </div>
             <div class="col-lg-4">
                 <h4 class="mb-4">Laporan Keuangan</h4>
-                <div class="card card-custom h-100 p-4">
-                    <div class="text-center">
+                <div class="card card-custom h-100 p-4 d-flex flex-column">
+                    <div class="text-center mb-4">
                         <i class="bi bi-file-earmark-text display-3 text-warning"></i>
-                        <h5 class="mt-3">Laporan Donasi Bulanan</h5>
-                        <p class="text-muted small mb-4">Kami berkomitmen untuk transparan. Unduh laporan penggunaan dana kami untuk melihat bagaimana setiap rupiah Anda memberikan dampak.</p>
+                        <h5 class="mt-3">Transparansi Dana</h5>
+                        <p class="text-muted small">Unduh laporan penggunaan dana untuk melihat dampak donasi Anda.</p>
                     </div>
 
-                    {{-- Daftar Laporan Dinamis --}}
-                    <ul class="list-group list-group-flush">
-                        @forelse($reports as $report)
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                {{ $report['name'] }}
-                                <a href="{{ $report['url'] }}" target="_blank" class="btn btn-sm btn-outline-warning">
-                                    <i class="bi bi-download"></i> Unduh
-                                </a>
-                            </li>
-                        @empty
-                            <li class="list-group-item text-center text-muted">
-                                Belum ada laporan yang diterbitkan.
-                            </li>
-                        @endforelse
-                    </ul>
-
-                    {{-- Tombol untuk laporan terbaru --}}
-                    @if($reports->isNotEmpty())
-                        <a href="{{ $reports->first()['url'] }}" target="_blank" class="btn btn-warning mt-auto fw-bold">
-                            Unduh Laporan Terbaru
-                        </a>
+                    {{-- OPSI 1: LAPORAN BULANAN (DARI FILE OTOMATIS) --}}
+                    @if(!empty($reports))
+                        <div class="mb-3">
+                            <label for="monthly-report" class="form-label fw-bold small">Pilih Laporan Bulanan:</label>
+                            <select id="monthly-report" class="form-select">
+                                @foreach($reports as $report)
+                                    <option value="{{ $report['url'] }}">{{ $report['name'] }}</option>
+                                @endforeach
+                            </select>
+                            <button onclick="downloadSelectedMonth()" class="btn btn-warning w-100 mt-2">Unduh Laporan Bulanan</button>
+                        </div>
+                        <hr>
                     @endif
+
+                    {{-- OPSI 2: LAPORAN RENTANG WAKTU --}}
+                    <form action="{{ route('report.date.range.download') }}" method="GET" target="_blank">
+                        <p class="fw-bold small mb-2">Pilih Rentang Waktu:</p>
+                        <div class="mb-2">
+                            <label for="start_date" class="form-label small">Tanggal Mulai</label>
+                            <input type="date" id="start_date" name="start_date" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="end_date" class="form-label small">Tanggal Selesai</label>
+                            <input type="date" id="end_date" name="end_date" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-outline-secondary w-100">Buat & Unduh Laporan</button>
+                    </form>
+                    
+                    {{-- OPSI 3: LAPORAN REAL-TIME (Tombol ini diletakkan paling bawah) --}}
+                    <div class="mt-auto pt-3">
+                        <a href="{{ route('laporan.download.realtime') }}" target="_blank" class="btn btn-dark w-100 fw-bold">
+                            <i class="bi bi-clock-history"></i> Unduh Laporan Real-time
+                        </a>
+                    </div>
                 </div>
             </div>
             </div>
@@ -471,56 +483,64 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
     <script>
+        function downloadSelectedMonth() {
+        const selectedUrl = document.getElementById('monthly-report').value;
+        if (selectedUrl) {
+            window.open(selectedUrl, '_blank');
+        }
+    }
+    </script>
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
     // Ambil semua elemen splide di halaman
-    var splideElements = document.querySelectorAll('.splide');
+        var splideElements = document.querySelectorAll('.splide');
 
-    if (splideElements.length > 0) {
-        splideElements.forEach(function(splideElement) {
-            
-            // Ambil jumlah post dari atribut data yang kita buat tadi
-            const postCount = parseInt(splideElement.dataset.postCount) || 0;
-            const perPage = 3; // Jumlah slide per halaman (sesuaikan jika perlu)
+        if (splideElements.length > 0) {
+            splideElements.forEach(function(splideElement) {
+                
+                // Ambil jumlah post dari atribut data yang kita buat tadi
+                const postCount = parseInt(splideElement.dataset.postCount) || 0;
+                const perPage = 3; // Jumlah slide per halaman (sesuaikan jika perlu)
 
-            let options = {}; // Siapkan objek opsi kosong
+                let options = {}; // Siapkan objek opsi kosong
 
-            // Jika jumlah post lebih sedikit atau sama dengan slide per halaman
-            if (postCount <= perPage) {
-                // Nonaktifkan fitur carousel dan tengahkan item
-                options = {
-                    type: 'slide', // 'slide' tidak akan membuat duplikat
-                    arrows: false, // Sembunyikan panah
-                    pagination: false, // Sembunyikan titik navigasi
-                    drag: false, // Matikan fungsi geser
-                    perPage: perPage, // Tetap tampilkan sesuai jumlah per halaman
-                    gap: '1.5rem',
-                     breakpoints: {
-                        992: { perPage: 2 },
-                        576: { perPage: 1 }
-                    }
-                };
-                // Tambahkan class untuk menengahkan
-                splideElement.classList.add('is-centered');
-            } else {
-                // Jika post banyak, jalankan mode carousel seperti biasa
-                options = {
-                    type: 'loop', // 'loop' akan membuat duplikat untuk efek putaran
-                    perPage: perPage,
-                    gap: '1.5rem',
-                    pagination: false,
-                    arrows: true,
-                    breakpoints: {
-                        992: { perPage: 2 },
-                        576: { perPage: 1 }
-                    }
-                };
+                // Jika jumlah post lebih sedikit atau sama dengan slide per halaman
+                if (postCount <= perPage) {
+                    // Nonaktifkan fitur carousel dan tengahkan item
+                    options = {
+                        type: 'slide', // 'slide' tidak akan membuat duplikat
+                        arrows: false, // Sembunyikan panah
+                        pagination: false, // Sembunyikan titik navigasi
+                        drag: false, // Matikan fungsi geser
+                        perPage: perPage, // Tetap tampilkan sesuai jumlah per halaman
+                        gap: '1.5rem',
+                        breakpoints: {
+                            992: { perPage: 2 },
+                            576: { perPage: 1 }
+                        }
+                    };
+                    // Tambahkan class untuk menengahkan
+                    splideElement.classList.add('is-centered');
+                } else {
+                    // Jika post banyak, jalankan mode carousel seperti biasa
+                    options = {
+                        type: 'loop', // 'loop' akan membuat duplikat untuk efek putaran
+                        perPage: perPage,
+                        gap: '1.5rem',
+                        pagination: false,
+                        arrows: true,
+                        breakpoints: {
+                            992: { perPage: 2 },
+                            576: { perPage: 1 }
+                        }
+                    };
+                }
+
+                    // Jalankan Splide dengan opsi yang sudah ditentukan
+                    new Splide(splideElement, options).mount();
+                });
             }
-
-                // Jalankan Splide dengan opsi yang sudah ditentukan
-                new Splide(splideElement, options).mount();
-            });
-        }
-    });
+        });
     </script>
 </body>
 

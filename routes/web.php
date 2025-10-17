@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\KwitansiController;
+use App\Http\Controllers\PdfController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\WelcomeController;
 use App\Models\m_post;
 use Illuminate\Support\Facades\Route;
@@ -45,6 +47,14 @@ Route::get('/transaksi/{transaksi}/download-kwitansi', [KwitansiController::clas
 Route::get('/transaksi-spesifikasi/{transaksi}/download-kwitansi', [KwitansiController::class, 'downloadSpesifikasi'])
     ->name('kwitansiSpesifikasi.download')
     ->middleware('auth');
+
+Route::get('/download-history-transaksi',[PdfController::class, 'downloadHistoryTransaksi'])->name('download.history.transaksi');
+
+// laporan bulanan dan custom date range untuk Web Profile
+
+Route::get('/laporan/download-rage', [ReportController::class, 'reportDateRange'])->name('report.date.range.download');
+
+Route::get('/laporan/download-realtime', [ReportController::class, 'downloadRealtime'])->name('laporan.download.realtime');
 
 Route::middleware([
     'auth:sanctum',

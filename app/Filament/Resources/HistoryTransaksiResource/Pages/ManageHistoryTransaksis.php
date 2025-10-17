@@ -4,6 +4,7 @@ namespace App\Filament\Resources\HistoryTransaksiResource\Pages;
 
 use App\Filament\Resources\HistoryTransaksiResource;
 use Filament\Actions;
+use Filament\Actions\Action;
 use Filament\Resources\Pages\ManageRecords;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use pxlrbt\FilamentExcel\Actions\Pages\ExportAction;
@@ -32,7 +33,13 @@ class ManageHistoryTransaksis extends ManageRecords
                         Column::make('metodePembayaran.nama_pembayaran')->heading('Nama Pembayarans'),
                     ])
                     ->modifyQueryUsing(fn ($query) => $query->where('status_pembayaran','sukses'))
-                ])->label('Export Data Transaksi')
+                ])->label('Export Data Transaksi'),
+            Action::make('downloadPdf')
+                ->label('Download PDF')
+                ->color('danger')
+                ->icon('heroicon-o-document-arrow-down')
+                ->url(route('download.history.transaksi'))
+                ->openUrlInNewTab(),
         ];
     }
 }

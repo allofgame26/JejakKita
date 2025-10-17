@@ -17,6 +17,7 @@ use Filament\Tables;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\TextColumn\TextColumnSize;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -64,9 +65,8 @@ class HistoryTransaksiResource extends Resource
                         'success' => 'Spesifik',
                     ])
                     ->searchable(),
-                Textarea::make('deskripsi')
-                    ->searchable()
-                    ->limit(40),
+                TextColumn::make('deskripsi')
+                    ->label('Deskripsi'),
                 TextColumn::make('jumlah_donasi')
                     ->money('IDR')
                     ->sortable(),
