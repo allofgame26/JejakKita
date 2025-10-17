@@ -169,9 +169,10 @@
                 <ul class="navbar-nav align-items-lg-center">
                     <li class="nav-item"><a href="#beranda" class="nav-link text-white fw-semibold">Beranda</a></li>
                     <li class="nav-item"><a href="#tentang" class="nav-link text-white fw-semibold">Tentang</a></li>
-                    <li class="nav-item"><a href="#donasi" class="nav-link text-white fw-semibold">Donasi</a></li>
+                    <li class="nav-item"><a href="#pembangunan" class="nav-link text-white fw-semibold">Pembangunan</a></li>
                     <li class="nav-item"><a href="#galeri" class="nav-link text-white fw-semibold">Galeri</a></li>
                     <li class="nav-item"><a href="#kontak" class="nav-link text-white fw-semibold">Kontak</a></li>
+                    <li class="nav-item"><a href="#lokasi" class="nav-link text-white fw-semibold">Lokasi</a></li>
                     <li class="nav-item">
                         <a href="{{ route('filament.admin.auth.login') }}" class="btn ms-lg-3 px-4 py-2 rounded-pill" style="background-color: var(--btn-yellow-bg);">Login</a>
                     </li>
@@ -179,6 +180,7 @@
             </div>
         </div>
     </nav>
+
 
     <section class="hero" id="beranda">
         <div class="hero-content">
@@ -457,16 +459,39 @@
         </div>
     </section>
 
+    <style>
+    .map-responsive {
+        position: relative;
+        width: 100%;
+        height: 400px; /* tinggi tetap */
+        overflow: hidden;
+        border-radius: 16px;
+        background: #fff;
+        padding-bottom: 0;
+    }
+    .map-responsive iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+        min-height: 350px;   
+        max-height: 450px;  
+        background: #fff;
+    }
+    </style>
     <section class="lokasi-section py-5 d-flex flex-column align-items-center" id="lokasi">
         <h2 class="fw-bold text-center mb-4 text-dark">Lokasi Kami</h2>
-        <div class="map-responsive shadow-lg">
-            <iframe
-                src="https://maps.google.com/maps?q=Sekolah%20Dasar%20Islam%20Terpadu%20AL%20Asror%20Gedangsari,%20Kab.%20Gunungkidul,%20Yogyakarta&t=&z=14&ie=UTF8&iwloc=&output=embed"
-                allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-                title="Google Maps Location">
-            </iframe>
-        </div>
+            <div class="map-responsive shadow-lg w-100" style="max-width: 900px;">
+                <iframe
+                    src="https://maps.google.com/maps?q=Sekolah%20Dasar%20Islam%20Terpadu%20AL%20Asror%20Gedangsari,%20Kab.%20Gunungkidul,%20Yogyakarta&t=&z=14&ie=UTF8&iwloc=&output=embed"
+                    allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                    title="Google Maps Location">
+                </iframe>
+            </div>
     </section>
+
 
     <section class="container my-5 py-5 text-center">
         <h2 class="fw-bold mb-4">Bekerja sama dengan :</h2>
