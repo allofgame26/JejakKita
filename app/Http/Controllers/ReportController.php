@@ -53,7 +53,7 @@ class ReportController extends Controller
 
         $data = $this->getData($startDate, $endDate);
 
-        $pdf = FacadePdf::loadView('filament.laporan.laporanBulanan', $data);
+        $pdf = FacadePdf::loadView('filament.laporan.laporanRealtime', $data);
 
         $filename = 'laporan-keuangan-realtime-' . $endDate->format('Y-m-d') . '.pdf';
 

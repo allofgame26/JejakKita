@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\m_barang;
 use App\Models\m_program_pembangunan;
+use App\Models\Priority;
 use App\Models\Priority_Pembangunan;
 use App\Models\t_transaksi_barang;
 use App\Models\t_transaksi_donasi_program;
@@ -61,7 +62,20 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        
+        m_program_pembangunan::observe(KodeProgram::class);
+        t_transaksi_donasi_program::observe(KodeTransaksiProgram::class);
+        t_transaksi_donasi_spesifik::observe(KodeTransaksiSpesifik::class);
+        m_barang::observe(KodeBarangObserver::class);
+        m_program_pembangunan::observe(ProgramPembangunanObserver:: class);
+        Priority_Pembangunan::observe(ProgramPembangunanObserver:: class);
+        t_transaksi_donasi_program::observe(TransaksiDonasiObserver::class);
+        t_transaksi_donasi_spesifik::observe(TransaksiDonasiObserver::class);
+        User::observe(UserObserver::class);
+        t_transaksi_barang::observe(RataHargaBarang::class);
+        t_transaksi_barang::observe(KebutuhanTerpenuhi::class);
+        t_transaksi_barang::observe(DoneTransaksiBarangObserver::class);
+        t_transaksi_barang::observe(Pengeluaran::class);
+        m_program_pembangunan::observe(tanggalSelesaiPembangunan::class);
     }
 
     /**

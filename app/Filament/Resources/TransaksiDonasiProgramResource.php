@@ -17,6 +17,7 @@ use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\ViewField;
 use Filament\Forms\Components\Wizard;
 use Filament\Forms\Components\Wizard\Step;
 use Filament\Forms\Form;
@@ -75,12 +76,14 @@ class TransaksiDonasiProgramResource extends Resource
                         ])->columns(2),
                     Step::make('Pembayaran')
                         ->schema([
-                            Select::make('pembayaran_id')
-                                ->required()
-                                ->preload()
-                                ->relationship('pembayaran','nama_pembayaran')
-                                ->options(m_metode_pembayaran::where('is_open', true)->pluck('nama_pembayaran','id'))
-                                ->label('Pilih Pembayaran'),
+                            Hidden::make('pembayaran_id')
+                                ->required(),
+                            ViewField::make('metode_pembayaran')
+                                ->view('filament.custom.metode_pembayaran')
+                                ->label('Metode Pembayaran')
+                                ->viewData([
+                                    'options' => m_metode_pembayaran::where('is_open', true)->with('media')->get(),
+                                ])->columnSpanFull(),
                             TextInput::make('jumlah_donasi')
                                 ->required()
                                 ->prefix('Rp.')

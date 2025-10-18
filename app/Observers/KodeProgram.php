@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\m_program_pembangunan;
+use Illuminate\Support\Facades\DB;
 
 class KodeProgram
 {
@@ -11,12 +12,23 @@ class KodeProgram
      */
     public function creating(m_program_pembangunan $m_program_pembangunan): void
     {
-        $cekID = m_program_pembangunan::max('id') ?? 0;
-        $nextID = $cekID + 1;
+        // $cekID = m_program_pembangunan::max('id') ?? 0;
+        // $nextID = $cekID + 1;
 
-        $kodeProgram = 'PRG-' . $nextID . '-' . date('ym');
+        // $kodeProgram = 'PRG-' . $nextID . '-' . date('ym');
 
-        $m_program_pembangunan->kode_program = $kodeProgram;
+        // $m_program_pembangunan->kode_program = $kodeProgram;
+    }
+
+    public function created(m_program_pembangunan $m_program_pembangunan): void
+    {
+        $kodeProgram = 'PRG-' . $m_program_pembangunan->id . '-' . date('ym');
+
+        // ini adalah function without event untuk menghindari loop tak berujung
+        $m_program_pembangunan->withoutEvents(function () use ($m_program_pembangunan, $kodeProgram) {
+            $m_program_pembangunan->kode_program = $kodeProgram;
+            $m_program_pembangunan->save();
+        });
     }
 
     /**
