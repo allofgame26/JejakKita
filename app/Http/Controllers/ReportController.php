@@ -25,7 +25,7 @@ class ReportController extends Controller
 
         $pdf = FacadePdf::loadView('filament.laporan.laporanBulanan', $data);
 
-        $filename = 'laporan-keuangan-' . $startDate->format('Y-m-d') . '_to_' . $endDate->format('Y-m-d') . '.pdf';
+        $filename = 'laporan-keuangan-' . $startDate->format('Y-m-d') . '_ke_' . $endDate->format('Y-m-d') . '.pdf';
 
         return $pdf->download($filename);
     }
@@ -51,16 +51,16 @@ class ReportController extends Controller
         $startDate = Carbon::parse($startDates)->startOfDay();
         $endDate = Carbon::now()->endOfDay();
 
-        $data = $this->getData($startDate, $endDate);
+        $data = $this->getData($startDate, $endDate, true);
 
-        $pdf = FacadePdf::loadView('filament.laporan.laporanRealtime', $data);
+        $pdf = FacadePdf::loadView('filament.laporan.laporanBulanan', $data);
 
         $filename = 'laporan-keuangan-realtime-' . $endDate->format('Y-m-d') . '.pdf';
 
         return $pdf->download($filename);
     }
 
-    private function getData($startDate, $endDate)
+    private function getData($startDate, $endDate, $detailPengeluaran = false)
     {
         $donasiProgram = t_transaksi_donasi_program::where('status_pembayaran', 'sukses')
             ->whereBetween('created_at', [$startDate, $endDate])
@@ -74,12 +74,37 @@ class ReportController extends Controller
         $pengeluaran = Pengeluaran::whereBetween('tanggal', [$startDate, $endDate])->get();
         $totalPengeluaran = $pengeluaran->sum('jumlah');
 
+        $semuaTransaksi = collect();
+
+        if($detailPengeluaran){
+            $transaksiProgram = t_transaksi_donasi_program::with(['user.datadiri', 'pembayaran', 'program'])
+                ->where('status_pembayaran', 'sukses')
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->get()
+                ->map(function ($item) {
+                    $item->deskripsi_donasi = 'Donasi Program: ' . $item->program->nama_pembangunan;
+                    return $item;
+                });
+            
+            $transaksiSpesifik = t_transaksi_donasi_spesifik::with(['user.datadiri', 'pembayaran', 'barang'])
+                ->where('status_pembayaran', 'sukses')
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->get()
+                ->map(function ($item) {
+                    $item->deskripsi_donasi = 'Donasi Barang: ' . $item->barang->nama_barang;
+                    return $item;
+                });
+
+            $semuaTransaksi = $transaksiProgram->concat($transaksiSpesifik)->sortBy('created_at');
+        }
+
         return [
             'reportDate' => $endDate,
             'donasi' => $totalDonasi,
             'pengeluaran' => $pengeluaran,
             'totalpengeluaran' => $totalPengeluaran,
-            'isCutom' =>true,
+            'transaksi' => $semuaTransaksi,
+            'detail' => $detailPengeluaran,
             'startDate' => $startDate,
         ];
     }
