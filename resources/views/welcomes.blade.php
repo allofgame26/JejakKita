@@ -246,7 +246,11 @@
                             <img src="{{ $program->getFirstMediaUrl('pembangunan') }}" class="card-img-top" alt="{{ $program->nama_pembangunan }}">
                             
                             <div class="card-body d-flex flex-column">
-                                <span class="badge bg-warning text-dark align-self-start mb-2">Infrastruktur</span>
+                                @if($program->tipe_donasi == 'donasi_target')
+                                    <span class="badge bg-success align-self-start mb-2">Infrastruktur</span>
+                                @else
+                                    <span class="badge bg-warning text-dark align-self-start mb-2">Donasi Berkelanjutan</span>
+                                @endif
                                 
                                 <h5 class="card-title">{{ $program->nama_pembangunan }}</h5>
                                 <p class="card-text text-muted small mb-3">{{ $program->deskripsi }}</p>

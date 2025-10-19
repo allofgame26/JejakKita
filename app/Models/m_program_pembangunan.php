@@ -75,7 +75,7 @@ class m_program_pembangunan extends Model implements HasMedia
 
         $totaldonasi = $this->hitungTotalDonasiTerkumpul();
 
-        if ($totaldonasi >= $this->estimasi_biaya && $statusSebelumnya != 'lengkap'){
+        if ($totaldonasi >= $this->estimasi_biaya && $statusSebelumnya != 'lengkap' && $this->tipe_donasi == 'donasi_target'){
             $this->status_pendanaan = 'lengkap';
             $this->status = 'berjalan';
             $this->saveQuietly();
