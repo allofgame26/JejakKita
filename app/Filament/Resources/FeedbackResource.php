@@ -52,7 +52,7 @@ class FeedbackResource extends Resource
                         TextInput::make('subject_feedback')->label('Subjek Feedback')->required(),
                         Textarea::make('isi_feedback')->label('Isi Subjek')->required(),
                         ComponentsRatingStar::make('rate')->label('Rating'),
-                        SpatieMediaLibraryFileUpload::make('Foto feedback')->image()->imageEditor()->multiple()->collection('feedback')->label('Foto Feedback')
+                        SpatieMediaLibraryFileUpload::make('Foto feedback')->image()->imageEditor()->multiple()->collection('feedback')->label('Foto Feedback')->conversion('conversion')->maxSize(2048)->helperText('Ukuran maksimum file adalah 2MB.'),
                     ])->columns('1')
             ]);
     }

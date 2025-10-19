@@ -61,8 +61,7 @@ class ProgramPembangunanResource extends Resource
                 Select::make('mandor_id')
                     ->required()
                     ->relationship('mandor','nama_lengkap')
-                    ->searchable()
-                    ->preload(),
+                    ->searchable(), //memliki kekurangan kita harus mengetahui Mandornya siapa saja
                 TextInput::make('nama_pembangunan')
                     ->required(),
                 Select::make('tipe_donasi')
@@ -75,7 +74,7 @@ class ProgramPembangunanResource extends Resource
                     ->live(),
                 Select::make('periode_id')
                     ->label('Periode Pembangunan')
-                    ->options(m_periode::all()->pluck('nama_periode','id'))
+                    ->relationship('periode','nama_periode')
                     ->required(),
                 DatePicker::make('tanggal_mulai')
                     ->displayFormat('d M Y')
@@ -107,7 +106,10 @@ class ProgramPembangunanResource extends Resource
                     ->default('pendanaan'),
                 SpatieMediaLibraryFileUpload::make('foto_pembangunan')
                         ->multiple()
-                        ->collection('pembangunan'),
+                        ->collection('pembangunan')
+                        ->conversion('compressed')
+                        ->maxSize(2048)
+                        ->helperText('Ukuran maksimum file adalah 2MB.'),
                 Textarea::make('deskripsi')
                         ->required()
                         ->label('Deskripsi Program'),

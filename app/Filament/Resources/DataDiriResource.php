@@ -67,7 +67,9 @@ class DataDiriResource extends Resource
                 SpatieMediaLibraryFileUpload::make('profile')
                     ->image()
                     ->collection('profile')
-                    ->imageEditor(),
+                    ->imageEditor()
+                    ->conversion('conversion')->maxSize(2048)
+                    ->helperText('Ukuran maksimum file adalah 2MB.'),
             ]);
     }
 

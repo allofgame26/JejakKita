@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class t_transaksi_barang extends Pivot implements HasMedia
 {
@@ -33,5 +34,12 @@ class t_transaksi_barang extends Pivot implements HasMedia
     public function vendor(): BelongsTo
     {
         return $this->belongsTo(m_vendor::class,'vendor_id','id');
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion('conversion')
+            ->quality(80)
+            ->withResponsiveImages();
     }
 }

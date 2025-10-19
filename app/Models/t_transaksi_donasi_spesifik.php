@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class t_transaksi_donasi_spesifik extends Model implements HasMedia
 {
@@ -48,6 +49,13 @@ class t_transaksi_donasi_spesifik extends Model implements HasMedia
             t_kebutuhan_barang_program::class,
             'id','id','kebutuhan_id','program_id'
         );
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion('conversion')
+            ->quality(80)
+            ->withResponsiveImages();
     }
 
 }

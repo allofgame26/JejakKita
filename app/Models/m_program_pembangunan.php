@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class m_program_pembangunan extends Model implements HasMedia
 {
@@ -83,7 +84,7 @@ class m_program_pembangunan extends Model implements HasMedia
 
             Notification::make()
                 ->title('Pendanaan Program Tercapai')
-                ->body("Program '{$this->nama_pembangunan}' telah berhasil mencapai targer donasi")
+                ->body("Program '{$this->nama_pembangunan}' telah berhasil mencapai target donasi")
                 ->success()
                 ->sendToDatabase($receipt)
                 ->broadcast($receipt);
@@ -172,5 +173,16 @@ class m_program_pembangunan extends Model implements HasMedia
                     }
                 }
             }
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion('thumb')
+            ->width(368)
+            ->height(232);
+
+        $this->addMediaConversion('compressed')
+            ->quality(80)
+            ->withResponsiveImages();
     }
 } 

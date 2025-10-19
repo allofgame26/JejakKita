@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class t_transaksi_donasi_program extends Model implements HasMedia
 {
@@ -45,4 +46,10 @@ class t_transaksi_donasi_program extends Model implements HasMedia
         return self::with('user.datadiri')->get();
     }
 
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion('conversion')
+            ->quality(80)
+            ->withResponsiveImages();
+    }
 }

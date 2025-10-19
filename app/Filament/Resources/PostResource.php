@@ -71,7 +71,8 @@ class PostResource extends Resource
                 SpatieMediaLibraryFileUpload::make('fitur_image')
                     ->label('Fitur Foto')
                     ->collection('fitur_image')
-                    ->image()->imageEditor(),
+                    ->image()->imageEditor()
+                    ->conversion('conversion')->maxSize(2048)->helperText('Ukuran maksimum file adalah 2MB.'),
             ]);
     }
 

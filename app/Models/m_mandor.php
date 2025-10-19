@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class m_mandor extends Model implements HasMedia
 {
@@ -22,5 +23,11 @@ class m_mandor extends Model implements HasMedia
         'no_telp',
     ];
 
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion('conversion')
+            ->quality(80)
+            ->withResponsiveImages();
+    }
     
 }

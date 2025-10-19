@@ -147,7 +147,7 @@ class TransaksiBarangRelationManager extends RelationManager
                             ->collection('pembelian_barang')
                             ->image()
                             ->imageEditor()
-                            ->required()
+                            ->required()->conversion('conversion')->maxSize(2028)->helperText('Format file: jpg, png. Ukuran maksimal 2MB.'),
                     ])
                     ->action(function (array $data, $record){
 

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class m_post extends Model implements HasMedia
 {
@@ -33,9 +34,10 @@ class m_post extends Model implements HasMedia
         return $this->belongsTo(User::class);
     }
 
-    public function registerMediaCollections(): void
+    public function registerMediaConversions(?Media $media = null): void
     {
-        $this->addMediaCollection('fitur_image')->singleFile(); // Untuk foto utama
-        $this->addMediaCollection('galeri_images'); // Untuk banyak foto galeri
+        $this->addMediaConversion('conversion')
+            ->quality(80)
+            ->withResponsiveImages();
     }
 }

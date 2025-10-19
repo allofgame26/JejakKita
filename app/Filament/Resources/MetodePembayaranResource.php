@@ -64,7 +64,8 @@ class MetodePembayaranResource extends Resource
                 SpatieMediaLibraryFileUpload::make('logo_metode_pembayaran')
                     ->label('Logo Metode Pembayaran')
                     ->collection('logo_metode_pembayaran')
-                    ->required(),
+                    ->conversion('conversion')
+                    ->required()->maxSize(2048)->helperText('Ukuran maksimum file adalah 2MB.'),
             ]);
     }
 

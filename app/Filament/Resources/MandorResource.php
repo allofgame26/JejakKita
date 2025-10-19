@@ -73,7 +73,8 @@ class MandorResource extends Resource
                     ->collection('mandor')
                     ->label('Foto Mandor')
                     ->image()
-                    ->imageEditor(),
+                    ->imageEditor()
+                    ->conversion('conversion')->maxSize(2048)->helperText('Ukuran maksimum file adalah 2MB.'),
             ]);
     }
 

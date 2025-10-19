@@ -224,7 +224,8 @@ class TransaksiDonasiProgramResource extends Resource
                             ->collection('bukti_pembayaran_transaksi_program')
                             ->image()
                             ->imageEditor()
-                            ->required(),
+                            ->required()
+                            ->conversion('conversion')->maxSize(2048)->helperText('Ukuran maksimum file adalah 2MB.'),
                     ])
                     ->action(function ($record){
                         $record->status_kirim_bukti_pembayaran = 'sudah';
