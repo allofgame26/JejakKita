@@ -71,7 +71,7 @@ class ReportController extends Controller
 
         $totalDonasi = $donasiProgram + $donasiSpesifik;
 
-        $pengeluaran = Pengeluaran::whereBetween('tanggal', [$startDate, $endDate])->get();
+        $pengeluaran = Pengeluaran::with('program')->whereBetween('tanggal', [$startDate, $endDate])->get();
         $totalPengeluaran = $pengeluaran->sum('jumlah');
 
         $semuaTransaksi = collect();

@@ -76,6 +76,7 @@
                     <th>Kategori</th>
                     <th>Deskripsi</th>
                     <th>Jumlah</th>
+                    <th>Untuk Program</th>
                 </tr>
             </thead>
             <tbody>
@@ -85,6 +86,7 @@
                     <td>{{ $expense->kategori }}</td>
                     <td>{{ $expense->deskripsi }}</td>
                     <td>Rp {{ number_format($expense->jumlah, 0, ',', '.') }}</td>
+                    <td>{{ $expense->program->nama_pembangunan }}</td>
                 </tr>
                 @endforeach
             </tbody>
