@@ -42,7 +42,7 @@ class BarangRelationManager extends RelationManager
                     ->numeric(),
                 TextColumn::make('status')
                     ->label('Status')
-                    ->description('Barang Sudah Tersedia Digudang')
+                    ->description('Menginformasikan Barang Tersedia di gudang atau Sudah Diambil')
                     ->badge()
                     ->color(
                         fn (string $state): string => match ($state){

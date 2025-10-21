@@ -18,6 +18,7 @@ class t_transaksi_barang extends Pivot implements HasMedia
     protected $fillable = [
         'vendor_id',
         'barang_id',
+        'kebutuhan_program_id',
         'jumlah_dibeli',
         'harga_satuan',
         'tanggal_beli',
@@ -34,6 +35,11 @@ class t_transaksi_barang extends Pivot implements HasMedia
     public function vendor(): BelongsTo
     {
         return $this->belongsTo(m_vendor::class,'vendor_id','id');
+    }
+
+    public function kebutuhanBarang(): BelongsTo
+    {
+        return $this->belongsTo(t_kebutuhan_barang_program::class,'kebutuhan_program_id','id');
     }
 
     public function registerMediaConversions(?Media $media = null): void

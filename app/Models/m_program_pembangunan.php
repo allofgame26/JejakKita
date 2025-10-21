@@ -35,6 +35,11 @@ class m_program_pembangunan extends Model implements HasMedia
         'periode_id'
     ];
 
+    public function pengeluaran(): HasMany
+    {
+        return $this->hasMany(Pengeluaran::class,'program_id');
+    }
+    
     public function mandor(): BelongsTo
     {
         return $this->belongsTo(m_mandor::class,'mandor_id','id');

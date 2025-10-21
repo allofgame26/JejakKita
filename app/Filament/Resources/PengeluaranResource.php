@@ -15,6 +15,8 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -38,7 +40,7 @@ class PengeluaranResource extends Resource
     {
         return $form
             ->schema([
-                DatePicker::make('tanggal')->label('Tanggal Pembelian')->required(),
+                DatePicker::make('tanggal')->label('Tanggal Pembelian')->required()->native(false)->displayFormat('d M Y')->maxDate(now())->prefixIcon('heroicon-o-calendar'),
                 Select::make('kategori')->label('Kategori Pengeluaran')->required()
                     ->options([
                         'Material' => 'Pembelian Material',
@@ -52,13 +54,12 @@ class PengeluaranResource extends Resource
                         'Pemasaran' => 'Pemasaran & Promosi',
                         'Lain - Lain' => 'Lain - Lain / Tak Terduga',
                     ]),
-                // Select::make('program_id')
-                //     ->options(m_program_pembangunan::all()->pluck('nama_program', 'id'))
-                //     ->searchable()
-                //     ->label('Program Pembangunan'),
+                Select::make('program_id')
+                    ->relationship('program', 'nama_pembangunan',fn (Builder $query) => $query->where('status','=', ['pendanaan','berjalan']))
+                    ->preload()
+                    ->label('Program Pembangunan'),
                 TextInput::make('jumlah')->label('Jumlah Pengeluaran')->required()->prefix('Rp.'),
-                Textarea::make('deskripsi')->label('Deskripsi Pengeluaran')->required(),
-                
+                Textarea::make('deskripsi')->label('Deskripsi Pengeluaran')->required(), 
             ]);
     }
 
@@ -70,13 +71,35 @@ class PengeluaranResource extends Resource
                 TextColumn::make('kategori')->label('Kategori Pengeluaran'),
                 TextColumn::make('deskripsi')->label('Deskripsi Pengeluaran'),
                 // TextColumn::make('program.nama_program')->label('Program Pembangunan'),
-                TextColumn::make('jumlah')->money('IDR')->label('Jumlah Pengeluaran')
+                TextColumn::make('jumlah')->money('IDR')->label('Jumlah Pengeluaran'),
+                TextColumn::make('program.nama_pembangunan')->label('Program Pembangunan'),
+                SpatieMediaLibraryImageColumn::make('bukti_pembayaran')->label('Bukti Pembayaran')->collection('bukti_pembayaran_pengeluaran'),
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Action::make('bayar')
+                    ->label('Bayar Sekarang')
+                    ->icon('heroicon-o-arrow-up-on-square')
+                    ->color('primary')
+                    ->visible(fn ($record): bool => $record->status_pembayaran === "pending" && auth()->user()->hasRole(['Admin','super_admin']) && $record->user_id = auth()->user()->id && $record->sumber_type != null)
+                    ->modalHeading('Upload Bukti Pembayaran / Struk Pembelian')
+                    ->modalSubmitActionLabel('Upload')
+                    ->form([
+                        \Filament\Forms\Components\SpatieMediaLibraryFileUpload::make('bukti_pembayaran')
+                            ->label('Bukti Pembayaran (JPG/PNG)')
+                            ->collection('bukti_pembayaran_pengeluaran')
+                            ->image()
+                            ->imageEditor()
+                            ->required()
+                            ->conversion('conversion')->maxSize(2048)->helperText('Ukuran maksimum file adalah 2MB.'),
+                    ])
+                    ->action(function ($record){
+                        $record->status_pembayaran = 'sudah';
+                        $record->save();
+                    }),
             ])
             ->bulkActions([
                 // Tables\Actions\BulkActionGroup::make([

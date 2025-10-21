@@ -18,11 +18,19 @@ class Pengeluaran extends Model implements HasMedia
         'jumlah',
         'sumber_type',
         'sumber_id',
-        // 'program_id',
+        'program_id',
+        'status_pembayaran',
     ];
 
-    // public function program()
-    // {
-    //     return $this->belongsTo(m_program_pembangunan::class,'program_id','id');
-    // }
+    public function program()
+    {
+        return $this->belongsTo(m_program_pembangunan::class, 'program_id');
+    }
+
+    public function registerMediaConversions(?\Spatie\MediaLibrary\MediaCollections\Models\Media $media = null): void
+    {
+        $this->addMediaConversion('conversion')
+            ->quality(80)
+            ->withResponsiveImages();
+    }
 }

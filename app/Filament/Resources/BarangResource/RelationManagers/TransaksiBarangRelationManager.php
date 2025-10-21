@@ -88,7 +88,6 @@ class TransaksiBarangRelationManager extends RelationManager
                             ->relationship('vendor', 'nama_vendor')
                             ->label('Pilih Vendor')
                             ->searchable()
-                            ->preload()
                             ->required()
                             ->createOptionForm([
                                 TextInput::make('kode_vendor')
@@ -126,6 +125,12 @@ class TransaksiBarangRelationManager extends RelationManager
                             ->displayFormat('d M Y')
                             ->label('Tanggal Pembelian')
                             ->maxDate(now())
+                            ->required(),
+                        Select::make('kebutuhan_program_id')
+                            ->label('Kebutuhan Program')
+                            ->relationship('kebutuhanBarang', 'm_program_pembangunans.nama_pembangunan', fn ($query) => $query->where('status_pembelian', 'belum_tersedia')->where('barang_id', $this->ownerRecord->id)->join('m_program_pembangunans', 't_kebutuhan_barang_programs.program_id', '=', 'm_program_pembangunans.id'))
+                            ->searchable()
+                            ->preload()
                             ->required(),
                         Hidden::make('status_pembayaran')
                             ->default('pending')

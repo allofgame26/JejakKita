@@ -29,6 +29,7 @@ class Pengeluaran
                     'jumlah' => $t_transaksi_barang->jumlah_dibeli * $t_transaksi_barang->harga_satuan,
                     'sumber_type' => t_transaksi_barang::class,
                     'sumber_id' => $t_transaksi_barang->id,
+                    'program_id' => $t_transaksi_barang->kebutuhanBarang->program_id,
                 ]);
         }
     }

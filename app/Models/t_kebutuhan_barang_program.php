@@ -49,7 +49,7 @@ class t_kebutuhan_barang_program extends Model
         return $this->barang?->nama_barang;
     }
 
-    public function transaksiBarang(): HasMany
+    public function kebutuhanBarang(): HasMany
     {
         return $this->hasMany(t_transaksi_barang::class,'kebutuhan_id');
     }
