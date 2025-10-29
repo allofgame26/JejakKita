@@ -4,7 +4,7 @@ namespace App\Observers;
 
 use App\Models\t_transaksi_donasi_spesifik;
 
-class KodeTransaksiSpesifik
+class TransaksiSpesifik
 {
     /**
      * Handle the t_transaksi_donasi_spesifik "created" event.
@@ -58,5 +58,18 @@ class KodeTransaksiSpesifik
     public function forceDeleted(t_transaksi_donasi_spesifik $t_transaksi_donasi_spesifik): void
     {
         //
+    }
+    public function saved(t_transaksi_donasi_spesifik $transaksi)
+    {
+        // melakukan pengecekan untuk Goal Donasi apakah sudah tercapai atau belum.
+         if ($transaksi->status_pembayaran === 'sukses' && $transaksi->wasChanged('status_pembayaran')){
+            $transaksi->load('kebutuhan.program');
+
+            $program = $transaksi->kebutuhan?->program;
+
+            if($program){
+                $program->cekDanUpdateStatus();
+            }
+        }
     }
 }

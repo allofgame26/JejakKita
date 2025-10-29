@@ -36,7 +36,7 @@ class ManageHistoryTransaksis extends ManageRecords
                 ])->label('Export Data Transaksi'),
             Action::make('downloadPdf')
                 ->label('Download PDF')
-                ->color('danger')
+                ->color('success')
                 ->icon('heroicon-o-document-arrow-down')
                 ->url(route('download.history.transaksi'))
                 ->openUrlInNewTab(),

@@ -5,14 +5,20 @@ namespace App\Observers;
 use App\Models\m_program_pembangunan;
 use App\Services\PerhitunganSAW;
 
-class tanggalSelesaiPembangunan
+class ProgramPembangunan
 {
     /**
      * Handle the m_program_pembangunan "created" event.
      */
     public function created(m_program_pembangunan $m_program_pembangunan): void
     {
-        //
+        $kodeProgram = 'PRG-' . $m_program_pembangunan->id . '-' . date('ym');
+
+        // ini adalah function without event untuk menghindari loop tak berujung
+        $m_program_pembangunan->withoutEvents(function () use ($m_program_pembangunan, $kodeProgram) {
+            $m_program_pembangunan->kode_program = $kodeProgram;
+            $m_program_pembangunan->save();
+        });
     }
 
     /**

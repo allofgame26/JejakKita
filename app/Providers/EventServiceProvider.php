@@ -17,10 +17,14 @@ use App\Observers\KodeProgram;
 use App\Observers\KodeTransaksiProgram;
 use App\Observers\KodeTransaksiSpesifik;
 use App\Observers\Pengeluaran;
+use App\Observers\ProgramPembangunan;
 use App\Observers\ProgramPembangunanObserver;
 use App\Observers\RataHargaBarang;
 use App\Observers\tanggalSelesaiPembangunan;
+use App\Observers\TransaksiBarang;
 use App\Observers\TransaksiDonasiObserver;
+use App\Observers\TransaksiProgram;
+use App\Observers\TransaksiSpesifik;
 use App\Observers\UserObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -41,20 +45,15 @@ class EventServiceProvider extends ServiceProvider
     ];
 
     protected $observers = [
-        m_program_pembangunan::class => [ProgramPembangunanObserver::class],
         Priority_Pembangunan::class => [ProgramPembangunanObserver::class],
-        t_transaksi_donasi_spesifik::class => [TransaksiDonasiObserver::class],
-        t_transaksi_donasi_program::class => [TransaksiDonasiObserver::class],
+        // t_transaksi_donasi_spesifik::class => [TransaksiDonasiObserver::class],
+        // t_transaksi_donasi_program::class => [TransaksiDonasiObserver::class],
         m_barang::class => [KodeBarangObserver::class],
         User::class => [UserObserver::class],
-        t_transaksi_barang::class => [RataHargaBarang::class],
-        t_transaksi_barang::class => [KebutuhanTerpenuhi::class],
-        t_transaksi_donasi_program::class => [KodeTransaksiProgram::class],
-        t_transaksi_donasi_spesifik::class => [KodeTransaksiSpesifik::class],
-        t_transaksi_barang::class => [Pengeluaran::class],
-        t_transaksi_barang::class => [DoneTransaksiBarangObserver::class],
-        m_program_pembangunan::class => [KodeProgram::class],
-        m_program_pembangunan::class => [tanggalSelesaiPembangunan::class],
+        t_transaksi_donasi_program::class => [TransaksiProgram::class],
+        t_transaksi_donasi_spesifik::class => [TransaksiSpesifik::class],
+        m_program_pembangunan::class => [ProgramPembangunan::class],
+        t_transaksi_barang::class => [TransaksiBarang::class],
     ];
 
     /**
@@ -62,20 +61,24 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        m_program_pembangunan::observe(KodeProgram::class);
-        t_transaksi_donasi_program::observe(KodeTransaksiProgram::class);
-        t_transaksi_donasi_spesifik::observe(KodeTransaksiSpesifik::class);
-        m_barang::observe(KodeBarangObserver::class);
-        m_program_pembangunan::observe(ProgramPembangunanObserver:: class);
-        Priority_Pembangunan::observe(ProgramPembangunanObserver:: class);
-        t_transaksi_donasi_program::observe(TransaksiDonasiObserver::class);
-        t_transaksi_donasi_spesifik::observe(TransaksiDonasiObserver::class);
-        User::observe(UserObserver::class);
-        t_transaksi_barang::observe(RataHargaBarang::class);
-        t_transaksi_barang::observe(KebutuhanTerpenuhi::class);
-        t_transaksi_barang::observe(DoneTransaksiBarangObserver::class);
-        t_transaksi_barang::observe(Pengeluaran::class);
-        m_program_pembangunan::observe(tanggalSelesaiPembangunan::class);
+        // m_program_pembangunan::observe(ProgramPembangunan::class);
+        // t_transaksi_barang::observe(TransaksiBarang::class);
+        // t_transaksi_donasi_program::observe(TransaksiProgram::class);
+        // t_transaksi_donasi_spesifik::observe(TransaksiSpesifik::class);
+        // m_barang::observe(KodeBarangObserver::class);
+        // Priority_Pembangunan::observe(ProgramPembangunanObserver:: class);
+        // User::observe(UserObserver::class);
+
+        
+        // m_program_pembangunan::observe(KodeProgram::class);
+        // m_program_pembangunan::observe(ProgramPembangunanObserver:: class);
+        // t_transaksi_donasi_program::observe(TransaksiDonasiObserver::class);
+        // t_transaksi_donasi_spesifik::observe(TransaksiDonasiObserver::class);
+        // t_transaksi_barang::observe(RataHargaBarang::class);
+        // t_transaksi_barang::observe(KebutuhanTerpenuhi::class);
+        // t_transaksi_barang::observe(DoneTransaksiBarangObserver::class);
+        // t_transaksi_barang::observe(Pengeluaran::class);
+        // m_program_pembangunan::observe(tanggalSelesaiPembangunan::class);
     }
 
     /**

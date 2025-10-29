@@ -5,7 +5,7 @@ namespace App\Observers;
 use App\Models\t_transaksi_donasi_program;
 use Illuminate\Support\Facades\Auth;
 
-class KodeTransaksiProgram
+class TransaksiProgram
 {
     /**
      * Handle the t_transaksi_donasi_program "created" event.
@@ -62,5 +62,15 @@ class KodeTransaksiProgram
     public function forceDeleted(t_transaksi_donasi_program $t_transaksi_donasi_program): void
     {
         //
+    }
+
+    public function saved(t_transaksi_donasi_program $transaksi)
+    {
+        // melakukan pengecekan untuk Goal Donasi apakah sudah tercapai atau belum.
+        if($transaksi->wasChanged('status_pembayaran') && $transaksi->status_pembayaran === 'sukses')
+
+            $transaksi->program->periksaKebutuhanDanKirimNotifikasi();
+
+            $transaksi->program->cekDanUpdateStatus();
     }
 }
