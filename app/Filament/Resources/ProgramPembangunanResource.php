@@ -91,12 +91,6 @@ class ProgramPembangunanResource extends Resource
                     ->minDate(fn ($get) => $get('tanggal_mulai'))
                     ->suffixIcon('heroicon-m-calendar')
                     ->disabled(fn (Get $get):bool  => $get('tipe_donasi') === 'donasi_berkelanjutan'),
-                DatePicker::make('tanggal_selesai_aktual')
-                    ->displayFormat('d M Y')
-                    ->native(false)
-                    ->minDate(fn ($get) => $get('tanggal_mulai'))
-                    ->suffixIcon('heroicon-m-calendar')
-                    ->disabled(fn (Get $get):bool  => $get('tipe_donasi') === 'donasi_berkelanjutan'),
                 TextInput::make('estimasi_biaya')
                     ->numeric()
                     ->required(fn (Get $get):bool  => $get('tipe_donasi') === 'donasi_target')

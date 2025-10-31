@@ -10,26 +10,16 @@ use App\Models\t_transaksi_barang;
 use App\Models\t_transaksi_donasi_program;
 use App\Models\t_transaksi_donasi_spesifik;
 use App\Models\User;
-use App\Observers\DoneTransaksiBarangObserver;
-use App\Observers\KebutuhanTerpenuhi;
 use App\Observers\KodeBarangObserver;
-use App\Observers\KodeProgram;
-use App\Observers\KodeTransaksiProgram;
-use App\Observers\KodeTransaksiSpesifik;
-use App\Observers\Pengeluaran;
 use App\Observers\ProgramPembangunan;
 use App\Observers\ProgramPembangunanObserver;
-use App\Observers\RataHargaBarang;
-use App\Observers\tanggalSelesaiPembangunan;
 use App\Observers\TransaksiBarang;
-use App\Observers\TransaksiDonasiObserver;
 use App\Observers\TransaksiProgram;
 use App\Observers\TransaksiSpesifik;
 use App\Observers\UserObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {

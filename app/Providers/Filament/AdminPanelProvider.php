@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\CustomLogin as PagesCustomLogin;
 use App\Filament\Widgets\DashboardWidget;
 use App\Filament\Widgets\TestWidget;
 use App\Filament\Widgets\ProgramPembangunanWidget;
@@ -21,7 +22,6 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Http\Middleware\EnsureProfileIsComplete;
 use App\Livewire\Auth\CustomLogin;
-use App\Livewire\Auth\LoginCustom;
 use Rupadana\ApiService\ApiServicePlugin;
 
 class AdminPanelProvider extends PanelProvider
@@ -40,7 +40,7 @@ class AdminPanelProvider extends PanelProvider
             ->sidebarCollapsibleOnDesktop()
             ->registration()
             ->passwordReset()
-            ->login()
+            ->login(PagesCustomLogin::class)
             // ->login(CustomLogin::class)
             ->databaseNotifications()
             ->databaseNotificationsPolling('10s')
