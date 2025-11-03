@@ -10,6 +10,7 @@
         "@tailwindcss/typography": "^0.5.16",
         "autoprefixer": "^10.4.21",
         "axios": "^1.6.4",
+        "cypress": "^15.5.0",
         "laravel-echo": "^2.2.4",
         "laravel-vite-plugin": "^1.0.0",
         "postcss": "^8.5.6",

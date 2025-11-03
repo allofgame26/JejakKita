@@ -33,7 +33,7 @@
             right: 0;
             bottom: 0;
             background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(4px);
+            backdrop-filter: blur(2px);
             -webkit-backdrop-filter: blur(8px);
             pointer-events: none;
         }
@@ -130,7 +130,7 @@
             <div class="brand">
                 <img src="{{ asset('images/logo_polinema.png') }}" alt="Logo">
                 <div>
-                    <h1>JejakKita - Admin</h1>
+                    <h1>JejakKita - Forum Donasi</h1>
                     <div style="font-size:0.85rem;color:#e2e8f0">Masuk untuk mengelola donasi dan transaksi</div>
                 </div>
             </div>
