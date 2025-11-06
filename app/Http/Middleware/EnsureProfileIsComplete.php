@@ -18,9 +18,31 @@ class EnsureProfileIsComplete
     {
         $user = Auth::user();
 
+        // Pengecualian: Rute-rute yang harus selalu diizinkan
+        $allowedRoutes = [
+            'filament.admin.pages.lengkapi-data-diri',
+            'filament.admin.auth.logout',
+        ];
+
         // Cek jika pengguna sudah login, profilnya belum lengkap,
         // DAN dia tidak sedang mencoba mengakses halaman untuk melengkapi profil (mencegah redirect loop)
-        if ($user && is_null($user->datadiri_id) && !$request->routeIs('filament.admin.pages.lengkapi-data-diri')) {
+        if ($user && is_null($user->datadiri_id)) {
+
+            $allowedRoutes = [
+                'filament.admin.pages.lengkapi-data-diri',
+                'filament.admin.auth.logout',
+            ];
+
+            // Cek apakah rute saat ini ada dalam daftar rute yang diizinkan
+            if (
+                $request->routeIs($allowedRoutes) || // Apakah ini rute yang diizinkan?
+                $request->routeIs('filament.admin.auth.email-verification.*') || // Apakah ini HALAMAN VERIFIKASI EMAIL?
+                $request->is('livewire/*') // Apakah ini request internal Livewire?
+            ) {
+                // Jika ya, jangan lakukan apa-apa dan lanjutkan
+                return $next($request);
+            }
+
             // Beri notifikasi
             session()->flash('filament.notifications', [
                 [

@@ -48,6 +48,10 @@ class DataDiriSchema
                     ->required()
                     ->label('Foto Profil')
                     ->image()->imageEditor()
+                    ->collection('fotoProfil')
+                    ->conversion('compressed')
+                    ->maxSize(2048)
+                    ->helperText('Ukuran maksimum file adalah 2MB.'),
         ];
     }
 }

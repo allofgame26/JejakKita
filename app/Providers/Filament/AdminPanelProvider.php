@@ -21,7 +21,6 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Http\Middleware\EnsureProfileIsComplete;
-use App\Livewire\Auth\CustomLogin;
 use Rupadana\ApiService\ApiServicePlugin;
 
 class AdminPanelProvider extends PanelProvider
@@ -41,7 +40,6 @@ class AdminPanelProvider extends PanelProvider
             ->registration()
             ->passwordReset()
             ->login(PagesCustomLogin::class)
-            // ->login(CustomLogin::class)
             ->databaseNotifications()
             ->databaseNotificationsPolling('10s')
             ->colors([
@@ -71,10 +69,10 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
-                EnsureProfileIsComplete::class,
             ])
             ->authMiddleware([
                 Authenticate::class,
+                EnsureProfileIsComplete::class,
             ])
             ->plugins([
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),

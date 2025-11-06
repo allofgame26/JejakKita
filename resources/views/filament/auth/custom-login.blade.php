@@ -151,7 +151,12 @@
 
                 {{ \Filament\Support\Facades\FilamentView::renderHook('panels::auth.login.form.after') }}
 
-                <div class="login-footer">Belum punya akun? Hubungi admin sekolah untuk pendaftaran.</div>
+                <div class="login-footer">
+                    Belum punya akun? 
+                    <a href="{{ route('filament.admin.auth.register') }}" class="font-semibold text-primary-500 hover:text-primary-400">
+                        Daftar di sini
+                    </a>
+                </div>
             </div>
         </div>
     </x-filament-panels::page.simple>
