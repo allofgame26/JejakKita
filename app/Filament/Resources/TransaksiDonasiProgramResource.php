@@ -73,7 +73,7 @@ class TransaksiDonasiProgramResource extends Resource
                             Hidden::make('kode_transaksi')
                                 ->dehydrated(false)
                                 ->disabled()
-                        ])->columns(2),
+                        ])->columns(2)->extraAttributes(['data-cy' => 'step-pilih-program']),
                     Step::make('Pembayaran')
                         ->schema([
                             Hidden::make('pembayaran_id')
@@ -91,7 +91,7 @@ class TransaksiDonasiProgramResource extends Resource
                                 ->numeric(),
                             Textarea::make('pesan_donatur')
                                 ->label('Pesan Donatur')
-                        ])->columns(2)
+                        ])->columns(2)->extraAttributes(['data-cy' => 'step-pilih-metode']),
                 ])->columnSpanFull()
             ]);
     }

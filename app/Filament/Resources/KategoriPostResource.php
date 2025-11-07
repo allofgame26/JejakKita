@@ -3,11 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\KategoriPostResource\Pages;
-use App\Filament\Resources\KategoriPostResource\RelationManagers;
-use App\Models\KategoriPost;
 use App\Models\m_kategori;
-use Filament\Forms;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -16,8 +12,6 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class KategoriPostResource extends Resource
 {
@@ -42,15 +36,21 @@ class KategoriPostResource extends Resource
                     ->required()
                     ->live()
                     ->live(onBlur: true)
-                    ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', \Str::slug($state))),
+                    ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', \Str::slug($state)))
+                    ->extraAttributes(['data-cy' => 'title-post-kategori']),
                 TextInput::make('slug')
                     ->label('slug')
                     ->readOnly(),
                 Textarea::make('content')
-                    ->label('Deskripsi'),
+                    ->label('Deskripsi')
+                    ->required()
+                    ->extraAttributes(['data-cy' => 'content-post-kategori']),
                 TextInput::make('row')
                     ->label('Urutan Upload')
-                    ->required(),
+                    ->required()
+                    ->numeric()
+                    ->label('Urutan Penataan')
+                    ->extraAttributes(['data-cy' => 'row-post-kategori']),
             ]);
     }
 
@@ -66,7 +66,7 @@ class KategoriPostResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()->extraAttributes(['data-cy' => 'edit-kategori-post']),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

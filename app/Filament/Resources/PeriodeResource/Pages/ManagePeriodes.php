@@ -13,7 +13,7 @@ class ManagePeriodes extends ManageRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()->extraAttributes(['data-cy' => 'create-periode-button']),
         ];
     }
 }

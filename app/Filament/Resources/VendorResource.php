@@ -44,15 +44,19 @@ class VendorResource extends Resource
                     ->required(),
                 TextInput::make('nama_vendor')
                     ->label('Nama Vendor')
-                    ->required(),
+                    ->required()
+                    ->extraAttributes(['data-cy' => 'nama-vendor']),
                 TextInput::make('alamat_vendor')
                     ->label('Alamat Vendor')
-                    ->required(),
+                    ->required()
+                    ->extraAttributes(['data-cy' => 'alamat-vendor']),
                 TextInput::make('no_telepon')
                     ->label('Nomor Telepon / WhatsApp')
-                    ->required(),
+                    ->required()
+                    ->extraAttributes(['data-cy' => 'no-telepon']),
                 Textarea::make('keterangan')
-                    ->label('Keterangan'),
+                    ->label('Keterangan')
+                    ->extraAttributes(['data-cy' => 'keterangan']),
                 Hidden::make('status')
                     ->default('aktif')
             ]);
@@ -76,8 +80,8 @@ class VendorResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make()->extraAttributes(['data-cy' => 'edit-vendor']),
+                Tables\Actions\DeleteAction::make()->extraAttributes(['data-cy' => 'delete-vendor']),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

@@ -33,13 +33,15 @@ class ManageHistoryTransaksis extends ManageRecords
                         Column::make('metodePembayaran.nama_pembayaran')->heading('Nama Pembayarans'),
                     ])
                     ->modifyQueryUsing(fn ($query) => $query->where('status_pembayaran','sukses'))
-                ])->label('Export Data Transaksi'),
+                ])->label('Export Data Transaksi')
+                ->extraAttributes(['data-cy' => 'export-transactions-button']),
             Action::make('downloadPdf')
                 ->label('Download PDF')
                 ->color('success')
                 ->icon('heroicon-o-document-arrow-down')
                 ->url(route('download.history.transaksi'))
-                ->openUrlInNewTab(),
+                ->openUrlInNewTab()
+                ->extraAttributes(['data-cy' => 'download-pdf-button']),
         ];
     }
 }

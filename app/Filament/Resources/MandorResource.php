@@ -40,7 +40,9 @@ class MandorResource extends Resource
         return $form
             ->schema([
                 TextInput::make('nama_lengkap')
-                    ->required(),
+                    ->required()
+                    ->label('Nama Lengkap')
+                    ->extraAttributes(['data-cy' => 'nama-lengkap-mandor']),
                 TextInput::make('nik')
                     ->unique(ignoreRecord: true)
                     ->required()
@@ -48,33 +50,45 @@ class MandorResource extends Resource
                     ->minLength(16)
                     ->validationMessages([
                         'unique' => 'NIK sudah Terpakai'
-                    ]),
+                    ])
+                    ->extraAttributes(['data-cy' => 'nik-mandor']),
                 TextInput::make('tempat_lahir')
-                    ->required(),
+                    ->required()
+                    ->label('Tempat Lahir')
+                    ->extraAttributes(['data-cy' => 'tempat-lahir-mandor']),
                 DatePicker::make('tanggal_lahir')
                     ->displayFormat('d/m/Y')
                     ->native(false)
                     ->maxDate(now())
                     ->required()
-                    ->suffixIcon('heroicon-m-calendar'),
+                    ->suffixIcon('heroicon-m-calendar')
+                    ->label('Tanggal Lahir')
+                    ->extraAttributes(['data-cy' => 'tanggal-lahir-mandor']),
                 TextInput::make('alamat')
-                    ->required(),
+                    ->required()
+                    ->label('Alamat Lengkap')
+                    ->extraAttributes(['data-cy' => 'alamat-mandor']),
                 Select::make('jenis_kelamin')
                     ->options([
                         'laki' => 'Laki - Laki',
                         'perempuan' => 'Perempuan'
                     ])
-                    ->required(),
+                    ->required()
+                    ->label('Jenis Kelamin')
+                    ->extraAttributes(['data-cy' => 'jenis-kelamin-mandor']),
                 TextInput::make('no_telp')
                     ->tel()
                     ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/')
-                    ->required(),
+                    ->required()
+                    ->label('Nomor Telepon')
+                    ->extraAttributes(['data-cy' => 'no-telp-mandor']),
                 SpatieMediaLibraryFileUpload::make('mandor')
                     ->collection('mandor')
                     ->label('Foto Mandor')
                     ->image()
                     ->imageEditor()
-                    ->conversion('conversion')->maxSize(2048)->helperText('Ukuran maksimum file adalah 2MB.'),
+                    ->conversion('conversion')->maxSize(2048)->helperText('Ukuran maksimum file adalah 2MB.')
+                    ->extraAttributes(['data-cy' => 'foto-mandor']),
             ]);
     }
 
@@ -92,7 +106,7 @@ class MandorResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()->extraAttributes(['data-cy' => 'edit-mandor']),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

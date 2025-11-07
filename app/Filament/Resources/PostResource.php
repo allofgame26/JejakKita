@@ -50,29 +50,34 @@ class PostResource extends Resource
                     ->live(onBlur: true)
                     ->reactive()
                     ->unique(ignoreRecord: TRUE)
-                    ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', \Str::slug($state))),
+                    ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', \Str::slug($state)))
+                    ->extraAttributes(['data-cy' => 'judul-post']),
                 TextInput::make('slug')
                     ->label('slug')
                     ->readOnly(),
                 Select::make('kategori')
                     ->relationship('kategori','title')
                     ->preload()
-                    ->required(),
+                    ->required()
+                    ->extraAttributes(['data-cy' => 'kategori-post']),
                 Hidden::make('user_id')
                     ->default(fn ()=> auth()->id()),
                 Toggle::make('is_published')
                     ->label('Di Publish'),
-                TextInput::make('meta_description')
+                TextInput::make('Keyword')
                     ->label('Keyword Deskripsi')
-                    ->required(),
+                    ->required()
+                    ->extraAttributes(['data-cy' => 'keyword-post']),
                 Textarea::make('content')
                     ->label('Deskripsi')
-                    ->required(),
+                    ->required()
+                    ->extraAttributes(['data-cy' => 'deskripsi-post']),
                 SpatieMediaLibraryFileUpload::make('fitur_image')
                     ->label('Fitur Foto')
                     ->collection('fitur_image')
                     ->image()->imageEditor()
-                    ->conversion('conversion')->maxSize(2048)->helperText('Ukuran maksimum file adalah 2MB.'),
+                    ->conversion('conversion')->maxSize(2048)->helperText('Ukuran maksimum file adalah 2MB.')
+                    ->extraAttributes(['data-cy' => 'fitur-image']),
             ]);
     }
 
@@ -94,7 +99,7 @@ class PostResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()->extraAttributes(['data-cy' => 'edit-post']),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

@@ -43,19 +43,23 @@ class PrioritasResource extends Resource
             ->schema([
                 TextInput::make('nama_priority')
                     ->required()
-                    ->label('Nama Variabel Prioritas'),
+                    ->label('Nama Variabel Prioritas')
+                    ->extraAttributes(['data-cy' => 'nama-prioritas']),
                 TextInput::make('persen_priority')
                     ->required()
                     ->label('Persen')
-                    ->suffixIcon('heroicon-o-percent-badge'),
+                    ->suffixIcon('heroicon-o-percent-badge')
+                    ->extraAttributes(['data-cy' => 'persen-prioritas']),
                 Textarea::make('deskripsi_priority')
                     ->required()
-                    ->label('Deskripsi Prioritas'),
+                    ->label('Deskripsi Prioritas')
+                    ->extraAttributes(['data-cy' => 'deskripsi-prioritas']),
                 Radio::make('jenis_kriteria')
                     ->options([
                         'benefit' => 'Keuntungan (Benefit)',
                         'cost' => 'Kerugian (Cost)',
                     ])
+                    ->extraAttributes(['data-cy' => 'jenis-kriteria'])
                     ->required()
                     ->descriptions([
                        'benefit' => 'Benefit adalah kriteria di mana nilai yang lebih tinggi adalah yang terbaik (misalnya: kualitas, manfaat, laba)',
@@ -98,8 +102,8 @@ class PrioritasResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make()->extraAttributes(['data-cy' => 'edit-prioritas']),
+                Tables\Actions\DeleteAction::make()->extraAttributes(['data-cy' => 'delete-prioritas']),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

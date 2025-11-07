@@ -49,10 +49,10 @@ class FeedbackResource extends Resource
                 Fieldset::make('Feedback')
                     ->schema([
                         Hidden::make('user_id')->default(fn () => auth()->id()),
-                        TextInput::make('subject_feedback')->label('Subjek Feedback')->required(),
-                        Textarea::make('isi_feedback')->label('Isi Subjek')->required(),
-                        ComponentsRatingStar::make('rate')->label('Rating'),
-                        SpatieMediaLibraryFileUpload::make('Foto feedback')->image()->imageEditor()->multiple()->collection('feedback')->label('Foto Feedback')->conversion('conversion')->maxSize(2048)->helperText('Ukuran maksimum file adalah 2MB.'),
+                        TextInput::make('subject_feedback')->label('Subjek Feedback')->required()->extraAttributes(['data-cy' => 'subject-feedback']),
+                        Textarea::make('isi_feedback')->label('Isi Subjek')->required()->extraAttributes(['data-cy' => 'isi-feedback']),
+                        ComponentsRatingStar::make('rate')->label('Rating')->extraAttributes(['data-cy' => 'rate'])->required(),
+                        SpatieMediaLibraryFileUpload::make('Foto feedback')->image()->imageEditor()->multiple()->collection('feedback')->label('Foto Feedback')->conversion('conversion')->maxSize(2048)->helperText('Ukuran maksimum file adalah 2MB.')->extraAttributes(['data-cy' => 'foto-feedback']),
                     ])->columns('1')
             ]);
     }
@@ -87,8 +87,8 @@ class FeedbackResource extends Resource
                     })
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make()->extraAttributes(['data-cy' => 'edit-feedback']),
+                Tables\Actions\DeleteAction::make()->extraAttributes(['data-cy' => 'delete-feedback']),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

@@ -15,7 +15,7 @@ class ListPengisianDonasis extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()->extraAttributes(['data-cy' => 'create-pengisian-donasi-button']),
         ];
     }
 }

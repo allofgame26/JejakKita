@@ -3,10 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PengisianDonasiResource\Pages;
-use App\Filament\Resources\PengisianDonasiResource\RelationManagers;
 use App\Models\m_program_pembangunan;
-use App\Models\PengisianDonasi;
-use App\Models\t_pengisian_donasi;
 use App\Models\t_transaksi_donasi_program;
 use Filament\Forms;
 use Filament\Forms\Components\Hidden;
@@ -15,7 +12,6 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
 
 class PengisianDonasiResource extends Resource
@@ -52,23 +48,22 @@ class PengisianDonasiResource extends Resource
                     ->searchable()
                     ->preload()
                     ->placeholder('Pilih metode pembayaran')
-                    // ->helperText('Pilih metode pembayaran yang tersedia.')
                     ->prefixIcon('heroicon-o-credit-card')
-                    ->required(),
+                    ->required()
+                    ->extraAttributes(['data-cy' => 'metode-pembayaran-pengisian-donasi']),
                 Forms\Components\TextInput::make('jumlah_donasi')
                     ->label('Jumlah Donasi')
                     ->numeric()
                     ->prefix('Rp')
                     ->placeholder('0')
                     // ->helperText('Masukkan nominal donasi dalam rupiah.')
-                    ->required(),
+                    ->required()
+                    ->extraAttributes(['data-cy' => 'jumlah-donasi-pengisian']),
                 Forms\Components\Textarea::make('pesan_donatur')
                     ->label('Pesan Donatur')
                     ->placeholder('Tulis pesan atau harapan Anda (opsional)')
                     ->rows(3)
-                // ->helperText('Pesan ini akan diterima oleh pengelola program.'),
-                // membuat Program automatis dipilih untuk masuk kedalam donasi
-                
+                    ->extraAttributes(['data-cy' => 'pesan-donatur-pengisian']),
 
             ]);
     }
@@ -109,6 +104,7 @@ class PengisianDonasiResource extends Resource
                     ->visible(fn ($record): bool => $record->status_pembayaran === "pending")
                     ->modalHeading('Upload Bukti Pembayaran')
                     ->modalSubmitActionLabel('Upload')
+                    ->extraAttributes(['data-cy' => 'action-bayar-sekarang'])
                     ->form([
                         \Filament\Forms\Components\ViewField::make('no_rekening')
                             ->view('filament.custom.no_rekening')
@@ -118,7 +114,9 @@ class PengisianDonasiResource extends Resource
                             ->collection('bukti_pembayaran_pengisian_lansia')
                             ->image()
                             ->imageEditor()
-                            ->required(),
+                            ->required()
+                            ->conversion('conversion')->maxSize(2048)->helperText('Ukuran maksimum file adalah 2MB.')
+                            ->extraAttributes(['data-cy' => 'bukti-pembayaran']),
                     ])
                     ->action(function ($record) {
                         $record->status_pembayaran = 'sukses';

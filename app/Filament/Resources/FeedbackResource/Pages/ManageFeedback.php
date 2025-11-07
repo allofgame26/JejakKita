@@ -15,7 +15,8 @@ class ManageFeedback extends ManageRecords
         return [
             Actions\CreateAction::make()
                 ->label('Tulis feedback')
-                ->icon('heroicon-o-pencil-square'),
+                ->icon('heroicon-o-pencil-square')
+                ->extraAttributes(['data-cy' => 'create-feedback-button']),
         ];
     }
 }

@@ -21,7 +21,7 @@ class EditTransaksiDonasiSpesifik extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            Actions\DeleteAction::make()->extraAttributes(['data-cy' => 'delete-button']),
         ];
     }
 

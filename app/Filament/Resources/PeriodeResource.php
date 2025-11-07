@@ -44,19 +44,22 @@ class PeriodeResource extends Resource
                     ->label('Nama Periode')
                     ->placeholder('2025/2026')
                     ->required()
-                    ->prefixIcon('heroicon-o-clock'),
+                    ->prefixIcon('heroicon-o-clock')
+                    ->extraAttributes(['data-cy' => 'nama-periode']),
                 DatePicker::make('tahun_mulai')
                     ->label('Tahun Mulai')
                     ->required()
                     ->displayFormat('d M Y')
                     ->native(false)
-                    ->prefixIcon('heroicon-o-calendar'),
+                    ->prefixIcon('heroicon-o-calendar')
+                    ->extraAttributes(['data-cy' => 'tahun-mulai']),
                 DatePicker::make('tahun_selesai')
                     ->required()
                     ->label('Tahun Selesai')
                     ->displayFormat('d M Y')
                     ->native(false)
-                    ->prefixIcon('heroicon-o-calendar'),
+                    ->prefixIcon('heroicon-o-calendar')
+                    ->extraAttributes(['data-cy' => 'tahun-selesai']),
                 Hidden::make('status')
                     ->default('nonaktif')
             ]);
@@ -86,8 +89,8 @@ class PeriodeResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make()->extraAttributes(['data-cy' => 'edit-periode']),
+                Tables\Actions\DeleteAction::make()->extraAttributes(['data-cy' => 'delete-periode']),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

@@ -42,30 +42,36 @@ class MetodePembayaranResource extends Resource
                 TextInput::make('nama_pembayaran')
                     ->label('Nama Pembayaran')
                     ->required()
-                    ->placeholder('Bank Central Asia'),
+                    ->placeholder('Bank Central Asia')
+                    ->extraAttributes(['data-cy' => 'nama-pembayaran']),
                 TextInput::make('kode_metode_pembayaran')
                     ->label('Kode Metode Pembayaran')
                     ->required()
-                    ->placeholder('BCA'),
+                    ->placeholder('BCA')
+                    ->extraAttributes(['data-cy' => 'kode-metode-pembayaran']),
                 TextInput::make('no_rekening')
                     ->label('Nomor Rekenening')
                     ->required()
                     ->unique(ignoreRecord: TRUE)
                     ->validationMessages([
                         'unique' => 'Nomor Rekening sudah ada'
-                    ]),
+                    ])
+                    ->extraAttributes(['data-cy' => 'no-rekening']),
                 Toggle::make('is_open')
                     ->label('Active')
                     ->onColor('success')
-                    ->offColor('danger'),
+                    ->offColor('danger')
+                    ->extraAttributes(['data-cy' => 'is-open']),
                 Textarea::make('deskripsi')
                     ->label('Deskripsi')
-                    ->required(),
+                    ->required()
+                    ->extraAttributes(['data-cy' => 'deskripsi']),
                 SpatieMediaLibraryFileUpload::make('logo_metode_pembayaran')
                     ->label('Logo Metode Pembayaran')
                     ->collection('logo_metode_pembayaran')
                     ->conversion('conversion')
-                    ->required()->maxSize(2048)->helperText('Ukuran maksimum file adalah 2MB.'),
+                    ->required()->maxSize(2048)->helperText('Ukuran maksimum file adalah 2MB.')
+                    ->extraAttributes(['data-cy' => 'logo-metode-pembayaran']),
             ]);
     }
 
@@ -90,7 +96,7 @@ class MetodePembayaranResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()->extraAttributes(['data-cy' => 'edit-metode-pembayaran']),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

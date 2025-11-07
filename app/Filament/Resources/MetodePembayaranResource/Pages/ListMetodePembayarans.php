@@ -16,7 +16,8 @@ class ListMetodePembayarans extends ListRecords
         return [
             Actions\CreateAction::make()
                 ->label('Tambah Metode')
-                ->icon('heroicon-o-plus-circle'),
+                ->icon('heroicon-o-plus-circle')
+                ->extraAttributes(['data-cy' => 'create-metode-pembayaran-button']),
         ];
     }
 

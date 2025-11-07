@@ -25,7 +25,8 @@ class EditPost extends EditRecord
                 ))
                 ->modalHeading('Preview Tampilan Post')
                 ->modalSubmitAction(false)
-                ->modalCancelAction(false),
+                ->modalCancelAction(false)
+                ->extraAttributes(['data-cy' => 'preview-button']),
 
             DeleteAction::make()
         ];

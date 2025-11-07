@@ -52,11 +52,13 @@ class BarangResource extends Resource
                 Select::make('kategoribarang_id')
                     ->required()
                     ->relationship('kategoriBarang','nama_kategori')
-                    ->preload(),
+                    ->preload()
+                    ->extraAttributes(['data-cy' => 'kategori-barang']),
                 TextInput::make('nama_barang')
                     ->required()
                     ->label('Nama Barang')
-                    ->placeholder('Contoh : Nama Barang, Merk, Tipe'),
+                    ->placeholder('Contoh : Nama Barang, Merk, Tipe')
+                    ->extraAttributes(['data-cy' => 'nama-barang']),
                 Select::make('nama_satuan')
                     ->required()
                     ->label('Nama Satuan')
@@ -70,9 +72,13 @@ class BarangResource extends Resource
                         'sak' => 'Sak',
                         'roll' => 'Roll',
                         'paket' => 'Paket',
-                    ]),
+                    ])
+                    ->extraAttributes(['data-cy' => 'nama-satuan']),
                 Textarea::make('deskripsi_barang')
-                    ->required(),
+                    ->required()
+                    ->label('Deskripsi Barang')
+                    ->placeholder('Contoh : Spesifikasi barang, warna, ukuran, dll.')
+                    ->extraAttributes(['data-cy' => 'deskripsi-barang']),
             ]);
     }
 
@@ -121,8 +127,8 @@ class BarangResource extends Resource
                     ->searchable()
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                DeleteAction::make()
+                Tables\Actions\EditAction::make()->extraAttributes(['data-cy' => 'edit-barang']),
+                DeleteAction::make()->extraAttributes(['data-cy' => 'delete-barang']),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

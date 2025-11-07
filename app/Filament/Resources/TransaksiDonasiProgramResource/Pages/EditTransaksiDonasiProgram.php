@@ -19,7 +19,7 @@ class EditTransaksiDonasiProgram extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            Actions\DeleteAction::make()->extraAttributes(['data-cy' => 'delete-button']),
         ];
     }
 
@@ -31,15 +31,18 @@ class EditTransaksiDonasiProgram extends EditRecord
                     ->disabled()
                     ->relationship('program', 'nama_pembangunan')
                     ->label('Pilih Program')
-                    ->required(),
+                    ->required()
+                    ->extraAttributes(['data-cy' => 'program-select']),
                 TextInput::make('jumlah_donasi')
                     ->required()
                     ->readOnly()
                     ->prefix('Rp.')
-                    ->label('Jumlah Donasi'),
+                    ->label('Jumlah Donasi')
+                    ->extraAttributes(['data-cy' => 'jumlah-donasi-input']),
                 TextInput::make('pesan_donatur')
                     ->readOnly()
-                    ->label('Pesan Donatur'),
+                    ->label('Pesan Donatur')
+                    ->extraAttributes(['data-cy' => 'pesan-donatur-input']),
                 TextInput::make('status_pembayaran')
                     ->readOnly(),
                 Select::make('pembayaran_id')
@@ -48,6 +51,7 @@ class EditTransaksiDonasiProgram extends EditRecord
                     ->options(m_metode_pembayaran::where('is_open', true)->pluck('nama_pembayaran','id'))
                     ->label('Pilih Pembayaran')
                     ->reactive()
+                    ->extraAttributes(['data-cy' => 'pembayaran-select'])
                     ->afterStateUpdated(function (callable $set, $state){
                         $pembayaran = m_metode_pembayaran::find($state);
                         if($pembayaran){
@@ -72,11 +76,7 @@ class EditTransaksiDonasiProgram extends EditRecord
                     ->image()->imageEditor()
                     ->required()
                     ->image()->imageEditor()
-                    // ->afterStateUpdated( function (callable $set, $state){
-                    //     if (!empty($state)) {
-                    //         $set('status_pembayaran','sukses');
-                    //     }
-                    // }),
+                    ->extraAttributes(['data-cy' => 'bukti-pembayaran-upload']),
             ]);
     }
 

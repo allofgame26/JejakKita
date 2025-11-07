@@ -16,7 +16,8 @@ class ListMandors extends ListRecords
         return [
             Actions\CreateAction::make()
                 ->label('Tambah Mandor')
-                ->icon('heroicon-o-plus-circle'),
+                ->icon('heroicon-o-plus-circle')
+                ->extraAttributes(['data-cy' => 'create-mandor-button']),
         ];
     }
 

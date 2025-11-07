@@ -40,7 +40,7 @@ class PengeluaranResource extends Resource
     {
         return $form
             ->schema([
-                DatePicker::make('tanggal')->label('Tanggal Pembelian')->required()->native(false)->displayFormat('d M Y')->maxDate(now())->prefixIcon('heroicon-o-calendar'),
+                DatePicker::make('tanggal')->label('Tanggal Pembelian')->required()->native(false)->displayFormat('d M Y')->maxDate(now())->prefixIcon('heroicon-o-calendar')->extraAttributes(['data-cy' => 'tanggal-pembelian']),
                 Select::make('kategori')->label('Kategori Pengeluaran')->required()
                     ->options([
                         'Material' => 'Pembelian Material',
@@ -53,13 +53,15 @@ class PengeluaranResource extends Resource
                         'Platform' => 'Biaya Platform & Transaksi',
                         'Pemasaran' => 'Pemasaran & Promosi',
                         'Lain - Lain' => 'Lain - Lain / Tak Terduga',
-                    ]),
+                    ])
+                    ->extraAttributes(['data-cy' => 'kategori-pengeluaran']),
                 Select::make('program_id')
                     ->relationship('program', 'nama_pembangunan',fn (Builder $query) => $query->where('status','=', ['pendanaan','berjalan']))
                     ->preload()
-                    ->label('Program Pembangunan'),
-                TextInput::make('jumlah')->label('Jumlah Pengeluaran')->required()->prefix('Rp.'),
-                Textarea::make('deskripsi')->label('Deskripsi Pengeluaran')->required(), 
+                    ->label('Program Pembangunan')
+                    ->extraAttributes(['data-cy' => 'program-pembangunan']),
+                TextInput::make('jumlah')->label('Jumlah Pengeluaran')->required()->prefix('Rp.')->extraAttributes(['data-cy' => 'jumlah-pengeluaran']),
+                Textarea::make('deskripsi')->label('Deskripsi Pengeluaran')->required()->extraAttributes(['data-cy' => 'deskripsi-pengeluaran']), 
             ]);
     }
 
@@ -79,7 +81,7 @@ class PengeluaranResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()->extraAttributes(['data-cy' => 'edit-pengeluaran']),
                 Action::make('bayar')
                     ->label('Bayar Sekarang')
                     ->icon('heroicon-o-arrow-up-on-square')
@@ -87,6 +89,12 @@ class PengeluaranResource extends Resource
                     ->visible(fn ($record): bool => $record->status_pembayaran === "pending" && auth()->user()->hasRole(['Admin','super_admin']) && $record->user_id = auth()->user()->id && $record->sumber_type != null)
                     ->modalHeading('Upload Bukti Pembayaran / Struk Pembelian')
                     ->modalSubmitActionLabel('Upload')
+                    ->extraAttributes([
+                        'data-cy' => 'action-bayar-sekarang',
+                        'class' => 'filament-button-bayar',
+                        'title' => 'Klik untuk upload bukti pembayaran',
+                        'data-status' => 'pending'
+                    ])
                     ->form([
                         \Filament\Forms\Components\SpatieMediaLibraryFileUpload::make('bukti_pembayaran')
                             ->label('Bukti Pembayaran (JPG/PNG)')
@@ -94,7 +102,8 @@ class PengeluaranResource extends Resource
                             ->image()
                             ->imageEditor()
                             ->required()
-                            ->conversion('conversion')->maxSize(2048)->helperText('Ukuran maksimum file adalah 2MB.'),
+                            ->conversion('conversion')->maxSize(2048)->helperText('Ukuran maksimum file adalah 2MB.')
+                            ->extraAttributes(['data-cy' => 'bukti-pembayaran']),
                     ])
                     ->action(function ($record){
                         $record->status_pembayaran = 'sudah';

@@ -3,25 +3,17 @@
 namespace App\Filament\Resources\BarangResource\RelationManagers;
 
 use App\Models\m_vendor;
-use App\Models\t_transaksi_barang;
-use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use Filament\Infolists\Components\Fieldset;
-use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
-use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class TransaksiBarangRelationManager extends RelationManager
 {
@@ -35,21 +27,25 @@ class TransaksiBarangRelationManager extends RelationManager
                     ->label('Nama Vendor')
                     ->options(m_vendor::where('status', 'aktif')->pluck('nama_vendor', 'id'))
                     ->searchable()
-                    ->required(),
+                    ->required()
+                    ->extraAttributes(['data-cy' => 'select-vendor']),
                 TextInput::make('jumlah_dibeli')
                     ->label('Jumlah Dibeli')
                     ->numeric()
-                    ->required(),
+                    ->required()
+                    ->extraAttributes(['data-cy' => 'input-jumlah-dibeli']),
                 TextInput::make('harga_satuan')
                     ->label('Harga Satuan')
                     ->numeric()
-                    ->required(),
+                    ->required()
+                    ->extraAttributes(['data-cy' => 'input-harga-satuan']),
                 DatePicker::make('tanggal_beli')
                     ->label('Tanggal Pembelian')
                     ->native(false)
                     ->displayFormat('d M Y')
                     ->maxDate(now())
-                    ->required(),
+                    ->required()
+                    ->extraAttributes(['data-cy' => 'input-tanggal-pembelian']),
             ]);
     }
 
@@ -83,6 +79,7 @@ class TransaksiBarangRelationManager extends RelationManager
                     ->icon('heroicon-o-plus-circle')
                     ->modalHeading('Catat Pembelian Barang')
                     ->color('warning')
+                    ->extraAttributes(['data-cy' => 'button-tambah-transaksi-barang'])
                     ->form([
                         Select::make('vendor_id')
                             ->relationship('vendor', 'nama_vendor')
@@ -92,18 +89,23 @@ class TransaksiBarangRelationManager extends RelationManager
                             ->createOptionForm([
                                 TextInput::make('kode_vendor')
                                     ->label('Kode Vendor')
-                                    ->required(),
+                                    ->required()
+                                    ->extraAttributes(['data-cy' => 'input-kode-vendor']),
                                 TextInput::make('nama_vendor')
                                     ->label('Nama Vendor')
-                                    ->required(),
+                                    ->required()
+                                    ->extraAttributes(['data-cy' => 'input-nama-vendor']),
                                 TextInput::make('alamat_vendor')
                                     ->label('Alamat Vendor')
-                                    ->required(),
+                                    ->required()
+                                    ->extraAttributes(['data-cy' => 'input-alamat-vendor']),
                                 TextInput::make('no_telepon')
                                     ->label('Nomor Telepon / WhatsApp')
-                                    ->required(),
+                                    ->required()
+                                    ->extraAttributes(['data-cy' => 'input-no-telepon']),
                                 TextInput::make('keterangan')
-                                    ->label('Keterangan'),
+                                    ->label('Keterangan')
+                                    ->extraAttributes(['data-cy' => 'input-keterangan-vendor']),
                                 Hidden::make('status')
                                     ->default('aktif')
                                 ])
@@ -137,8 +139,8 @@ class TransaksiBarangRelationManager extends RelationManager
                     ]),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make()->extraAttributes(['data-cy' => 'button-edit-transaksi-barang']),
+                Tables\Actions\DeleteAction::make()->extraAttributes(['data-cy' => 'button-hapus-transaksi-barang']),
                 Action::make('bayar')
                     ->label('Pengumpulan Struk')
                     ->icon('heroicon-o-arrow-up-on-square')
@@ -146,9 +148,14 @@ class TransaksiBarangRelationManager extends RelationManager
                     ->visible(fn ($record): bool => $record->status_pembayaran === 'pending')
                     ->modalHeading('Upload Bukti Pembayaran')
                     ->modalSubmitActionLabel('Upload')
+                    ->extraAttributes([
+                        'data-cy' => 'action-upload-bukti-pembayaran',
+                        'class' => 'filament-button-upload-bukti',
+                    ])
                     ->form([
                         SpatieMediaLibraryFileUpload::make('bukti_pembayaran')
                             ->label('Nota Pembayaran')
+                            ->extraAttributes(['data-cy' => 'upload-bukti-pembayaran'])
                             ->collection('pembelian_barang')
                             ->image()
                             ->imageEditor()

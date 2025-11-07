@@ -42,15 +42,18 @@ class KategoriBarangResource extends Resource
                     ->placeholder('Contoh : SL')
                     ->required()
                     ->unique(ignoreRecord: true)
-                    ->minLength(2),
+                    ->minLength(2)
+                    ->extraAttributes(['data-cy' => 'kode-kategori']),
                 TextInput::make('nama_kategori')
                     ->unique(ignoreRecord: true)
                     ->label('Nama Kategori')
-                    ->required(),
+                    ->required()
+                    ->extraAttributes(['data-cy' => 'nama-kategori']),
                 Textarea::make('deskripsi_kategori')
                     ->label('Deskripsi Kategori')
                     ->maxLength(500)
-                    ->required(),
+                    ->required()
+                    ->extraAttributes(['data-cy' => 'deskripsi-kategori']),
             ]);
     }
 
@@ -69,7 +72,7 @@ class KategoriBarangResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()->extraAttributes(['data-cy' => 'edit-kategori-barang']),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

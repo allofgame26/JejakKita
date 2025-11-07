@@ -16,7 +16,7 @@ class ListProgramPembangunans extends ListRecords
         return [
             Actions\CreateAction::make()
                 ->label('Tambah Program')
-                ->icon('heroicon-o-plus-circle'),
+                ->icon('heroicon-o-plus-circle')->extraAttributes(['data-cy' => 'create-program-button']),
         ];
     }
 

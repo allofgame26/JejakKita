@@ -16,7 +16,8 @@ class ListBarangs extends ListRecords
         return [
             Actions\CreateAction::make()
                 ->label('Tambah Barang')
-                ->icon('heroicon-o-plus-circle'),
+                ->icon('heroicon-o-plus-circle')
+                ->extraAttributes(['data-cy' => 'button-tambah-barang']),
         ];
     }
 

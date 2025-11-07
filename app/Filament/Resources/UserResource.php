@@ -3,24 +3,16 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
-use App\Filament\Resources\UserResource\RelationManagers;
-use App\Models\m_data_diri;
 use App\Models\User;
-use Filament\Forms;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Hash;
-use Nette\Utils\ImageColor;
-use SebastianBergmann\Type\TrueType;
 
 class UserResource extends Resource
 {
@@ -48,11 +40,14 @@ class UserResource extends Resource
             ->schema([
                 TextInput::make('name')
                     ->required()
-                    ->label('Username'),
+                    ->label('Username')
+                    ->unique(ignoreRecord: TRUE)
+                    ->extraAttributes(['data-cy' => 'username']),
                 TextInput::make('email')
                     ->email()
                     ->unique(ignoreRecord: TRUE)
-                    ->required(),
+                    ->required()
+                    ->extraAttributes(['data-cy' => 'email']),
                 TextInput::make('password')
                     ->required()
                     ->password()
@@ -60,18 +55,14 @@ class UserResource extends Resource
                     ->label('Password')
                     ->dehydrateStateUsing(fn ($state) => $state ? Hash::make($state) : null) //melakukan edit sebuah value yang di inputkan, setelah itu dimasukkan kedalam database
                     ->required(fn (string $context): bool => $context === 'create')
+                    ->extraAttributes(['data-cy' => 'password'])
                     ->dehydrated(fn ($state) => filled($state)), // melakukan hanya simpan jika kolom diisi 
-                Select::make('id_identitas')
-                    ->label('Data Diri')
-                    ->preload()
-                    ->relationship('datadiri','nama_lengkap')
-                    ->searchable(['nama_lengkap','nip'])
-                    ->preload(),
                 Select::make('roles')
                     ->relationship('roles','name')
                     ->label('Roles')
                     ->preload()
                     ->searchable()
+                    ->extraAttributes(['data-cy' => 'roles']),
             ]);
     }
 
@@ -94,7 +85,7 @@ class UserResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()->extraAttributes(['data-cy' => 'edit-user']),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

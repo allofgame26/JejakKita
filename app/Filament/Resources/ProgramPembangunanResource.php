@@ -61,9 +61,12 @@ class ProgramPembangunanResource extends Resource
                 Select::make('mandor_id')
                     ->required()
                     ->relationship('mandor','nama_lengkap')
-                    ->searchable(), //memliki kekurangan kita harus mengetahui Mandornya siapa saja
+                    ->searchable()
+                    ->extraAttributes(['data-cy' => 'mandor-id']), //memliki kekurangan kita harus mengetahui Mandornya siapa saja
                 TextInput::make('nama_pembangunan')
-                    ->required(),
+                    ->required()
+                    ->label('Nama Pembangunan')
+                    ->extraAttributes(['data-cy' => 'nama-pembangunan']),
                 Select::make('tipe_donasi')
                     ->label('Tipe Donasi')
                     ->options([
@@ -71,11 +74,13 @@ class ProgramPembangunanResource extends Resource
                         'donasi_target' => 'Donasi Target'
                     ])
                     ->required()
-                    ->live(),
+                    ->live()
+                    ->extraAttributes(['data-cy' => 'tipe-donasi']),
                 Select::make('periode_id')
                     ->label('Periode Pembangunan')
                     ->relationship('periode','nama_periode')
-                    ->required(),
+                    ->required()
+                    ->extraAttributes(['data-cy' => 'periode-pembangunan']),
                 DatePicker::make('tanggal_mulai')
                     ->displayFormat('d M Y')
                     ->native(false)
@@ -83,19 +88,22 @@ class ProgramPembangunanResource extends Resource
                     ->minDate(fn (string $operation): ?string => $operation === 'create' ? now() : null)
                     ->suffixIcon('heroicon-m-calendar')
                     ->live()
-                    ->disabled(fn (Get $get):bool  => $get('tipe_donasi') === 'donasi_berkelanjutan'),
+                    ->disabled(fn (Get $get):bool  => $get('tipe_donasi') === 'donasi_berkelanjutan')
+                    ->extraAttributes(['data-cy' => 'tanggal-mulai']),
                 DatePicker::make('estimasi_tanggal_selesai')
                     ->displayFormat('d M Y')
                     ->native(false)
                     ->required(fn (Get $get):bool  => $get('tipe_donasi') === 'donasi_target')
                     ->minDate(fn ($get) => $get('tanggal_mulai'))
                     ->suffixIcon('heroicon-m-calendar')
-                    ->disabled(fn (Get $get):bool  => $get('tipe_donasi') === 'donasi_berkelanjutan'),
+                    ->disabled(fn (Get $get):bool  => $get('tipe_donasi') === 'donasi_berkelanjutan')
+                    ->extraAttributes(['data-cy' => 'estimasi-tanggal-selesai']),
                 TextInput::make('estimasi_biaya')
                     ->numeric()
                     ->required(fn (Get $get):bool  => $get('tipe_donasi') === 'donasi_target')
                     ->prefix('Rp.')
-                    ->disabled(fn (Get $get):bool  => $get('tipe_donasi') === 'donasi_berkelanjutan'),
+                    ->disabled(fn (Get $get):bool  => $get('tipe_donasi') === 'donasi_berkelanjutan')
+                    ->extraAttributes(['data-cy' => 'estimasi-biaya']),
                 Hidden::make('status')
                     ->default('pendanaan'),
                 SpatieMediaLibraryFileUpload::make('foto_pembangunan')
@@ -103,10 +111,12 @@ class ProgramPembangunanResource extends Resource
                         ->collection('pembangunan')
                         ->conversion('compressed')
                         ->maxSize(2048)
-                        ->helperText('Ukuran maksimum file adalah 2MB.'),
+                        ->helperText('Ukuran maksimum file adalah 2MB.')
+                        ->extraAttributes(['data-cy' => 'foto-pembangunan']),
                 Textarea::make('deskripsi')
                         ->required()
-                        ->label('Deskripsi Program'),
+                        ->label('Deskripsi Program')
+                        ->extraAttributes(['data-cy' => 'deskripsi-pembangunan']),
             ]);
     }
 
@@ -172,8 +182,8 @@ class ProgramPembangunanResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make()->extraAttributes(['data-cy' => 'view-program']),
+                Tables\Actions\EditAction::make()->extraAttributes(['data-cy' => 'edit-program']),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

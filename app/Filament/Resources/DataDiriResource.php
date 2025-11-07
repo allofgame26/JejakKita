@@ -41,35 +41,51 @@ class DataDiriResource extends Resource
         return $form
             ->schema([
                 TextInput::make('nama_lengkap')
-                    ->required(),
+                    ->required()
+                    ->label('Nama Lengkap')
+                    ->extraAttributes(['data-cy' => 'nama-lengkap']),
                 TextInput::make('nip')
                     ->required()
-                    ->unique(ignoreRecord: TRUE),
+                    ->unique(ignoreRecord: TRUE)
+                    ->label('NIP')
+                    ->extraAttributes(['data-cy' => 'nip']),
                 TextInput::make('tempat_lahir')
-                    ->required(),
+                    ->required()
+                    ->label('Tempat Lahir')
+                    ->extraAttributes(['data-cy' => 'tempat-lahir']),
                 DatePicker::make('tanggal_lahir')
                     ->displayFormat('d/m/Y')
                     ->native(false)
                     ->maxDate(now())
-                    ->required(),
+                    ->required()
+                    ->label('Tanggal Lahir')
+                    ->extraAttributes(['data-cy' => 'tanggal-lahir']),
                 TextInput::make('alamat')
-                    ->required(),
+                    ->required()
+                    ->label('Alamat')
+                    ->extraAttributes(['data-cy' => 'alamat']),
                 Select::make('jenis_kelamin')
                     ->options([
                         'laki' => 'Laki - Laki',
                         'perempuan' => 'Perempuan'
                     ])
-                    ->required(),
+                    ->required()
+                    ->label('Jenis Kelamin')
+                    ->extraAttributes(['data-cy' => 'jenis-kelamin']),
                 TextInput::make('no_telp')
                     ->tel()
                     ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/')
-                    ->required(),
+                    ->required()
+                    ->label('No. Telp')
+                    ->extraAttributes(['data-cy' => 'no-telp']),
                 SpatieMediaLibraryFileUpload::make('profile')
                     ->image()
                     ->collection('profile')
                     ->imageEditor()
                     ->conversion('conversion')->maxSize(2048)
-                    ->helperText('Ukuran maksimum file adalah 2MB.'),
+                    ->helperText('Ukuran maksimum file adalah 2MB.')
+                    ->label('Foto Profil')
+                    ->extraAttributes(['data-cy' => 'foto-profil']),
             ]);
     }
 
@@ -90,7 +106,7 @@ class DataDiriResource extends Resource
                 
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()->extraAttributes(['data-cy' => 'edit-data-diri']),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
