@@ -39,9 +39,7 @@ class VendorResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('kode_vendor')
-                    ->label('Kode Vendor')
-                    ->required(),
+                Hidden::make('kode_vendor'),
                 TextInput::make('nama_vendor')
                     ->label('Nama Vendor')
                     ->required()
