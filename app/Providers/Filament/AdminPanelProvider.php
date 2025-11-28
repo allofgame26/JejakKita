@@ -34,6 +34,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->brandName('JejakKita')
+            ->favicon(asset('images/iconJejakKita.png'))
             ->profile(isSimple: false) // kurang dicustom
             ->emailVerification()
             ->sidebarCollapsibleOnDesktop()
@@ -57,7 +58,7 @@ class AdminPanelProvider extends PanelProvider
                 // Widgets\FilamentInfoWidget::class,
                 TestWidget::class, // Widget Bisa ditaruh didalam sini
                 ProgramPembangunanWidget::class,
-                DashboardWidget::class,
+                // DashboardWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

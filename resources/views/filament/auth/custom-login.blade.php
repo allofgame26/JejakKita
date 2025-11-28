@@ -115,6 +115,20 @@
                 border-color: rgba(255, 255, 255, 0.5) !important;
                 box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5) !important;
             }
+
+            /* Menyesuaikan style icon show/hide password */
+            .fi-input-wrp button[aria-label="Show password"],
+            .fi-input-wrp button[aria-label="Hide password"] {
+                color: #f8fafc !important; /* Paksa warna icon jadi putih/terang */
+                opacity: 0.6; /* Buat sedikit transparan */
+                transition: opacity 0.2s ease-in-out;
+            }
+
+            /* Efek hover agar lebih jelas saat disentuh mouse */
+            .fi-input-wrp button[aria-label="Show password"]:hover,
+            .fi-input-wrp button[aria-label="Hide password"]:hover {
+                opacity: 1; /* Buat jadi solid saat di-hover */
+            }
             
             /* Memperbaiki warna teks deskripsi */
             .brand div div { color: #e2e8f0 !important; }

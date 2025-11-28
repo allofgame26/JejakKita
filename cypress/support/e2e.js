@@ -15,3 +15,20 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands'
+
+// Perintah ini memberi tahu Cypress untuk tidak
+// menganggap request 'livewire/update' sebagai "loading" halaman.
+// Ini akan menghentikan error timeout karena Livewire.
+beforeEach(() => {
+    cy.intercept('POST', '/livewire/update').as('livewireUpdate');
+});
+
+// (Opsional tapi direkomendasikan)
+// Terkadang Livewire melempar error internal yang bisa
+// menghentikan Cypress. Ini akan mengabaikannya.
+Cypress.on('uncaught:exception', (err, runnable) => {
+    // kita mengabaikan error dari Livewire
+    if (err.message.includes('Livewire')) {
+        return false;
+    }
+});

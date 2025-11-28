@@ -23,3 +23,22 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('login', (email, password) => {
+    cy.visit('http://127.0.0.1:8000/admin/login'); // Kunjungi untuk dapat CSRF token
+
+    cy.get('meta[name="csrf-token"]').then((meta) => {
+        const csrfToken = meta.attr('content');
+
+        cy.request({
+            method: 'POST',
+            url: '/admin/login',
+            form: true, // Penting
+            body: {
+                _token: csrfToken,
+                'data.login': email, // Sesuai 'name' input Anda
+                'data.password': password,
+            }
+        });
+    });
+});

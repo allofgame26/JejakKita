@@ -24,16 +24,6 @@ class UserResource extends Resource
 
     protected static ?string $navigationGroup = 'Super Admin';
 
-    public static function getNavigationBadge(): ?string
-    {
-        return static::getModel()::count();
-    }
-
-    public static function getNavigationBadgeTooltip(): ?string
-    {
-        return 'Banyaknya User';
-    }
-
     public static function form(Form $form): Form
     {
         return $form
