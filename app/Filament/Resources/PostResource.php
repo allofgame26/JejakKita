@@ -47,14 +47,8 @@ class PostResource extends Resource
                 TextInput::make('title')
                     ->label('Judul')
                     ->required()
-                    ->live(onBlur: true)
-                    ->reactive()
                     ->unique(ignoreRecord: TRUE)
-                    ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', \Str::slug($state)))
                     ->extraAttributes(['data-cy' => 'judul-post']),
-                TextInput::make('slug')
-                    ->label('slug')
-                    ->readOnly(),
                 Select::make('kategori')
                     ->relationship('kategori','title')
                     ->preload()

@@ -16,7 +16,7 @@ class KodeVendor
 
     public function creating(m_vendor $m_vendor): void
     {
-        $jumlahVendor = m_vendor::where('nama_vendor', $m_vendor->nama_vendor)->count();
+        $jumlahVendor = m_vendor::where('id')->count();
 
         $kodeVendor = 'VDR-' . $jumlahVendor . '-' . date('ym');
 

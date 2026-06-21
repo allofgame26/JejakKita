@@ -17,7 +17,7 @@
             
             /* Style untuk container Filament */
             .fi-simple-layout {
-                background-image: url("{{ asset('images/kemenkeumengajar.jpeg') }}");
+                background-image: url("{{ asset('images/login.jpg') }}");
                 background-size: cover;
                 background-position: center;
                 background-repeat: no-repeat;
@@ -65,7 +65,7 @@
 
             /* Override style Filament card */
             .fi-simple-main {
-                background: rgba(255, 255, 255, 0.15) !important;
+                background: rgba(14, 11, 11, 0.15) !important;
                 backdrop-filter: blur(4px);
                 -webkit-backdrop-filter: blur(4px);
             }

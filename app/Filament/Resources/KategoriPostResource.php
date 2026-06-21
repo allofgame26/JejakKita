@@ -34,13 +34,7 @@ class KategoriPostResource extends Resource
                 TextInput::make('title')
                     ->label('Nama Kategori')
                     ->required()
-                    ->live()
-                    ->live(onBlur: true)
-                    ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', \Str::slug($state)))
                     ->extraAttributes(['data-cy' => 'title-post-kategori']),
-                TextInput::make('slug')
-                    ->label('slug')
-                    ->readOnly(),
                 Textarea::make('content')
                     ->label('Deskripsi')
                     ->required()

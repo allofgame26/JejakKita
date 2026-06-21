@@ -20,18 +20,6 @@ class DataDiriSchema
             TextInput::make('nama_lengkap')
                     ->required()
                     ->label('Nama Lengkap'),
-            TextInput::make('nip')
-                    ->unique(ignoreRecord: true)
-                    ->label('Nomor Induk Kependudukan')
-                    ->required(),
-            TextInput::make('tempat_lahir')
-                    ->label('Kota Lahir')
-                    ->required(),
-            DatePicker::make('tanggal_lahir')
-                    ->label('Tanggal Lahir')
-                    ->native(false)
-                    ->displayFormat('d M Y')
-                    ->required(),
             TextInput::make('alamat')
                     ->label('Alamat lengkap')
                     ->required(),

@@ -50,7 +50,7 @@
         .hero {
             position: relative;
             /* */
-            background: url("{{ asset('images/kunjungansekolah.jpeg') }} ") no-repeat center center/cover;
+            background: url("{{ asset('images/mainpicture.jpg') }} ") no-repeat center center/cover;
             color: white;
             text-align: center;
             padding: 8rem 1rem;
@@ -223,13 +223,13 @@
             <div class="col-lg-6">
                 <div class="row g-3">
                     <div class="col-6">
-                        <img src="{{ asset('images/kemenkeumengajar.jpeg') }}" class="img-fluid rounded-3 shadow" alt="Anak-anak sekolah di desa">
+                        <img src="{{ asset('images/kisahkami1.jpg') }}" class="img-fluid rounded-3 shadow" alt="Anak-anak sekolah di desa">
                     </div>
                     <div class="col-6">
-                        <img src="{{ asset('images/SDMuhammadiyahGantong.jpeg') }}" class="img-fluid rounded-3 shadow" alt="Pemandangan pegunungan">
+                        <img src="{{ asset('images/kisahkami2.jpg') }}" class="img-fluid rounded-3 shadow" alt="Pemandangan pegunungan">
                     </div>
                      <div class="col-12">
-                        <img src="{{ asset('images/GunungGede.jpeg') }}" class="img-fluid rounded-3 shadow" alt="Proses pembangunan sekolah">
+                        <img src="{{ asset('images/kisahkami3.jpg') }}" class="img-fluid rounded-3 shadow" alt="Proses pembangunan sekolah">
                     </div>
                 </div>
             </div>
@@ -388,6 +388,7 @@
             <div class="splide__track">
                 <ul class="splide__list">
                     @foreach($kategori->posts as $post)
+                        @if($post->is_published == true)
                         <li class="splide__slide p-2">
                             <div class="card card-custom">
                                 <img src="{{ $post->getFirstMediaUrl('fitur_image') }}" alt="{{ $post->title }}" class="card-img-top">
@@ -397,6 +398,7 @@
                                 </div>
                             </div>
                         </li>
+                        @endif
                     @endforeach
                 </ul>
             </div>
