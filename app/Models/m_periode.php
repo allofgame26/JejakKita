@@ -21,4 +21,9 @@ class m_periode extends Model
     {
         return $this->hasMany(m_program_pembangunan::class);
     }
+
+    public function dokumen(): HasMany
+    {
+        return $this->hasMany(m_dokumen::class, 'id_periode');
+    }
 }
