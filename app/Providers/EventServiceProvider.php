@@ -10,6 +10,7 @@ use App\Models\t_transaksi_barang;
 use App\Models\t_transaksi_donasi_program;
 use App\Models\t_transaksi_donasi_spesifik;
 use App\Models\User;
+use App\Models\m_dokumen;
 use App\Observers\KodeBarangObserver;
 use App\Observers\ProgramPembangunan;
 use App\Observers\ProgramPembangunanObserver;
@@ -17,6 +18,7 @@ use App\Observers\TransaksiBarang;
 use App\Observers\TransaksiProgram;
 use App\Observers\TransaksiSpesifik;
 use App\Observers\UserObserver;
+use App\Observers\MasterDokumenEmbedding;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -44,6 +46,7 @@ class EventServiceProvider extends ServiceProvider
         t_transaksi_donasi_spesifik::class => [TransaksiSpesifik::class],
         m_program_pembangunan::class => [ProgramPembangunan::class],
         t_transaksi_barang::class => [TransaksiBarang::class],
+        m_dokumen::class => [MasterDokumenEmbedding::class],
     ];
 
     /**

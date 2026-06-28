@@ -2,47 +2,47 @@
 
 namespace App\Observers;
 
-use App\Models\dokumen_rag;
-use App\Jobs\ProsesEmbeddingRAG;
+use App\Jobs\prosesEmbeddingRAG;
+use App\Models\m_dokumen;
 
 class MasterDokumenEmbedding
 {
     /**
-     * Handle the dokumen_rag "created" event.
+     * Handle the m_dokumen "created" event.
      */
-    public function created(dokumen_rag $dokumen_rag): void
+    public function created(m_dokumen $m_dokumen): void
     {
-        prosesEmbeddingRAG::dispatch($dokumen_rag);
+        prosesEmbeddingRAG::dispatch($m_dokumen);
     }
 
     /**
-     * Handle the dokumen_rag "updated" event.
+     * Handle the m_dokumen "updated" event.
      */
-    public function updated(dokumen_rag $dokumen_rag): void
-    {
-        //
-    }
-
-    /**
-     * Handle the dokumen_rag "deleted" event.
-     */
-    public function deleted(dokumen_rag $dokumen_rag): void
+    public function updated(m_dokumen $m_dokumen): void
     {
         //
     }
 
     /**
-     * Handle the dokumen_rag "restored" event.
+     * Handle the m_dokumen "deleted" event.
      */
-    public function restored(dokumen_rag $dokumen_rag): void
+    public function deleted(m_dokumen $m_dokumen): void
     {
         //
     }
 
     /**
-     * Handle the dokumen_rag "force deleted" event.
+     * Handle the m_dokumen "restored" event.
      */
-    public function forceDeleted(dokumen_rag $dokumen_rag): void
+    public function restored(m_dokumen $m_dokumen): void
+    {
+        //
+    }
+
+    /**
+     * Handle the m_dokumen "force deleted" event.
+     */
+    public function forceDeleted(m_dokumen $m_dokumen): void
     {
         //
     }

@@ -43,7 +43,7 @@ class DokumenResource extends Resource
                     ->label('File Dokumen')
                     ->acceptedFileTypes(['application/pdf'])
                     ->required()
-                    ->collection('dokumen'),
+                    ->directory('public/dokumen'),
             ]);
     }
 
