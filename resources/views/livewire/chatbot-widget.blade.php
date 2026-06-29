@@ -1,4 +1,4 @@
-<div x-data="{ open: false }" class="fixed bottom-6 right-6 z-50 font-sans">
+<div x-data="{ open: false }" style="position: fixed; bottom: 30px; right: 30px; z-index: 99999;" class="font-sans">
     
     <button @click="open = true" x-show="!open" class="bg-primary-600 text-white p-4 rounded-full shadow-2xl hover:bg-primary-500 transition transform hover:scale-105">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7">

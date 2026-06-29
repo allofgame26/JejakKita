@@ -52,7 +52,7 @@ class AdminPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
-                Pages\Dashboard::class,
+                \App\Filament\Pages\Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
@@ -81,10 +81,10 @@ class AdminPanelProvider extends PanelProvider
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
                 ApiServicePlugin::make(), // harus di masukkan, jika tidak maka API akan tidak terpanggil yang ada didalam route:list
             ])
-            ->renderHook(
-                PanelsRenderHook::BODY_END,
-                fn (): string => Blade::render('@livewire(\'chatbot-widget\')'),
-            )
+            // ->renderHook(
+            //     'panels::page.end',
+            //     fn () => \Livewire\Livewire::mount(\App\Livewire\ChatbotWidget::class),
+            // )
             ->renderHook(
                 'panels::global-search.after',
                 fn () => \Livewire\Livewire::mount(\App\Livewire\GlobalActions::class),

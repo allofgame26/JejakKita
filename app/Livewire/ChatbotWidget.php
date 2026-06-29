@@ -8,18 +8,18 @@ use Livewire\Component;
 class ChatbotWidget extends Component
 {
 
-    public $pesaninput = '';
+    public $pesanInput = '';
     public $riwayatChat = []; //untuk memeorti percakapan History Aware
 
     public function kirimPesan()
     {
         // mencegah inputan kosong
-        if (trim($this->pesaninput) === '') return;
+        if (trim($this->pesanInput) === '') return;
 
         // menyimpan chat untuk di simpan di riwwayatChat
-        $pertanyaan = $this->pesaninput;
+        $pertanyaan = $this->pesanInput;
         $this->riwayatChat[] = ['role' => 'user', 'content' => $pertanyaan];
-        $this->pesaninput= ''; //mengkosongkan kolom input pesan setealh dikirim
+        $this->pesanInput= ''; //mengkosongkan kolom input pesan setealh dikirim
 
         // mengambil riwayat lama untuk history Aware
         $historyUntukAPI = array_slice($this->riwayatChat, 0, -1);
@@ -28,7 +28,7 @@ class ChatbotWidget extends Component
             $response = Http::timeout(60)->post('http://127.0.0.1:8001/api/cari-jawaban',[
                 'pertanyaan' => $pertanyaan,
                 'jumlah_hasil' => 3, //kedepannya mungkin didalam embedding.py dirubah menjadi "tidak harus diisi"
-                'history' => $ $historyUntukAPI
+                'history' => $historyUntukAPI
             ]);
 
             if ($response->successful()){
