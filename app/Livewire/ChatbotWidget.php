@@ -25,16 +25,25 @@ class ChatbotWidget extends Component
         $historyUntukAPI = array_slice($this->riwayatChat, 0, -1);
 
         try {
-            $response = Http::timeout(60)->post('http://127.0.0.1:8001/api/cari-jawaban',[
+            $response = Http::timeout(300)->post('http://127.0.0.1:8001/api/pertanyaan',[
                 'pertanyaan' => $pertanyaan,
-                'jumlah_hasil' => 3, //kedepannya mungkin didalam embedding.py dirubah menjadi "tidak harus diisi"
+                'jumlah_hasil' => 2, //kedepannya mungkin didalam embedding.py dirubah menjadi "tidak harus diisi"
                 'history' => $historyUntukAPI
             ]);
 
             if ($response->successful()){
                 $data = $response->json();
                 // memasukkan jawaban ke layar Chatbot
-                $this->riwayatChat[] = ['role' => 'assistant', 'content' => $data['jawaban_ai']];       
+                $this->riwayatChat[] = ['role' => 'assistant', 'content' => $data['jawaban_ai']];
+                
+                // Rangkaian metrics untuk menampilkan dibawah chat AI
+                $stringMetrics = "Waktu: {data['waktu_proses']} dt| Jarak Consine: {data['jarak_vector']}";
+
+                $this->riwayatChat[] = [
+                    'role' => 'assistant',
+                    'content' => $data['jawaban_ai'],
+                    'metrics' => $stringMetrics // memasukkan metrik ke memori
+                ];
             } else {
                 $this->riwayatChat[] = ['role' => 'assistant', 'content' => 'Maaf, terjadi kesalahan pada server AI'];
             }

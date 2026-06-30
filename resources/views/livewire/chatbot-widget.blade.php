@@ -27,8 +27,38 @@
             @endif
 
             @foreach($riwayatChat as $chat)
-                <div class="p-3 rounded-2xl max-w-[85%] text-sm shadow-sm {{ $chat['role'] === 'user' ? 'bg-primary-100 text-primary-900 self-end rounded-tr-none' : 'bg-white dark:bg-gray-700 dark:text-white border border-gray-200 dark:border-gray-600 self-start rounded-tl-none' }}">
-                    {!! nl2br(e($chat['content'])) !!}
+                <div class="flex w-full {{ $chat['role'] === 'user' ? 'justify-end' : 'justify-start' }}">
+                    
+                    @if($chat['role'] === 'assistant')
+                    <div class="flex-shrink-0 mr-2 mt-1">
+                        <div class="w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 21v-4.872c0-1.143.9-2.094 2.03-2.193a2.12 2.12 0 0 1 .72.062 1.93 1.93 0 0 0 .848 0 2.12 2.12 0 0 1 .72-.062c1.13.099 2.03 1.05 2.03 2.193V21M15.75 21h3a2.25 2.25 0 0 0 2.25-2.25V13.5m0 0a2.25 2.25 0 0 0-2.25-2.25h-3m3 0V8.25m0 3.75V8.25m-3-3.75h3m0 0V3.75m0 0a2.25 2.25 0 0 0-2.25-2.25h-3M8.25 21H5.25A2.25 2.25 0 0 1 3 18.75V13.5m0 0a2.25 2.25 0 0 1 2.25-2.25h3m-3 0V8.25m0 3.75V8.25m3-3.75h-3m0 0V3.75m0 0A2.25 2.25 0 0 1 5.25 1.5h3M12 15h.008v.008H12V15Z" />
+                            </svg>
+                        </div>
+                    </div>
+                    @endif
+
+                    <div class="flex flex-col {{ $chat['role'] === 'user' ? 'items-end' : 'items-start' }}">
+                        <div class="p-3 rounded-2xl max-w-[100%] text-sm shadow-sm {{ $chat['role'] === 'user' ? 'bg-primary-100 text-primary-900 rounded-tr-none' : 'bg-white dark:bg-gray-700 dark:text-white border border-gray-200 dark:border-gray-600 rounded-tl-none' }}">
+                            {!! nl2br(e($chat['content'])) !!}
+                        </div>
+                        
+                        @if($chat['role'] === 'assistant' && isset($chat['metrics']))
+                            <span class="text-[10px] text-gray-400 mt-1 ml-1">{{ $chat['metrics'] }}</span>
+                        @endif
+                    </div>
+
+                    @if($chat['role'] === 'user')
+                    <div class="flex-shrink-0 ml-2 mt-1">
+                        <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-gray-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                                <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                    </div>
+                    @endif
+
                 </div>
             @endforeach
             
